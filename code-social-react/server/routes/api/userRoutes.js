@@ -22,4 +22,15 @@ const router = require('express').Router();
 // router.route('/likes').post(addLikedPost).put(deleteUserLikes);
 // router.route('/likes/:username').get(getUserLikes);
 
+const {
+    getUser,
+    getAllUsers,
+    postUser,
+    login
+} = require('../../controllers/userController');
+
+router.route('/').get(getAllUsers).post(postUser);
+router.route('/:username').get(getUser);
+router.route('/login').post(login);
+
 module.exports = router;

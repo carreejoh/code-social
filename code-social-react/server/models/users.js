@@ -1,10 +1,5 @@
 const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
-
-var validateEmail = function(email) {
-    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return re.test(email)
-};
+const { emailValidation } = require('../../app/verify/verify')
 
 const userSchema = new Schema(
     {
@@ -18,7 +13,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            validate: [validateEmail, "Email address is invalid!"],
+            validate: [emailValidation, "Email address is invalid!"],
         },
         password: {
             type: String,

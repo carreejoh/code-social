@@ -1,4 +1,5 @@
 const { User, Post } = require("../models");
+const cors = require('cors');
 
 module.exports = {
   async getUser(req, res) {
@@ -31,21 +32,21 @@ module.exports = {
     }
   },
 
-  async signUp(req, res) {
-    try {
-      const newUser = await User.create(req.body);
-      const loginUser = await User.findOne({ username: req.body.username });
-      req.session.save(() => {
-        req.session.loggedIn = true;
-        req.session.username = loginUser.username;
-        res
-          .status(200)
-          .json({ message: "Sign Up and Log in successful", newUser });
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  },
+//   async signUp(req, res) {
+//     try {
+//       const newUser = await User.create(req.body);
+//       const loginUser = await User.findOne({ username: req.body.username });
+//       req.session.save(() => {
+//         req.session.loggedIn = true;
+//         req.session.username = loginUser.username;
+//         res
+//           .status(200)
+//           .json({ message: "Sign Up and Log in successful", newUser });
+//       });
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   },
 
   async login(req, res) {
     try {
@@ -66,75 +67,75 @@ module.exports = {
     }
   },
 
-  async logout(req, res) {
-    try {
-      if (req.session.loggedIn) {
-        req.session.destroy(() => {
-          res.status(200).end();
-        });
-      } else {
-        res.status(404).end();
-      }
-    } catch (e) {
-      console.error(e);
-      res.status(500).json(e);
-    }
-  },
-
-  async unknown(req, res) {
-    try {
-      if (req.session.loggedIn) {
-        let user = req.session.username;
-        res.json(user);
-      } else {
-        res.json("No User Found");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-//   async addLikedPost(req, res) {
+//   async logout(req, res) {
 //     try {
-//       const post = await Post.findOne({ _id: req.body.postId }).exec();
-//       const user = await User.findOneAndUpdate(
-//         { username: req.body.username },
-//         { $push: { likes: post._id } },
-//         { new: true }
-//       ).exec();
-//       if (!user) {
-//         res.json({ message: "No user found" });
-//         return;
+//       if (req.session.loggedIn) {
+//         req.session.destroy(() => {
+//           res.status(200).end();
+//         });
+//       } else {
+//         res.status(404).end();
 //       }
-//       res.json(post);
 //     } catch (e) {
 //       console.error(e);
+//       res.status(500).json(e);
 //     }
 //   },
 
-  async getUserLikes(req, res) {
-    try {
-      const likes = await User.find({ username: req.params.username }).select(
-        "likes"
-      );
-      res.json(likes);
-    } catch (err) {
-      console.error(err);
-    }
-  },
+//   async unknown(req, res) {
+//     try {
+//       if (req.session.loggedIn) {
+//         let user = req.session.username;
+//         res.json(user);
+//       } else {
+//         res.json("No User Found");
+//       }
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   },
 
-  async deleteUserLikes(req, res) {
-    try {
-        const user = await User.findOneAndUpdate(
-            { username: req.body.username },
-            { $pull: { likes: req.body.postId }}
-            );
-        if(!user) {
-            return res.status(404).json({ message: "No code with that ID" });
-        }
-        res.json(user);
-    } catch (err) {
-        console.error(err)
-    }
-  },
+// //   async addLikedPost(req, res) {
+// //     try {
+// //       const post = await Post.findOne({ _id: req.body.postId }).exec();
+// //       const user = await User.findOneAndUpdate(
+// //         { username: req.body.username },
+// //         { $push: { likes: post._id } },
+// //         { new: true }
+// //       ).exec();
+// //       if (!user) {
+// //         res.json({ message: "No user found" });
+// //         return;
+// //       }
+// //       res.json(post);
+// //     } catch (e) {
+// //       console.error(e);
+// //     }
+// //   },
+
+//   async getUserLikes(req, res) {
+//     try {
+//       const likes = await User.find({ username: req.params.username }).select(
+//         "likes"
+//       );
+//       res.json(likes);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   },
+
+//   async deleteUserLikes(req, res) {
+//     try {
+//         const user = await User.findOneAndUpdate(
+//             { username: req.body.username },
+//             { $pull: { likes: req.body.postId }}
+//             );
+//         if(!user) {
+//             return res.status(404).json({ message: "No code with that ID" });
+//         }
+//         res.json(user);
+//     } catch (err) {
+//         console.error(err)
+//     }
+//   },
 };
