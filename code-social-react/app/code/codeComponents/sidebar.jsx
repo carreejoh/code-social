@@ -7,7 +7,7 @@ function Sidebar() {
   const [files, toggleFiles] = useState(false);
 
   return (
-    <div className="h-[100vh] pt-12 flex">
+    <div className="h-[100vh] pt-12 z-40 flex">
       <div className=" w-12 flex-col bg-mainGray">
         <SidebarIcons
           onClick={() => toggleFiles(!files)}
@@ -37,7 +37,7 @@ function Sidebar() {
           }
         />
       </div>
-      <div className={`${files ? "block" : "hidden"} duration-200 ease-in-out`}>
+      <div className={`${files ? "translate-x-0" : "w-0 translate-x-[-300px]"} z-30 duration-100 ease-in-out transform`}>
         <YourFiles/>
       </div>
     </div>

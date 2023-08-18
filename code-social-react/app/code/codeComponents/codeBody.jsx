@@ -3,6 +3,9 @@ import CodeInput from "./codeInput";
 import CodeOutput from "./codeOutput";
 import React, { useState } from "react";
 import SplitPane, { Pane } from "split-pane-react";
+// import {DndContext} from '@dnd-kit/core';
+// import {Draggable} from './Draggable';
+// import {Droppable} from './Droppable';
 import "split-pane-react/esm/themes/default.css";
 
 function CodeBody() {
@@ -17,7 +20,9 @@ function CodeBody() {
           maxSize="80%"
           className="p-1 border-[2px] border-r-[1px] border-l-[0px] border-transparent"
         >
-          <div className="w-full h-full bg-mainDarkGray rounded-lg overflow-x-hidden"></div>
+          <div className="w-full h-full bg-mainDarkGray rounded-lg overflow-x-hidden">
+            <CodeInput />
+          </div>
         </Pane>
         <Pane>
           <SplitPane
