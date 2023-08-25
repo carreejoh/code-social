@@ -1,27 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CodeBody from "./codeComponents/codeBody";
 import SidebarIcons from "./codeComponents/sidebarIcons";
 import YourFiles from "./codeComponents/yourFiles";
+import Auth from "../verify/auth";
 
 function Code() {
   const [files, toggleFiles] = useState(false);
   const [inputValue, changeInputValue] = useState("");
   const [codeOutput, changeCodeOutout] = useState("");
+  const [username, setUsername] = useState(null);
+
+  // useEffect(() => {
+  //   if(Auth.loggedIn()) {
+  //     console.log("logged in")
+  //     return;
+  //   } 
+  //   console.log("not logged in ")
+  // }, [])
+
+  // {Auth.loggedIn() ? setUsername()}
 
   function runCode() {
-    var capturedOutput = "";
-
-    var originalConsoleLog = console.log;
+    let capturedOutput = "";
+    let originalConsoleLog = console.log;
     console.log = function (message) {
       capturedOutput += message + "\n";
     };
-
     new Function(inputValue)();
     console.log = originalConsoleLog;
-
     changeCodeOutout(capturedOutput);
+  }
+
+
+  async function saveCode() {
+    if(inputValue !== '') {
+      const code = await fetch("http://localhost:5050/api/code/")
+    } else {
+      alert("Cannot save a new file with nothing in it")
+      return;
+    }
   }
 
   return (
@@ -47,6 +66,7 @@ function Code() {
             }
           />
           <SidebarIcons
+            onClick={() => saveCode()}
             icon={
               "M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
             }

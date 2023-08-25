@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import { render } from "react-dom";
+import { useEffect, useState } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
@@ -8,6 +8,7 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 
 function CodeEditor({ changeInputValue }) {
+
   function onChange(newValue) {
     changeInputValue(newValue);
   }
