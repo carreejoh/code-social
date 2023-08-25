@@ -7,17 +7,15 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-function CodeEditor() {
+function CodeEditor({ changeInputValue }) {
   function onChange(newValue) {
-    console.log("change", newValue);
+    changeInputValue(newValue);
   }
 
   const editorStyle = {
     width: "100%",
     height: "90vh"
   }
-
-
 
   return (
       <AceEditor

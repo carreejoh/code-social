@@ -26,11 +26,13 @@ const {
     getUser,
     getAllUsers,
     postUser,
-    login
+    login,
+    isLoggedIn
 } = require('../../controllers/userController');
 
 router.route('/').get(getAllUsers).post(postUser);
 router.route('/:username').get(getUser);
 router.route('/login').post(login);
+router.route('/login/loggedIn').get(isLoggedIn);
 
 module.exports = router;

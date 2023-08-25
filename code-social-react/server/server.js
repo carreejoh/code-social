@@ -4,13 +4,16 @@ const db = require("./config/connection");
 const routes = require("./routes");
 const session = require("express-session");
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 
 const PORT = process.env.PORT || 5050;
 const app = express();
 
+const oneDay = 1000 * 60 * 60 * 24;
+
 const sessionInstance = {
   secret: "zdMwutRaKNRGMemRwgUNaHIZv",
-  cookie: {},
+  cookie: { maxAge: oneDay },
   resave: false,
   saveUninitialized: true,
 };
@@ -24,6 +27,7 @@ app.use(session(sessionInstance));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(cookieParser());
 app.use(routes);
 
 db.once('open', () => {

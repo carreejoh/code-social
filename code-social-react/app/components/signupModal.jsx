@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { samePassword, emailValidation, passwordLength } from "../verify/verify";
+import Auth from "../verify/auth";
 
 function SignUpModal({ closeModal }) {
   //UseState for managing form
@@ -35,20 +36,13 @@ function SignUpModal({ closeModal }) {
   }
 
   async function SignUp() {
-    fetch("http://localhost:5050/api/users", {
+    const newUser = await fetch("http://localhost:5050/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    });
+    const userToken = await newUser.json()
+    Auth.login(userToken.token);
   }
 
   // Actual content

@@ -1,16 +1,26 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Auth from "../verify/auth";
 
 function LoginModal({ closeModal }) {
-  //UseState for managing form
-
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-async function Login() {
-    console.log("No functionality yet")
-}
+  async function Login() {
+    try {
+      if (username && password) {
+        const response = await fetch("http://localhost:5050/api/users/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        const userToken = await response.json();
+        Auth.login(userToken.token);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-60">
@@ -24,13 +34,6 @@ async function Login() {
             className="text-black"
             onChange={(e) => setUsername(e.target.value)}
             max={30}
-          ></input>
-          <h1>Email</h1>
-          <input
-            placeholder="username"
-            className="text-black"
-            onChange={(e) => setEmail(e.target.value)}
-            max={50}
           ></input>
           <h1>Password</h1>
           <input

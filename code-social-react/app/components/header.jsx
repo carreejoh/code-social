@@ -1,8 +1,9 @@
 "use client";
 import NavBtn from "./globalComponents/secondaryNavBtn";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignUpModal from "./signupModal";
 import LoginModal from "./loginModal";
+import Auth from "../verify/auth";
 
 function Header() {
   const [signupModal, toggleSignupModal] = useState(false);
@@ -26,6 +27,11 @@ function Header() {
               d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
             />
           </svg>
+          {Auth.loggedIn() ? (
+            <h1>loggedin!</h1>
+          ):(
+            <h1>not loggedin</h1>
+          )}
           <h1 className="text-xl text-white">Code_Spot</h1>
         </div>
         <div className="flex items-center justify-around w-64">
@@ -33,26 +39,36 @@ function Header() {
           <NavBtn link={"#"} text={"Code"} textColor={"white"} />
           <NavBtn link={"#"} text={"Explore"} textColor={"white"} />
           {/* <NavBtn link={"#"} text={"Profile"} textColor={"white"} /> */}
-          <NavBtn
+
+          {Auth.loggedIn() ? (
+            <NavBtn
             link={"#"}
-            text={"Sign-Up"}
+            text={"Sign-Out"}
             textColor={"white"}
-            onClick={() => toggleSignupModal(true)}
+            onClick={() => Auth.logout()}
           />
-          <NavBtn
-            link={"#"}
-            text={"Login"}
-            textColor={"white"}
-            onClick={() => toggleLoginModal(true)}
-          />
+          ) : (
+            <>
+              <NavBtn
+                link={"#"}
+                text={"Sign-Up"}
+                textColor={"white"}
+                onClick={() => toggleSignupModal(true)}
+              />
+              <NavBtn
+                link={"#"}
+                text={"Login"}
+                textColor={"white"}
+                onClick={() => toggleLoginModal(true)}
+              />
+            </>
+          )}
         </div>
       </div>
       {signupModal && (
-        <SignUpModal closeModal={() => toggleSignupModal(false)}/>
+        <SignUpModal closeModal={() => toggleSignupModal(false)} />
       )}
-      {loginModal && (
-        <LoginModal closeModal={() => toggleLoginModal(false)}/>
-      )}
+      {loginModal && <LoginModal closeModal={() => toggleLoginModal(false)} />}
     </>
   );
 }
