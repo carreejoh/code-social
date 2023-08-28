@@ -43,6 +43,7 @@ function SignUpModal({ closeModal }) {
     });
     const userToken = await newUser.json()
     Auth.login(userToken.token);
+    localStorage.setItem("codeSpotUser", `${username}`)
   }
 
   // Actual content

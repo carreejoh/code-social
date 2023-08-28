@@ -7,20 +7,23 @@ import YourFiles from "./codeComponents/yourFiles";
 import Auth from "../verify/auth";
 
 function Code() {
+  let user = Auth.getProfile();
+  let userId = user?.data?._id;
   const [files, toggleFiles] = useState(false);
   const [inputValue, changeInputValue] = useState("");
   const [codeOutput, changeCodeOutout] = useState("");
   const [username, setUsername] = useState(null);
+  const [userData, setUserData] = useState();
 
-  // useEffect(() => {
-  //   if(Auth.loggedIn()) {
-  //     console.log("logged in")
-  //     return;
-  //   } 
-  //   console.log("not logged in ")
-  // }, [])
+  // Get User Data on load
 
-  // {Auth.loggedIn() ? setUsername()}
+  useEffect(() => {
+    if (userId) {
+      getUser();
+    }
+  }, []);
+
+  // SIDEBAR FUNCTIONS
 
   function runCode() {
     let capturedOutput = "";
@@ -33,14 +36,61 @@ function Code() {
     changeCodeOutout(capturedOutput);
   }
 
-
   async function saveCode() {
-    if(inputValue !== '') {
-      const code = await fetch("http://localhost:5050/api/code/")
-    } else {
-      alert("Cannot save a new file with nothing in it")
+    console.log(username);
+    let user = "";
+    if (Auth.loggedIn() !== true) {
+      alert("You Must Be Logged In To Save Files");
       return;
     }
+    if (inputValue === "") {
+      alert("Cannot Save Empty File");
+      return;
+    }
+    if (username === null) {
+      alert("There was an error saving this code. Reload page and try again");
+      return;
+    }
+    const postCode = await postCodeApi(
+      username,
+      "tempTitle",
+      "JavaScript",
+      inputValue
+    );
+    if (!postCode) {
+      alert("Something went wrong, please try again");
+    }
+  }
+
+  // CLIENT SIDE API ROUTES
+
+  async function postCodeApi(username, title, language, code) {
+    try {
+      const postCode = await fetch("http://localhost:5050/api/code/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, title, language, code }),
+      });
+      const data = await postCode.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function getUser() {
+    fetch(`http://localhost:5050/api/users/userId/${userId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setUserData(data);
+        setUsername(data.username);
+        console.log(userData);
+      });
   }
 
   return (
@@ -48,12 +98,16 @@ function Code() {
       {/* <Sidebar /> */}
       <div className="h-[100vh] pt-12 z-40 flex">
         <div className=" w-12 flex-col bg-mainGray">
-          <SidebarIcons
-            onClick={() => toggleFiles(!files)}
-            icon={
-              "M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"
-            }
-          />
+          {Auth.loggedIn() ? (
+            <SidebarIcons
+              onClick={() => toggleFiles(!files)}
+              icon={
+                "M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"
+              }
+            />
+          ) : (
+            <></>
+          )}
           <SidebarIcons
             onClick={() => runCode()}
             icon={
@@ -78,12 +132,15 @@ function Code() {
             }
           />
         </div>
+
         <div
           className={`${
             files ? "translate-x-0" : "w-0 translate-x-[-300px]"
           } z-30 duration-100 ease-in-out transform`}
         >
-          <YourFiles />
+          <div className="w-48 pl-12 h-[100vh] bg-mainGray duration-200 ease-in-out">
+            {userData === undefined ? <YourFiles userData={userData} /> : <></>}
+          </div>
         </div>
       </div>
       <div className="pt-12 w-full bg-darkestBlack">

@@ -16,6 +16,7 @@ function LoginModal({ closeModal }) {
         });
         const userToken = await response.json();
         Auth.login(userToken.token);
+        localStorage.setItem("codeSpotUser", `${username}`);
       }
     } catch (err) {
       console.error(err);

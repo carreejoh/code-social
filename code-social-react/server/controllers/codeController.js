@@ -15,11 +15,11 @@ module.exports = {
 
   async getUsersCode(req, res) {
     try {
-        const code = await Code.find({ username: req.params.username })
-        if(!code) {
-            res.status(404).json({ message: "This user has no code"})
-        }
-        res.json(code);
+      const code = await Code.find({ username: req.params.username });
+      if (!code) {
+        res.status(404).json({ message: "This user has no code" });
+      }
+      res.json(code);
     } catch (err) {
       console.error(err);
     }
@@ -28,6 +28,10 @@ module.exports = {
   async postCode(req, res) {
     try {
       const code = await Code.create(req.body);
+      const userVerify = await User.findOne({ username: req.body.username });
+      if (!userVerify) {
+        return res.status(403).json({ message: "This user doesn't exist!" });
+      }
       const user = await User.findOneAndUpdate(
         { username: req.body.username },
         { $addToSet: { codeSnips: code._id } },

@@ -1,62 +1,44 @@
+"use client";
+import { useEffect, useState } from "react";
+import IndividualFile from "./individualFile";
 
-function YourFiles() {
+function YourFiles({ userData }) {
+  const [userFiles, setUserFiles] = useState([]);
+  const [username, setUsername] = useState('');
 
-    const tempData = [
-        {
-          language: "JS",
-          fileName: "binarySearch.js",
-        },
-        {
-          language: "PY",
-          fileName: "linkedLists.py",
-        },
-        {
-          language: "JS",
-          fileName: "recursion.js",
-        },
-        {
-          language: "JS",
-          fileName: "hashTable.js",
-        },
-        {
-          language: "JS",
-          fileName: "stacksAndQueues.js",
-        },
-        {
-          language: "PY",
-          fileName: "graphTraversal.py",
-        },
-        {
-          language: "JS",
-          fileName: "dynamicProgramming.js",
-        },
-        {
-          language: "PY",
-          fileName: "heapSort.py",
-        },
-        {
-          language: "JS",
-          fileName: "treeTraversal.js",
-        },
-        {
-          language: "JS",
-          fileName: "mergeSort.js",
-        },
-        {
-          language: "JS",
-          fileName: "dijkstraAlgorithm.js",
-        },
-        {
-          language: "PY",
-          fileName: "depthFirstSearch.py",
-        },
-      ];
+  useEffect(() => {
+    if(userData) {
+      setUsername(userData.username)
+      getUserFiles(username);
+    }
+  }, [userData]);
 
-    return(
-        <div className="w-48 pl-12 h-[100vh] bg-mainGray duration-200 ease-in-out">
+  // CLIENT SIDE API ROUTES
 
-        </div>
-    )
+  function getUserFiles(username) {
+    fetch(`http://localhost:5050/api/code/${username}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setUserFiles(data);
+        console.log(userFiles)
+      });
+  }
+
+  return (
+  <div className="w-full h-full">
+    <ul className="w-full h-full">
+      {userFiles.map((file, index) => (
+        <IndividualFile fileData={file} key={index}/>
+      ))}
+    </ul>
+  </div>
+  );
 }
 
 export default YourFiles;
+
