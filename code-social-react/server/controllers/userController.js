@@ -1,4 +1,4 @@
-const { User, Post } = require("../models");
+const { User } = require("../models");
 const cors = require("cors");
 const { signToken } = require("../verify/auth");
 

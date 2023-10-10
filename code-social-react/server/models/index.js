@@ -1,5 +1,5 @@
 const User = require('./users');
-const Code = require('./codeSnips');
-// const Post = require('./posts');
+const Routine = require('./routines');
+// const Week = require('./week');
 
-module.exports = { User, Code };
+module.exports = { User, Routine };

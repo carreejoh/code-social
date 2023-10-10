@@ -1,9 +1,14 @@
-"use client"
-import './globals.css'
-import { Inter } from 'next/font/google'
-import Header from './components/header'
+import "./globals.css";
+import { Inter } from "next/font/google";
+import BodyContent from "./bodyContent";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
+
+export const dynamicParams = true,
+  revalidate = Infinity,
+  fetchCache = "auto",
+  runtime = "nodejs",
+  preferredRegion = "auto";
 
 // export const metadata = {
 //   title: 'Create Next App',
@@ -13,7 +18,9 @@ const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}><Header/>{children}</body>
+      <body className={`${inter.className}`}>
+        <BodyContent children={children} />
+      </body>
     </html>
-  )
+  );
 }

@@ -7,7 +7,8 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            trim: true
+            trim: true,
+            lowercase: true
         },
         email: {
             type: String,
@@ -22,19 +23,48 @@ const userSchema = new Schema(
             minLength: 8,
             maxLength: 30,
         },
-        codeSnips: [
+        sunday: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'codeSnips'
+                ref: 'routine'
             }
         ],
-        likes: [
+        monday: [
             {
                 type: Schema.Types.ObjectId,
-                required: false,
-                ref: 'posts'
+                ref: 'routine'
             }
-        ]
+        ],
+        tuesday: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'routine'
+            }
+        ],
+        wednesday: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'routine'
+            }
+        ],
+        thursday: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'routine'
+            }
+        ],
+        friday: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'routine'
+            }
+        ],
+        saturday: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'routine'
+            }
+        ],
     },
     {
         toJSON: {

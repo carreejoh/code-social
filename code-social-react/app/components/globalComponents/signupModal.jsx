@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { samePassword, emailValidation, passwordLength } from "../verify/verify";
-import Auth from "../verify/auth";
+import { samePassword, emailValidation, passwordLength } from "../../verify/verify";
+import Auth from "../../verify/auth";
 
 function SignUpModal({ closeModal }) {
   //UseState for managing form

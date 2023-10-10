@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import Auth from "../verify/auth";
+import Auth from "../../verify/auth";
 
 function LoginModal({ closeModal }) {
   const [username, setUsername] = useState("");
