@@ -13,28 +13,41 @@ function ScheduleContainer() {
   );
   const [dayData, setDayData] = useState([]);
   const [splideRendered, setSplideRendered] = useState(false);
+  const [relevantDayList, setDayList] = useState([]);
 
-  // Make array in starting with today
+  // Make array starting with yesterday
+
   const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
   ];
-  const currentDayIndex = new Date().getDay();
-  const sortedDays = [
-    ...daysOfWeek.slice(currentDayIndex),
-    ...daysOfWeek.slice(0, currentDayIndex),
-  ];
+
+  useEffect(() => {
+    const currentDayIndex = new Date().getDay();
+    const sortedDays = [
+      ...daysOfWeek.slice(currentDayIndex - 1),
+      ...daysOfWeek.slice(0, currentDayIndex - 1),
+    ];
+    setDayList(sortedDays);
+  }, []);
 
   // Scroll to relevant postion
 
   // Fetch relevant data if logged in on load
   useEffect(() => {
     if (Auth.loggedIn()) {
+      // const currentDayIndex = new Date().getDay();
+      // const sortedDays = [
+      //   ...daysOfWeek.slice(currentDayIndex - 1),
+      //   ...daysOfWeek.slice(0, currentDayIndex - 1),
+      // ];
+      // setDayList(sortedDays);
+
       let user = Auth.getProfile();
       let username = user.data.username;
       fetchRoutineController(username);
@@ -55,38 +68,68 @@ function ScheduleContainer() {
   }, []);
 
   // When splide is moved
-  useEffect(() => {
-    const splide = splideRef.current.splide;
-    splide.on("moved", (newIndex) => {
-      setActiveSlide(newIndex);
-    });
-    return () => {
-      splide.off("moved");
-    };
-  });
+  // useEffect(() => {
+  //   const splide = splideRef.current.splide;
+  //   splide.on("moved", (newIndex) => {
+  //     setActiveSlide(newIndex);
+  //   });
+  //   return () => {
+  //     splide.off("moved");
+  //   };
+  // });
 
   // Fetch all days of users routines
 
+
+
+  function createWeekArray() {
+    const currentDayIndex = new Date().getDay();
+    const sortedDays = [
+      ...daysOfWeek.slice(currentDayIndex - 1),
+      ...daysOfWeek.slice(0, currentDayIndex - 1),
+    ];
+    return sortedDays;
+  }
+
+  // Master controller
+
   async function fetchRoutineController(username) {
-    let routineData = [];
-    let response = await fetchIndividualDay(username);
-    routineData.push(response.sunday);
-    routineData.push(response.monday);
-    routineData.push(response.tuesday);
-    routineData.push(response.wednesday);
-    routineData.push(response.thursday);
-    routineData.push(response.friday);
-    routineData.push(response.saturday);
-    routineData.push(response.sunday);
-    routineData.push(response.monday);
-    routineData.push(response.tuesday);
-    routineData.push(response.wednesday);
-    routineData.push(response.thursday);
-    routineData.push(response.friday);
-    routineData.push(response.saturday);
-    setDayData(routineData);
+    try {
+      const weekArray = createWeekArray();
+      const response = await fetchIndividualDay(username);
+      if (!response) {
+        return;
+      }
+      const orderedDays = await relevantDayOrder(response, weekArray);
+      if (!orderedDays) {
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
     setSplideRendered(true);
   }
+
+  // Aligns days in order relevant to current date
+
+  async function relevantDayOrder(response, weekArray) {
+    try {
+      let newOrder = [];
+      newOrder.push(response[weekArray[0]]);
+      newOrder.push(response[weekArray[1]]);
+      newOrder.push(response[weekArray[2]]);
+      newOrder.push(response[weekArray[3]]);
+      newOrder.push(response[weekArray[4]]);
+      newOrder.push(response[weekArray[5]]);
+      newOrder.push(response[weekArray[6]]);
+      setDayData(newOrder)
+      return true;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // API call
 
   async function fetchIndividualDay(username) {
     try {
@@ -105,41 +148,38 @@ function ScheduleContainer() {
   }
 
   return (
-    // h-[calc(100vh-228px)]
-    // Original height for div
-
     <div className="w-full h-full bg-darkBaseGray rounded-tl-lg">
       <div className="w-[calc(100vw-64px)] h-full">
-        {/* {dayData.length === 7 && ( */}
-        <Splide
-          ref={splideRef}
-          aria-label="List of schedules"
-          options={{
-            direction: "ttb",
-            height: "870px",
-            wheel: true,
-            wheelSleep: 0,
-            perPage: 3,
-            perMove: 1,
-            type: "loop",
-          }}
-        >
-          {dayData.map((data, index) => (
-            <SplideSlide
-              key={index}
-              className=""
-            >
-              <div className={`transition-all duration-[400ms] ease-in-out h-full`}>
-                <TodayContainer
-                  // size={activeSlide === index ? "fullsize" : "small"}
-                  size={"fullsize"}
-                  routineData={data}
-                />
-              </div>
-            </SplideSlide>
-          ))}
-        </Splide>
-        {/* )} */}
+        {splideRendered === true && (
+          <Splide
+            ref={splideRef}
+            aria-label="List of schedules"
+            options={{
+              direction: "ttb",
+              height: "870px",
+              wheel: true,
+              wheelSleep: 0,
+              perPage: 3,
+              perMove: 1,
+              type: "loop",
+            }}
+          >
+            {dayData.map((data, index) => (
+              <SplideSlide key={index} className="">
+                <div
+                  className={`transition-all duration-[400ms] ease-in-out h-full`}
+                >
+                  <TodayContainer
+                    // size={activeSlide === index ? "fullsize" : "small"}
+                    size={"fullsize"}
+                    routineData={data}
+                    day={relevantDayList[index]}
+                  />
+                </div>
+              </SplideSlide>
+            ))}
+          </Splide>
+        )}
         {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
           <h1 className="text-lg font-semibold">Quick Stats</h1>
           <div className="h-64 w-[210px] mt-2">

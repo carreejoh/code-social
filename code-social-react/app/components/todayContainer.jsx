@@ -5,22 +5,17 @@ import TimeLine from "./timeline";
 import { useState, useEffect, useRef } from "react";
 import EmptyBlock from "./emptyBlock";
 
-function TodayContainer({ size, routineData }) {
+function TodayContainer({ size, routineData, day }) {
   const [dayData, setDayData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [weekdayTitle, setWeekdayTitle] = useState("");
   const [scrollTime, setScrollTime] = useState(0);
   const barRef = useRef(null);
 
+  // console.log(routineData + day)
+
   const date = new Date();
   const dayOfWeekNumber = date.getDay();
-
-  // useEffect(() => {
-  //   let date = new Date();
-  //   let currentMinute = date.getMinutes();
-  //   let scrollPosition = Math.floor(currentMinute * 4.29);
-  //   overflowDiv.current.scrollTo(scrollPosition, 0);
-  // }, []);
 
   const allStartTimes = [
     2500, 2530, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700,
@@ -81,18 +76,22 @@ function TodayContainer({ size, routineData }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let dataArray = await Promise.all(
-          routineData.map((id) => fetchIndividualRoutine(id))
-        );
-        setDayData(dataArray);
-        console.log(dataArray);
-        setDataLoaded(true);
-        setWeekdayTitle(dataArray[0]?.dayOfWeek);
+        if (Array.isArray(routineData) && routineData.length) {
+          let dataArray = await Promise.all(
+            routineData.map((id) => fetchIndividualRoutine(id))
+          );
+          setDayData(dataArray);
+          console.log(dataArray);
+          setDataLoaded(true);
+          setWeekdayTitle(dataArray[0]?.dayOfWeek);
+        } else {
+          console.error("routineData is not an array or is empty");
+        }
       } catch (error) {
-        console.error("There was an error!", error);
+        console.error("Error Fetching Data Today Container", error);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -124,10 +123,10 @@ function TodayContainer({ size, routineData }) {
     <>
       {daysOfWeek[dayOfWeekNumber] === weekdayTitle ? (
         <h1 className="text-xl ml-20 font-semibold text-pink-500">
-          {weekdayTitle}
+          {day}
         </h1>
       ) : (
-        <h1 className="text-xl font-semibold ml-20 text-white h-4">GOOBER</h1>
+        <h1 className="text-xl font-semibold ml-20 text-white h-4">{day}</h1>
       )}
       <div
         id="scrollDiv"
