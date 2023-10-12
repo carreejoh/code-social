@@ -8,23 +8,23 @@ function TaskBlock({
   desc,
   length,
   blockSize,
-  startTime
+  startTime,
 }) {
   const taskLengths = {
     // w-32 = 128px
     // 128px = 30min (on xl screens)
     // 1 Hr
-    30: "w-[124px] h-56",
-    60: "w-[252px] h-56",
+    30: "w-[124px] h-48",
+    60: "w-[252px] h-48",
     // 2 Hr
-    90: "w-[380px] h-56",
-    120: "w-[512px] h-56",
+    90: "w-[380px] h-48",
+    120: "w-[512px] h-48",
     // 3 Hr
-    150: "w-[640px] h-56",
-    180: "w-[768px] h-56",
+    150: "w-[640px] h-48",
+    180: "w-[768px] h-48",
     // 4 Hr
-    210: "w-[896px] h-56",
-    240: "w-[1024px] h-56"
+    210: "w-[896px] h-48",
+    240: "w-[1024px] h-48",
   };
 
   const taskLengthSmall = {
@@ -32,8 +32,8 @@ function TaskBlock({
     60: "w-[96px] h-32",
     90: "w-[128px] h-32",
     120: "w-[160px] h-32",
-    150: "w-[192px] h-32"
-  }
+    150: "w-[192px] h-32",
+  };
 
   const timeStart = {
     2500: "ml-[0px]",
@@ -77,12 +77,14 @@ function TaskBlock({
     1900: "ml-[4864px]",
     1930: "ml-[4992px]",
     2000: "ml-[5120px]",
-  }
+  };
 
   return (
     <div
       className={`bg-baseGray p-2 rounded-lg mr-[2px]  ${
-        blockSize === "fullsize" ? `${taskLengths[length]} ${timeStart[startTime]} fixed` : taskLengthSmall[length]
+        blockSize === "fullsize"
+          ? `${taskLengths[length]} ${timeStart[startTime]} fixed z-50`
+          : taskLengthSmall[length]
       } cursor-pointer `}
     >
       <div className="flex flex-col justify-between h-full">
@@ -92,25 +94,45 @@ function TaskBlock({
           } w-full justify-between`}
         >
           <div className="">
-            <h1 className={`${blockSize === "fullsize" ? "text-sm font-semibold" : "text-[12px]"} text-white`}>{title}</h1>
-            <h1 className={`${blockSize === "fullsize" ? "text-sm font-semibold" : "text-[9px]"} text-gray-400`}>{time}</h1>
+            <h1
+              className={`${
+                blockSize === "fullsize"
+                  ? "text-sm font-semibold"
+                  : "text-[12px]"
+              } text-white`}
+            >
+              {title}
+            </h1>
+            <h1
+              className={`${
+                blockSize === "fullsize"
+                  ? "text-sm font-semibold"
+                  : "text-[9px]"
+              } text-gray-400`}
+            >
+              {time}
+            </h1>
           </div>
           <div
-            className={`${
-              priority === "Highest" ? "" : "hidden"
-            } ${blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"} badge font-semibold badge-secondary`}
+            className={`${priority === "Highest" ? "" : "hidden"} ${
+              blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"
+            } badge font-semibold badge-secondary`}
           >
             !!!
           </div>
           <div
-            className={`${
-              priority === "High" ? "" : "hidden"
-            } ${blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"} badge text-white font-semibold badge-primary`}
+            className={`${priority === "High" ? "" : "hidden"} ${
+              blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"
+            } badge text-white font-semibold badge-primary`}
           >
             !
           </div>
         </div>
-        <div className={`justify-between ${blockSize === "fullsize" ? "flex" : "hidden"}`}>
+        <div
+          className={`justify-between ${
+            blockSize === "fullsize" ? "flex" : "hidden"
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -125,6 +147,22 @@ function TaskBlock({
               d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
             />
           </svg>
+          {/* <div className="dropdown dropdown-right dropdown-end">
+            <label tabIndex={0} className="btn m-1">
+              Click
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a>Item 1</a>
+              </li>
+              <li>
+                <a>Item 2</a>
+              </li>
+            </ul>
+          </div> */}
           <button className="btn btn-xs btn-success btn-outline">
             Complete
           </button>

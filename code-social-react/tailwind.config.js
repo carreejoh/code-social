@@ -21,7 +21,9 @@ module.exports = {
         baseGray: '#161B22',
         lightestGray: '#31373D',
         darkBaseWhite: '#EBEFF4',
-        baseWhite: '#FEFFFE'
+        baseWhite: '#FEFFFE',
+
+        secondary: '#D926A9'
 
         // BLUE TINT White Mode (Crusaders color scheme)
 

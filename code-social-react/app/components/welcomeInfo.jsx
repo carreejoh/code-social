@@ -7,7 +7,9 @@ function WelcomeInfo() {
   const [dateTime, setDateTime] = useState({
     time: new Date().toLocaleTimeString(),
     date: new Date().toLocaleDateString(),
+    weekday: new Date().getDay()
   });
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,11 +36,21 @@ function WelcomeInfo() {
     }
   }, [])
 
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   return (
     <div className="h-24 w-full border-b-[2px] border-darkestBaseGray bg-darkestBaseGray">
       <div className="h-16">
-        <h1>Welcome {username}</h1>
-        <h1>{dateTime.date}</h1>
+        <h1 className="font-semibold text-xl pt-4 ml-12">Welcome {username}!</h1>
+        <h1 className="text-lg ml-12 text-white">Monday, {dateTime.date}</h1>
       </div>
     </div>
   );

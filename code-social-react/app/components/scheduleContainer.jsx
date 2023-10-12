@@ -77,6 +77,13 @@ function ScheduleContainer() {
     routineData.push(response.thursday);
     routineData.push(response.friday);
     routineData.push(response.saturday);
+    routineData.push(response.sunday);
+    routineData.push(response.monday);
+    routineData.push(response.tuesday);
+    routineData.push(response.wednesday);
+    routineData.push(response.thursday);
+    routineData.push(response.friday);
+    routineData.push(response.saturday);
     setDayData(routineData);
     setSplideRendered(true);
   }
@@ -102,14 +109,14 @@ function ScheduleContainer() {
     // Original height for div
 
     <div className="w-full h-full bg-darkBaseGray rounded-tl-lg">
-      <div className="w-[calc(100vw-64px)] h-[100vh]">
+      <div className="w-[calc(100vw-64px)] h-full">
         {/* {dayData.length === 7 && ( */}
         <Splide
           ref={splideRef}
           aria-label="List of schedules"
           options={{
             direction: "ttb",
-            height: "864px",
+            height: "870px",
             wheel: true,
             wheelSleep: 0,
             perPage: 3,
@@ -119,16 +126,10 @@ function ScheduleContainer() {
         >
           {dayData.map((data, index) => (
             <SplideSlide
-              // ref={overflowDiv}
               key={index}
-              // className={
-              //   activeSlide === index
-              //     ? "active "
-              //     : (activeSlide + 1 === index ? "h-20 bg-green-400" : "h-24 ") + "h-56 pt-8"
-              // }
+              className=""
             >
-              {/* <h1>{data[0]?.dayOfWeek}</h1> */}
-              <div className={`transition-all duration-[400ms] ease-in-out`}>
+              <div className={`transition-all duration-[400ms] ease-in-out h-full`}>
                 <TodayContainer
                   // size={activeSlide === index ? "fullsize" : "small"}
                   size={"fullsize"}
@@ -139,7 +140,7 @@ function ScheduleContainer() {
           ))}
         </Splide>
         {/* )} */}
-        <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
+        {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
           <h1 className="text-lg font-semibold">Quick Stats</h1>
           <div className="h-64 w-[210px] mt-2">
             <div className="flex">
@@ -172,7 +173,7 @@ function ScheduleContainer() {
             </div>
             <div className="flex"></div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

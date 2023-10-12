@@ -13,9 +13,10 @@ const routineSchema = new Schema(
             trim: true
         },
         dayOfWeek: {
-            type: String,
+            type: [String],
             required: true,
-            trim: true
+            trim: true,
+            
         },
         length: {
             type: Number,

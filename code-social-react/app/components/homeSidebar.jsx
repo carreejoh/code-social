@@ -13,6 +13,7 @@ function Sidebar() {
 
   async function handleRoutineForm(e) {
     e.preventDefault();
+    let dayOfWeek = [];
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
@@ -22,42 +23,58 @@ function Sidebar() {
       return;
     }
 
-    formJson.sunday ? postRoutine("sunday", formJson) : ""
-    formJson.monday ? postRoutine("monday", formJson) : ""
-    formJson.tuesday ? postRoutine("tuesday", formJson) : ""
-    formJson.wednesday ? postRoutine("wednesday", formJson) : ""
-    formJson.thursday ? postRoutine("thursday", formJson) : ""
-    formJson.friday ? postRoutine("friday", formJson) : ""
-    formJson.saturday ? postRoutine("saturday", formJson) : ""
+    formJson.sunday ? dayOfWeek.push("sunday") : "";
+    formJson.monday ? dayOfWeek.push("monday") : "";
+    formJson.tuesday ? dayOfWeek.push("tuesday") : "";
+    formJson.wednesday ? dayOfWeek.push("wednesday") : "";
+    formJson.thursday ? dayOfWeek.push("thursday") : "";
+    formJson.friday ? dayOfWeek.push("friday") : "";
+    formJson.saturday ? dayOfWeek.push("saturday") : "";
+    postRoutine(formJson, dayOfWeek);
     console.log(formJson);
   }
 
-  async function postRoutine(dayOfWeek, routineData) {
+  async function postRoutine(routineData, dayOfWeek) {
     // Convert form data to api data
-    let startTime = await MathMod.timeStringToNumber(routineData.startTime)
-    let endTime = await MathMod.timeStringToNumber(routineData.endTime)
+    let startTime = await MathMod.timeStringToNumber(routineData.startTime);
+    let endTime = await MathMod.timeStringToNumber(routineData.endTime);
     let firstLength = endTime - startTime;
-    let length = await MathMod.convertToMinutes(firstLength)
-    let user = Auth.getProfile()
-    let username = user.data.username
-    
-    if(!username) {
-      alert("Log in to save routines")
+    let length = await MathMod.convertToMinutes(firstLength);
+    let user = Auth.getProfile();
+    let username = user.data.username;
+
+    if (!username) {
+      alert("Log in to save routines");
       return;
     }
-    
+
     let priority = routineData.priority;
     let title = routineData.title;
     let description = routineData.description;
+    // let dayOfWeek = routineData.dayOfWeek
 
-    const newRoutine = await fetch("http://localhost:5050/api/routines/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, dayOfWeek, title, description, length, startTime, endTime, priority }),
-    })
-    const routine = await newRoutine.json()
-    console.log(routine)
+    const newRoutine = await fetch(
+      "http://localhost:5050/api/routines/create",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username,
+          dayOfWeek,
+          title,
+          description,
+          length,
+          startTime,
+          endTime,
+          priority,
+        }),
+      }
+    );
+    const routine = await newRoutine.json();
+    console.log(routine);
   }
+
+  // Validate all criteria is met
 
   function checkFormData(form) {
     if (
@@ -123,9 +140,7 @@ function Sidebar() {
                   className="select select-bordered w-[33%] max-w-xs select-sm focus:outline-none mr-1"
                   name="priority"
                 >
-                  <option disabled>
-                    Priority?
-                  </option>
+                  <option disabled>Priority?</option>
                   <option className="text-white">Nan</option>
                   <option className="text-[#641AE6]">High</option>
                   <option className="text-[#D926A9]">Highest</option>
@@ -139,9 +154,7 @@ function Sidebar() {
                     name="startTime"
                     className="select select-bordered max-w-xs max-h-20 select-sm focus:outline-none"
                   >
-                    <option disabled>
-                      Start Time
-                    </option>
+                    <option disabled>Start Time</option>
                     <option className="text-white">00:00</option>
                     <option className="text-white">00:30</option>
                     <option className="text-white">01:00</option>
@@ -195,9 +208,7 @@ function Sidebar() {
                     name="endTime"
                     className="select select-bordered max-w-xs select-sm focus:outline-none ml-2"
                   >
-                    <option disabled>
-                      End Time
-                    </option>
+                    <option disabled>End Time</option>
                     <option className="text-white">00:00</option>
                     <option className="text-white">00:30</option>
                     <option className="text-white">01:00</option>
@@ -342,7 +353,7 @@ function Sidebar() {
         </Link>
         <div className="w-16 p-2 text-center mt-6">
           <button
-            className="mt-4 "
+            className="mt-4 text-white"
             onClick={() =>
               document.getElementById("add_routine_modal").showModal()
             }
@@ -353,7 +364,7 @@ function Sidebar() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8 hover:scale-95 duration-100"
+              className="w-9 h-9"
             >
               <path
                 strokeLinecap="round"
@@ -369,7 +380,7 @@ function Sidebar() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8 hover:scale-95 duration-100 inline-block mt-1"
+              className="w-8 h-8 hover:scale-95 duration-100 inline-block mt-7"
             >
               <path
                 strokeLinecap="round"
@@ -396,6 +407,22 @@ function Sidebar() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
+              />
+            </svg>
+          </Link>
+          <Link href={"/notes"}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-8 h-8 hover:scale-95 duration-100 inline-block mt-3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
               />
             </svg>
           </Link>
