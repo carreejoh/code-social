@@ -9,6 +9,7 @@ function TaskBlock({
   length,
   blockSize,
   startTime,
+  dateIndex
 }) {
   const taskLengths = {
     // w-32 = 128px
@@ -18,7 +19,7 @@ function TaskBlock({
     60: "w-[252px] h-48",
     // 2 Hr
     90: "w-[380px] h-48",
-    120: "w-[512px] h-48",
+    120: "w-[508px] h-48",
     // 3 Hr
     150: "w-[640px] h-48",
     180: "w-[768px] h-48",
@@ -85,7 +86,7 @@ function TaskBlock({
         blockSize === "fullsize"
           ? `${taskLengths[length]} ${timeStart[startTime]} fixed z-50`
           : taskLengthSmall[length]
-      } cursor-pointer `}
+      } ${dateIndex === 0 ? " border-red-800" : "border-green-800"} border-[1px] cursor-pointer `}
     >
       <div className="flex flex-col justify-between h-full">
         <div
@@ -147,23 +148,7 @@ function TaskBlock({
               d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
             />
           </svg>
-          {/* <div className="dropdown dropdown-right dropdown-end">
-            <label tabIndex={0} className="btn m-1">
-              Click
-            </label>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Item 2</a>
-              </li>
-            </ul>
-          </div> */}
-          <button className="btn btn-xs btn-success btn-outline">
+          <button className={`btn btn-xs btn-success btn-outline ${dateIndex >= 2 ? "hidden" : "block"} ${priority === "Nan" ? "hidden" : "block"}`}>
             Complete
           </button>
         </div>

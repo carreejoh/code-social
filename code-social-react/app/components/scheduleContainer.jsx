@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import TodayContainer from "./todayContainer";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css";
+import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
+import "@splidejs/splide/dist/css/splide-core.min.css";
 import Auth from "../verify/auth";
 
 function ScheduleContainer() {
@@ -27,6 +27,9 @@ function ScheduleContainer() {
     "saturday",
   ];
 
+  const goNext = () => splideRef.current.splide.go("+");
+  const goPrev = () => splideRef.current.splide.go("-");
+
   useEffect(() => {
     const currentDayIndex = new Date().getDay();
     const sortedDays = [
@@ -41,13 +44,6 @@ function ScheduleContainer() {
   // Fetch relevant data if logged in on load
   useEffect(() => {
     if (Auth.loggedIn()) {
-      // const currentDayIndex = new Date().getDay();
-      // const sortedDays = [
-      //   ...daysOfWeek.slice(currentDayIndex - 1),
-      //   ...daysOfWeek.slice(0, currentDayIndex - 1),
-      // ];
-      // setDayList(sortedDays);
-
       let user = Auth.getProfile();
       let username = user.data.username;
       fetchRoutineController(username);
@@ -67,20 +63,7 @@ function ScheduleContainer() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // When splide is moved
-  // useEffect(() => {
-  //   const splide = splideRef.current.splide;
-  //   splide.on("moved", (newIndex) => {
-  //     setActiveSlide(newIndex);
-  //   });
-  //   return () => {
-  //     splide.off("moved");
-  //   };
-  // });
-
   // Fetch all days of users routines
-
-
 
   function createWeekArray() {
     const currentDayIndex = new Date().getDay();
@@ -122,7 +105,7 @@ function ScheduleContainer() {
       newOrder.push(response[weekArray[4]]);
       newOrder.push(response[weekArray[5]]);
       newOrder.push(response[weekArray[6]]);
-      setDayData(newOrder)
+      setDayData(newOrder);
       return true;
     } catch (err) {
       console.error(err);
@@ -149,38 +132,51 @@ function ScheduleContainer() {
 
   return (
     <div className="w-full h-full bg-darkBaseGray rounded-tl-lg">
-      <div className="w-[calc(100vw-64px)] h-full">
-        {splideRendered === true && (
-          <Splide
-            ref={splideRef}
-            aria-label="List of schedules"
-            options={{
-              direction: "ttb",
-              height: "870px",
-              wheel: true,
-              wheelSleep: 0,
-              perPage: 3,
-              perMove: 1,
-              type: "loop",
-            }}
-          >
-            {dayData.map((data, index) => (
-              <SplideSlide key={index} className="">
-                <div
-                  className={`transition-all duration-[400ms] ease-in-out h-full`}
-                >
-                  <TodayContainer
-                    // size={activeSlide === index ? "fullsize" : "small"}
-                    size={"fullsize"}
-                    routineData={data}
-                    day={relevantDayList[index]}
-                  />
-                </div>
-              </SplideSlide>
-            ))}
-          </Splide>
-        )}
-        {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
+      {splideRendered === true && (
+        <Splide
+          hasTrack={false}
+          ref={splideRef}
+          aria-label="List of schedules"
+          options={{
+            direction: "ttb",
+            height: "870px",
+            wheel: true,
+            wheelSleep: 0,
+            perPage: 3,
+            perMove: 1,
+            // type: "loop",
+          }}
+        >
+          <div className="w-[calc(100vw-64px)] h-full pt-2">
+            <SplideTrack>
+              {dayData.map((data, index) => (
+                <SplideSlide key={index} className="">
+                  <div
+                    className={`transition-all duration-[400ms] ease-in-out h-full`}
+                  >
+                    <TodayContainer
+                      // size={activeSlide === index ? "fullsize" : "small"}
+                      size={"fullsize"}
+                      routineData={data}
+                      day={relevantDayList[index]}
+                      dateIndex={index}
+                    />
+                  </div>
+                </SplideSlide>
+              ))}
+            </SplideTrack>
+          </div>
+          <div className="relative z-[100]">
+              <button onClick={goPrev} className="prev-button fixed z-[100]">
+                Prev
+              </button>
+              <button onClick={goNext} className="next-button fixed z-[100]">
+                Next
+              </button>
+            </div>
+        </Splide>
+      )}
+      {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
           <h1 className="text-lg font-semibold">Quick Stats</h1>
           <div className="h-64 w-[210px] mt-2">
             <div className="flex">
@@ -214,8 +210,8 @@ function ScheduleContainer() {
             <div className="flex"></div>
           </div>
         </div> */}
-      </div>
     </div>
+    // </div>
   );
 }
 

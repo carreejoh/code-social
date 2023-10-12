@@ -1,5 +1,5 @@
 
-function EmptyBlock({startTime}) {
+function EmptyBlock({startTime, dateIndex}) {
 
     const timeStart = {
         2500: "ml-[0px]",
@@ -46,7 +46,7 @@ function EmptyBlock({startTime}) {
       };
 
     return(
-        <div className={`${timeStart[startTime]} p-2 w-[124px] h-48 bg-darkBaseGray fixed rounded-lg z-30 border-[1px] border-lightestGray`}>
+        <div className={`${timeStart[startTime]}  p-2 w-[124px] h-48 bg-darkBaseGray fixed rounded-lg z-30 border-[1px] border-lightestGray`}>
             {/* <h1 className="text-xs text-lightestGray">Empty</h1> */}
         </div>
     )

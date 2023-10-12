@@ -5,12 +5,13 @@ import TimeLine from "./timeline";
 import { useState, useEffect, useRef } from "react";
 import EmptyBlock from "./emptyBlock";
 
-function TodayContainer({ size, routineData, day }) {
+function TodayContainer({ size, routineData, day, dateIndex }) {
   const [dayData, setDayData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [weekdayTitle, setWeekdayTitle] = useState("");
   const [scrollTime, setScrollTime] = useState(0);
   const barRef = useRef(null);
+  const [datesArray, setDatesArray] = useState([])
 
   // console.log(routineData + day)
 
@@ -23,7 +24,7 @@ function TodayContainer({ size, routineData, day }) {
     1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930,
     2000,
   ];
-
+  
   const daysOfWeek = [
     "sunday",
     "monday",
@@ -33,6 +34,31 @@ function TodayContainer({ size, routineData, day }) {
     "friday",
     "saturday",
   ];
+  
+  const containerLength = {
+    fullsize:
+      "w-[6178px] h-56 transform duration-[500ms] ease-[cubic-bezier(0.17,0.67,0.06,0.96)]",
+    small: "w-[800px] h-44",
+  };
+
+// MAKE ARRAY OF DATES
+
+useEffect(() => {
+  const dates = [];
+
+  for (let i = -1; i < 6; i++) { // starting from -1 to get yesterday's date
+      const date = new Date();
+      date.setDate(date.getDate() + i); // adding i days to the current date
+
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 because months are 0-indexed in JS
+      const year = String(date.getFullYear()).slice(-2); // getting the last 2 digits of the year
+
+      dates.push(`${month}/${day}/${year}`);
+  }
+  setDatesArray(dates);
+  console.log(datesArray)
+}, [])
 
   // Moves "time bar" left each minute so user knows time relative to their schedule
 
@@ -113,20 +139,15 @@ function TodayContainer({ size, routineData, day }) {
     }
   }
 
-  const containerLength = {
-    fullsize:
-      "w-[6178px] h-56 transform duration-[500ms] ease-[cubic-bezier(0.17,0.67,0.06,0.96)]",
-    small: "w-[800px] h-44",
-  };
 
   return (
     <>
-      {daysOfWeek[dayOfWeekNumber] === weekdayTitle ? (
-        <h1 className="text-xl ml-20 font-semibold text-pink-500">
-          {day}
+      {dateIndex === 1 ? (
+        <h1 className="text-lg ml-20 font-semibold text-white h-4">
+          Today, {datesArray[dateIndex]}
         </h1>
       ) : (
-        <h1 className="text-xl font-semibold ml-20 text-white h-4">{day}</h1>
+        <h1 className="text-lg font-semibold ml-20 text-white h-4">{day}, {datesArray[dateIndex]}</h1>
       )}
       <div
         id="scrollDiv"
@@ -162,11 +183,12 @@ function TodayContainer({ size, routineData, day }) {
                   priority={data.priority}
                   length={data.length}
                   startTime={data.startTime}
+                  dateIndex={dateIndex}
                 />
               ))}
             {dataLoaded &&
               allStartTimes.map((time, index) => (
-                <EmptyBlock key={index} startTime={time} />
+                <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
               ))}
           </div>
           <div
