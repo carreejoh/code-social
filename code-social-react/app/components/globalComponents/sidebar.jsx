@@ -1,11 +1,11 @@
 "use client";
-import NavBtn from "./globalComponents/secondaryNavBtn";
+import NavBtn from "./secondaryNavBtn";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import SignUpModal from "./globalComponents/signupModal";
-import LoginModal from "./globalComponents/loginModal";
-import Auth from "../verify/auth";
-import MathMod from "../verify/math";
+import SignUpModal from "./signupModal";
+import LoginModal from "./loginModal";
+import Auth from "../../verify/auth";
+import MathMod from "../../verify/math";
 
 function Sidebar() {
   const [signupModal, toggleSignupModal] = useState(false);

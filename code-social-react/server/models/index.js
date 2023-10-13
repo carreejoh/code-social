@@ -1,5 +1,5 @@
 const User = require('./users');
 const Routine = require('./routines');
-// const Week = require('./week');
+// const Stats = require('./statSheet');
 
 module.exports = { User, Routine };

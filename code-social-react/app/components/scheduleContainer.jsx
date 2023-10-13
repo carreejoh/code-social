@@ -132,6 +132,40 @@ function ScheduleContainer() {
 
   return (
     <div className="w-full h-full bg-darkBaseGray rounded-tl-lg">
+      <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16 bg-darkestBaseGray">
+        <button onClick={goPrev} className="prev-button z-[100]  rounded-full justify-center items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-10 h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.5 15.75l7.5-7.5 7.5 7.5"
+            />
+          </svg>
+        </button>
+        <button onClick={goNext} className="next-button z-[100]  rounded-full justify-center items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-10 h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </button>
+      </div>
       {splideRendered === true && (
         <Splide
           hasTrack={false}
@@ -165,17 +199,11 @@ function ScheduleContainer() {
                 </SplideSlide>
               ))}
             </SplideTrack>
+            <div class="splide__arrows"></div>
           </div>
-          <div className="relative z-[100]">
-              <button onClick={goPrev} className="prev-button fixed z-[100]">
-                Prev
-              </button>
-              <button onClick={goNext} className="next-button fixed z-[100]">
-                Next
-              </button>
-            </div>
         </Splide>
       )}
+
       {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
           <h1 className="text-lg font-semibold">Quick Stats</h1>
           <div className="h-64 w-[210px] mt-2">

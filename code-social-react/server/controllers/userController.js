@@ -38,9 +38,17 @@ module.exports = {
 
   async postUser(req, res) {
     try {
+      req.body.statSheet = {
+        highOccured: 0,
+        highestOccured: 0,
+        highCompleted: 0,
+        highestCompleted: 0,
+        weekdayOccur: [0,0,0,0,0,0,0],
+        weekdayCompleted: [0,0,0,0,0,0,0],
+      }
       const user = await User.create(req.body);
       const token = signToken(user);
-      res.status(200).json({token});
+      res.status(200).json({ token });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -56,26 +64,11 @@ module.exports = {
         return res.status(404).json({ message: "Incorrect Password" });
       }
       const token = signToken(user);
-      res.status(200).json({token});
+      res.status(200).json({ token });
     } catch (err) {
       console.error(err);
     }
   },
-
-  //   async logout(req, res) {
-  //     try {
-  //       if (req.session.loggedIn) {
-  //         req.session.destroy(() => {
-  //           res.status(200).end();
-  //         });
-  //       } else {
-  //         res.status(404).end();
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //       res.status(500).json(e);
-  //     }
-  //   },
 
   async isLoggedIn(req, res) {
     try {
@@ -84,7 +77,7 @@ module.exports = {
         res.json("loggedin");
         return;
       } else {
-        res.json("none")
+        res.json("none");
         return;
       }
     } catch (err) {
@@ -92,60 +85,51 @@ module.exports = {
     }
   },
 
-  //   async unknown(req, res) {
-  //     try {
-  //       if (req.session.loggedIn) {
-  //         let user = req.session.username;
-  //         res.json(user);
-  //       } else {
-  //         res.json("No User Found");
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
+  // FOR STATS
 
-  // //   async addLikedPost(req, res) {
-  // //     try {
-  // //       const post = await Post.findOne({ _id: req.body.postId }).exec();
-  // //       const user = await User.findOneAndUpdate(
-  // //         { username: req.body.username },
-  // //         { $push: { likes: post._id } },
-  // //         { new: true }
-  // //       ).exec();
-  // //       if (!user) {
-  // //         res.json({ message: "No user found" });
-  // //         return;
-  // //       }
-  // //       res.json(post);
-  // //     } catch (e) {
-  // //       console.error(e);
-  // //     }
-  // //   },
+  // async firstPostStats(req,res) {
+  //   try{
 
-  //   async getUserLikes(req, res) {
-  //     try {
-  //       const likes = await User.find({ username: req.params.username }).select(
-  //         "likes"
-  //       );
-  //       res.json(likes);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
+  //   } catch(err) {
+  //     console.error(err)
+  //   }
+  // },
 
-  //   async deleteUserLikes(req, res) {
-  //     try {
-  //         const user = await User.findOneAndUpdate(
-  //             { username: req.body.username },
-  //             { $pull: { likes: req.body.postId }}
-  //             );
-  //         if(!user) {
-  //             return res.status(404).json({ message: "No code with that ID" });
-  //         }
-  //         res.json(user);
-  //     } catch (err) {
-  //         console.error(err)
-  //     }
-  //   },
+  async updateStats(req, res) {
+    try {
+      const { highOc, highestOc, highComp, highestComp, weekOccurIndex, weekOccurIncre, weekCompIndex, weekCompIncre } = req.body
+      const user = await User.findOneAndUpdate(
+        { username: req.params.username },
+        { $inc: { 
+          'statSheet.highOccured': highOc, 
+          'statSheet.highestOccured': highestOc, 
+          'statSheet.highCompleted': highComp,
+           'statSheet.highestCompleted': highestComp,
+           [`statSheet.weekdayOccur.${weekOccurIndex}`]: weekOccurIncre,
+           [`statSheet.weekdayCompleted.${weekCompIndex}`]: weekCompIncre,
+        } },
+        { new: true }
+      );
+      if (!user) {
+        res.status(400).json({ message: "No user found" });
+      }
+      res.json(user)
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  async getUserStats(req,res) {
+    try {
+      const user = await User.findOne({ username: req.params.username });
+      if (!user) {
+        res.status(400).json({ message: "No user found" });
+      }
+      res.json(user.statSheet)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+
 };
