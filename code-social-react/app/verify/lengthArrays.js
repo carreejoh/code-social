@@ -1,7 +1,34 @@
 
-function EmptyBlock({startTime, dateIndex}) {
+module.exports = {
+    taskLengths: {
+        // w-32 = 128px
+        // 128px = 30min (on xl screens)
+        // 1 Hr
+        30: "w-[124px] h-48",
+        60: "w-[252px] h-48",
+        // 2 Hr
+        90: "w-[380px] h-48",
+        120: "w-[508px] h-48",
+        // 3 Hr
+        150: "w-[636px] h-48",
+        180: "w-[768px] h-48",
+        // 4 Hr
+        210: "w-[896px] h-48",
+        240: "w-[1024px] h-48",
+      },
 
-    const timeStart = {
+      editModalMarginLeft: {
+        30: "ml-[124px]",
+        60: "ml-[252px]",
+        90: "ml-[380px]",
+        120: "ml-[508px]",
+        150: "ml-[636px]",
+        180: "ml-[768px]",
+        210: "ml-[896px]",
+        240: "ml-[1024px]",
+      },
+
+      timeStart: {
         2500: "ml-[0px]",
         2530: "ml-[128px]",
         100: "ml-[258px]",
@@ -43,13 +70,15 @@ function EmptyBlock({startTime, dateIndex}) {
         1900: "ml-[4864px]",
         1930: "ml-[4992px]",
         2000: "ml-[5120px]",
-      };
+      },
 
-    return(
-        <div className={`${timeStart[startTime]}  p-2 w-[124px] h-48 shadow-xl bg-baseWhite dark:bg-darkBaseGray fixed rounded-lg z-30 border-[1px] border-lightestGray`}>
-            {/* <h1 className="text-xs text-lightestGray">Empty</h1> */}
-        </div>
-    )
+      weekdayToIndex: {
+        "sunday": 0,
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6,
+      }
 }
-
-export default EmptyBlock;

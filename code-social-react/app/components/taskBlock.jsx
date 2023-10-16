@@ -1,159 +1,311 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { taskLengths, timeStart, weekdayToIndex } from "../verify/lengthArrays";
+import TaskBlockEdit from "./taskBlockEdit";
+import Auth from "../verify/auth";
+
 function TaskBlock({
   title,
   time,
   priority,
-  activity,
-  desc,
+  routineId,
+  date,
   length,
   blockSize,
   startTime,
-  dateIndex
+  dateIndex,
+  day,
+  description,
 }) {
-  const taskLengths = {
-    // w-32 = 128px
-    // 128px = 30min (on xl screens)
-    // 1 Hr
-    30: "w-[124px] h-48",
-    60: "w-[252px] h-48",
-    // 2 Hr
-    90: "w-[380px] h-48",
-    120: "w-[508px] h-48",
-    // 3 Hr
-    150: "w-[640px] h-48",
-    180: "w-[768px] h-48",
-    // 4 Hr
-    210: "w-[896px] h-48",
-    240: "w-[1024px] h-48",
-  };
+  const [username, setUsername] = useState("");
+  const [taskComplete, setTaskComplete] = useState(false);
+  const [taskCompleteLocal, setTaskCompleteLocal] = useState(true);
+  const [titleInput, setTitleInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
+  const [editBlock, setEditBlock] = useState(false);
 
-  const taskLengthSmall = {
-    30: "w-[64px] h-32",
-    60: "w-[96px] h-32",
-    90: "w-[128px] h-32",
-    120: "w-[160px] h-32",
-    150: "w-[192px] h-32",
-  };
+  useEffect(() => {
+    setTitleInput(title);
+    setDescriptionInput(description);
+    let user = Auth.getProfile();
+    let username = user.data.username;
+    setUsername(username);
+    let localStorageTask = localStorage.getItem(`${routineId}${date}`);
+    if (!localStorageTask) {
+      setTaskCompleteLocal(false);
+      return;
+    }
+    if (localStorageTask && priority !== "Nan") {
+      setTaskComplete(true);
+    }
+  }, []);
 
-  const timeStart = {
-    2500: "ml-[0px]",
-    2530: "ml-[128px]",
-    100: "ml-[258px]",
-    130: "ml-[384px]",
-    200: "ml-[512px]",
-    230: "ml-[640px]",
-    300: "ml-[768px]",
-    330: "ml-[896px]",
-    400: "ml-[1024px]",
-    430: "ml-[1152px]",
-    500: "ml-[1280px]",
-    530: "ml-[1408px]",
-    600: "ml-[1536px]",
-    630: "ml-[1664px]",
-    700: "ml-[1792px]",
-    730: "ml-[1920px]",
-    800: "ml-[2048px]",
-    830: "ml-[2176px]",
-    900: "ml-[2304px]",
-    930: "ml-[2432px]",
-    1000: "ml-[2560px]",
-    1030: "ml-[2688px]",
-    1100: "ml-[2816px]",
-    1130: "ml-[2944px]",
-    1200: "ml-[3072px]",
-    1230: "ml-[3200px]",
-    1300: "ml-[3328px]",
-    1330: "ml-[3456px]",
-    1400: "ml-[3584px]",
-    1430: "ml-[3712px]",
-    1500: "ml-[3840px]",
-    1530: "ml-[3968px]",
-    1600: "ml-[4096px]",
-    1630: "ml-[4224px]",
-    1700: "ml-[4352px]",
-    1730: "ml-[4480px]",
-    1800: "ml-[4608px]",
-    1830: "ml-[4736px]",
-    1900: "ml-[4864px]",
-    1930: "ml-[4992px]",
-    2000: "ml-[5120px]",
-  };
+  // FOR COMPLETE BUTTON
+
+  async function completeTask() {
+    let localStorageTask = localStorage.getItem(`${routineId}${date}`);
+    if (!localStorageTask) {
+      setTaskComplete(true);
+      let body = {
+        highOc: 0,
+        highestOc: 0,
+        highComp: 0,
+        highestComp: 0,
+        weekOccurIndex: 0,
+        weekOccurIncre: 0,
+        weekCompIndex: 0,
+        weekCompIncre: 1,
+      };
+      priority === "Highest"
+        ? (body.highestComp += 1)
+        : (body.highestComp += 0);
+      priority === "High" ? (body.highComp += 1) : (body.highComp += 0);
+      body.weekCompIndex = weekdayToIndex[day];
+      const usableJson = JSON.stringify(body);
+      const userStats = await incrementUserStats(usableJson);
+      localStorage.setItem(`${routineId}${date}`, true);
+    } else {
+      console.log("This task already compelte ");
+    }
+  }
+
+  async function incrementUserStats(statsBody) {
+    try {
+      const response = await fetch(
+        `http://localhost:5050/api/users/stats/${username}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: statsBody,
+        }
+      );
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // When Title or Description are changed, setTimeout for minimal fetches
+
+  useEffect(() => {
+    const fetchInterval = setTimeout(() => {
+      updateRoutineValues();
+    }, 3000);
+
+    return () => clearTimeout(fetchInterval);
+  }, [titleInput, descriptionInput]);
+
+  async function updateRoutineValues() {
+    let body = {
+      title: titleInput,
+      description: descriptionInput,
+    };
+    const usableJson = JSON.stringify(body);
+    const response = await fetch(
+      `http://localhost:5050/api/routines/individ/${routineId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: usableJson,
+      }
+    );
+    const data = await response.json();
+    if (!data) {
+      console.error("fetch invalid, try again");
+    }
+    console.log(data);
+  }
 
   return (
-    <div
-      className={`bg-baseGray p-2 rounded-lg mr-[2px]  ${
-        blockSize === "fullsize"
-          ? `${taskLengths[length]} ${timeStart[startTime]} fixed z-50`
-          : taskLengthSmall[length]
-      } ${dateIndex === 0 ? " border-red-800" : "border-green-800"} border-[1px] cursor-pointer `}
-    >
-      <div className="flex flex-col justify-between h-full">
-        <div
-          className={`${
-            length === "length30" ? "" : "flex"
-          } w-full justify-between`}
-        >
-          <div className="">
-            <h1
+    <>
+      {/* <dialog id="edit_modal" >
+        <TaskBlockEdit
+         />
+      </dialog> */}
+      <div
+        className={`bg-lightestGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
+          blockSize === "fullsize"
+            ? `${taskLengths[length]} ${timeStart[startTime]} z-40 absolute`
+            : taskLengthSmall[length]
+        } ${
+          dateIndex === 0 ? " border-red-800" : "border-green-800"
+        } border-[1px] `}
+      >
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <div
               className={`${
-                blockSize === "fullsize"
-                  ? "text-sm font-semibold"
-                  : "text-[12px]"
-              } text-white`}
+                length === "length30" ? "" : "flex"
+              } w-full justify-between`}
             >
-              {title}
-            </h1>
-            <h1
-              className={`${
-                blockSize === "fullsize"
-                  ? "text-sm font-semibold"
-                  : "text-[9px]"
-              } text-gray-400`}
-            >
-              {time}
-            </h1>
+              <div className="-mt-[4px]">
+                <input
+                  className={`text-sm font-semibold text-white bg-transparent focus:outline-none`}
+                  value={titleInput}
+                  onChange={(e) => setTitleInput(e.target.value)}
+                  type="text"
+                ></input>
+                <h1
+                  className={`${
+                    blockSize === "fullsize"
+                      ? "text-md font-semibold"
+                      : "text-[9px]"
+                  } text-gray-400`}
+                >
+                  {time}
+                </h1>
+              </div>
+              <div
+                className={`${priority === "Highest" ? "" : "hidden"} ${
+                  blockSize === "fullsize"
+                    ? "text-lg badge-md"
+                    : "text-xs badge-xs"
+                } badge font-semibold badge-secondary`}
+              >
+                !!!
+              </div>
+              <div
+                className={`${priority === "High" ? "" : "hidden"} ${
+                  blockSize === "fullsize"
+                    ? "text-lg badge-md"
+                    : "text-xs badge-xs"
+                } badge text-white font-semibold badge-primary`}
+              >
+                !
+              </div>
+            </div>
+            <div className={`mt-1`}>
+              <textarea
+                onChange={(e) => setDescriptionInput(e.target.value)}
+                defaultValue={descriptionInput}
+                className="text-sm text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
+              ></textarea>
+            </div>
           </div>
           <div
-            className={`${priority === "Highest" ? "" : "hidden"} ${
-              blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"
-            } badge font-semibold badge-secondary`}
+            className={`justify-between h-6 ${
+              blockSize === "fullsize" ? "flex" : "hidden"
+            }`}
           >
-            !!!
+            <div className="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                onClick={() => setEditBlock(true)}
+                className={`${
+                  editBlock ? "hidden" : ""
+                } w-6 h-6 cursor-pointer hover:scale-95 duration-100`}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                />
+              </svg>
+              {editBlock && (
+                <div className="h-32 w-96 z-[9999] fixed bg-darkestBaseGray -mt-[104px] p-1">
+                  <h1 className="text-sm text-black dark:text-white">
+                    Active Days
+                  </h1>
+                  <div className="flex">
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex">
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                        checked="checked"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Tue</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => completeTask()}
+              className={`btn btn-xs btn-success btn-outline ${
+                taskComplete === false ? "block" : "hidden"
+              } ${dateIndex >= 2 ? "hidden" : "block"} ${
+                priority === "Nan" ? "hidden" : "block"
+              } ${taskCompleteLocal === false ? "block" : "hidden"}`}
+            >
+              Complete
+            </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className={`h-7 w-7 text-green-500 ${
+                taskComplete === true ? "block" : "hidden"
+              } `}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
           </div>
-          <div
-            className={`${priority === "High" ? "" : "hidden"} ${
-              blockSize === "fullsize" ? "text-lg badge-md" : "text-xs badge-xs"
-            } badge text-white font-semibold badge-primary`}
-          >
-            !
-          </div>
-        </div>
-        <div
-          className={`justify-between ${
-            blockSize === "fullsize" ? "flex" : "hidden"
-          }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 ml-[-9px]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-            />
-          </svg>
-          <button className={`btn btn-xs btn-success btn-outline ${dateIndex >= 2 ? "hidden" : "block"} ${priority === "Nan" ? "hidden" : "block"}`}>
-            Complete
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

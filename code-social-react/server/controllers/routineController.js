@@ -90,13 +90,77 @@ module.exports = {
     }
   },
 
-  async deleteRoutine(req, res) {
+  async editRoutine(req, res) {
     try {
-      const routine = await Routine.findByIdAndDelete({ _id: req.params._id });
+      const routine = await Routine.findByIdAndUpdate(
+        req.params._id,
+        req.body,
+        { new: true }
+      );
       if (!routine) {
         return res.status(400);
       }
-      res.status(200).json({ message: "Routine deleted" });
+      res.status(200).json({ message: "Routine updated!" });
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  async deleteSomeRoutines(req, res) {
+    try {
+      const daysOfWeek = Array.isArray(req.body.dayOfWeek)
+        ? req.body.dayOfWeek
+        : [req.body.dayOfWeek];
+      const updateOperations = daysOfWeek.reduce(
+        (ops, day) => {
+          ops[`$pull`][day] = req.params.routineId;
+          return ops;
+        },
+        { $pull: {} }
+      );
+      const user = await User.findOneAndUpdate(
+        { username: req.params.username },
+        updateOperations,
+        { new: true }
+      );
+      if (!user) {
+        return res
+          .status(400)
+          .json({ message: "Unable to remove routines from user" });
+      }
+      res.json(user);
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
+  async nukeRoutine(req, res) {
+    try {
+      const daysOfWeek = Array.isArray(req.body.dayOfWeek)
+        ? req.body.dayOfWeek
+        : [req.body.dayOfWeek];
+      const updateOperations = daysOfWeek.reduce(
+        (ops, day) => {
+          ops[`$pull`][day] = req.params.routineId;
+          return ops;
+        },
+        { $pull: {} }
+      );
+      const user = await User.findOneAndUpdate(
+        { username: req.params.username },
+        updateOperations,
+        { new: true }
+      );
+      if(!user) {
+        return res.json({message: "User wasn't found"})
+      }
+      const routine = await Routine.findByIdAndDelete({ _id: req.params.routineId });
+      if (!routine) {
+        return res.json({
+          message: "Lucky for you this routine doesn't exist",
+        });
+      }
+      res.json({ message: "Routine destroyed" });
     } catch (err) {
       console.error(err);
     }

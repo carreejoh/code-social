@@ -57,7 +57,6 @@ useEffect(() => {
       dates.push(`${month}/${day}/${year}`);
   }
   setDatesArray(dates);
-  console.log(datesArray)
 }, [])
 
   // Moves "time bar" left each minute so user knows time relative to their schedule
@@ -107,7 +106,7 @@ useEffect(() => {
             routineData.map((id) => fetchIndividualRoutine(id))
           );
           setDayData(dataArray);
-          console.log(dataArray);
+          // console.log(dataArray);
           setDataLoaded(true);
           setWeekdayTitle(dataArray[0]?.dayOfWeek);
         } else {
@@ -143,11 +142,11 @@ useEffect(() => {
   return (
     <>
       {dateIndex === 1 ? (
-        <h1 className="text-lg ml-20 font-semibold text-white h-4">
+        <h1 className="text-lg ml-20 font-semibold text-black dark:text-white h-4">
           Today, {datesArray[dateIndex]}
         </h1>
       ) : (
-        <h1 className="text-lg font-semibold ml-20 text-white h-4">{day}, {datesArray[dateIndex]}</h1>
+        <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">{day}, {datesArray[dateIndex]}</h1>
       )}
       <div
         id="scrollDiv"
@@ -184,6 +183,10 @@ useEffect(() => {
                   length={data.length}
                   startTime={data.startTime}
                   dateIndex={dateIndex}
+                  routineId={data.id}
+                  description={data.description}
+                  date={datesArray[dateIndex]}
+                  day={day}
                 />
               ))}
             {dataLoaded &&

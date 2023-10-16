@@ -47,10 +47,10 @@ function WelcomeInfo() {
   ];
 
   return (
-    <div className="h-24 w-full border-b-[2px] border-darkestBaseGray bg-darkestBaseGray">
+    <div className="h-24 w-full border-b-[2px] bg-darkBaseWhite dark:border-darkestBaseGray dark:bg-darkestBaseGray">
       <div className="h-16">
-        <h1 className="font-semibold text-xl pt-4 ml-12">Welcome {username}!</h1>
-        <h1 className="text-lg ml-12 text-white">Monday, {dateTime.date}</h1>
+        <h1 className="font-semibold text-black dark:text-white text-xl pt-4 ml-12">Welcome {username}!</h1>
+        <h1 className="text-lg ml-12 text-black dark:text-white">Monday, {dateTime.date}</h1>
       </div>
     </div>
   );

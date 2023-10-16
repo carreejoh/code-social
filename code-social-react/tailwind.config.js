@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,31 +15,25 @@ module.exports = {
       },
       colors: {
 
-        // BLUE TINT Dark Mode
+        // OG COLOR
 
         darkestBaseGray: '#010508',
         darkBaseGray: '#0D1117',
         baseGray: '#161B22',
-        lightestGray: '#31373D',
-        darkBaseWhite: '#EBEFF4',
-        baseWhite: '#FEFFFE',
+        lightestGray: '#41474F',
+        baseWhite: '#E5E4E6',
+        darkBaseWhite: '#F2F4F7',
+        darkestBaseWhite: '#E5E4E6',
+        // secondary: '#D926A9'
 
-        secondary: '#D926A9'
+        // NEW NEW
 
-        // BLUE TINT White Mode (Crusaders color scheme)
+        // darkestBaseGray: '#0D1117',
+        // darkBaseGray: '#000000',
+        // baseGray: '#41474F',
+        // lightestGray: '#1B1E22'
 
-        // darkestBaseGray: '#AABACE',
-        // darkBaseGray: '#EAEFF5',
-        // baseGray: '#FEFFFE'
-
-        // BROWN TINT Dark Mode
-
-        // darkestBaseGray: '#050404',
-        // darkBaseGray: '#1A1B1B',
-        // // baseGray: '#1F1F1E',
-        // baseGray: '#4C4D4D',
-        // darkBaseWhite: '#EBEFF4',
-        // baseWhite: '#FEFFFE'
+        
       },
       keyframes: {
         slideInRight: {

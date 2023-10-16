@@ -131,8 +131,8 @@ function ScheduleContainer() {
   }
 
   return (
-    <div className="w-full h-full bg-darkBaseGray rounded-tl-lg">
-      <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16 bg-darkestBaseGray">
+    <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+      <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16 bg-baseWhite dark:bg-darkestBaseGray">
         <button onClick={goPrev} className="prev-button z-[100]  rounded-full justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +199,7 @@ function ScheduleContainer() {
                 </SplideSlide>
               ))}
             </SplideTrack>
-            <div class="splide__arrows"></div>
+            <div className="splide__arrows"></div>
           </div>
         </Splide>
       )}

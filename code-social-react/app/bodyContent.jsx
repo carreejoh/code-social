@@ -13,12 +13,12 @@ const Header = dynamic(() => import("./components/globalComponents/header"), {
 function BodyContent({ children }) {
   return (
     <>
-      <Sidebar />
-      <div className="w-[100vw] h-[100vh] pl-16 bg-darkBaseGray overflow-hidden">
+       <Sidebar />
+      <div className="w-[100vw] h-[100vh] pl-16 bg-baseWhite dark:bg-darkBaseGray overflow-hidden">
         <div className="h-24">
           <WelcomeInfo />
         </div>
-        <div className=" bg-darkestBaseGray ">
+        <div className=" bg-darkBaseWhite dark:bg-darkestBaseGray ">
         <Suspense fallback={<Loading />}>{children}</Suspense>
         </div>
       </div>
