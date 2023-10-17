@@ -9,9 +9,8 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   const [dayData, setDayData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [weekdayTitle, setWeekdayTitle] = useState("");
-  const [scrollTime, setScrollTime] = useState(0);
   const barRef = useRef(null);
-  const [datesArray, setDatesArray] = useState([])
+  const [datesArray, setDatesArray] = useState([]);
 
   // console.log(routineData + day)
 
@@ -22,9 +21,9 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
     2500, 2530, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700,
     730, 800, 830, 900, 930, 1000, 1030, 1100, 1130, 1200, 1230, 1300, 1330,
     1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930,
-    2000,
+    2000, 2030, 2100, 2130, 2200, 2230, 2300, 2330,
   ];
-  
+
   const daysOfWeek = [
     "sunday",
     "monday",
@@ -34,66 +33,59 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
     "friday",
     "saturday",
   ];
-  
+
   const containerLength = {
     fullsize:
       "w-[6178px] h-56 transform duration-[500ms] ease-[cubic-bezier(0.17,0.67,0.06,0.96)]",
     small: "w-[800px] h-44",
   };
 
-// MAKE ARRAY OF DATES
+  // MAKE ARRAY OF DATES
 
-useEffect(() => {
-  const dates = [];
+  useEffect(() => {
+    const dates = [];
 
-  for (let i = -1; i < 6; i++) { // starting from -1 to get yesterday's date
+    for (let i = -1; i < 6; i++) {
+      // starting from -1 to get yesterday's date
       const date = new Date();
       date.setDate(date.getDate() + i); // adding i days to the current date
 
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 because months are 0-indexed in JS
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // +1 because months are 0-indexed in JS
       const year = String(date.getFullYear()).slice(-2); // getting the last 2 digits of the year
 
       dates.push(`${month}/${day}/${year}`);
-  }
-  setDatesArray(dates);
-}, [])
-
-  // Moves "time bar" left each minute so user knows time relative to their schedule
-
-  // useEffect(() => {
-  //   const updateMarginLeft = () => {
-  //     // if (barRef.current) {
-  //     //   // Replace this with your logic to calculate the new margin-left
-  //     //   const newMarginLeft = 'w-[2px] ml-24';
-  //     //   barRef.className = newMarginLeft;
-  //     // }
-  //     let timeBar = document.querySelector("#timeBar");
-  //     timeBar.classList.add("ml-[200px]");
-  //   };
-  //   const intervalId = setInterval(updateMarginLeft, 60000);
-  //   return () => clearInterval(intervalId);
-  // }, []);
+    }
+    setDatesArray(dates);
+  }, []);
 
   // Auto scroll left based on time of day
 
   useEffect(() => {
+    // Scroll main div to relevant time of day
     let scrollDivs = document.querySelectorAll(".scrollDiv");
-
     let date = new Date();
     let currentHour = date.getHours();
     let currentMinute = date.getMinutes();
     let totalMinutesElapsed = currentHour * 60 + currentMinute;
-    setScrollTime(totalMinutesElapsed);
 
-    let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
+    // let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
+    // scrollDivs.forEach((div) =>
+    //   div.scrollTo({
+    //     left: scrollPosition,
+    //     behavior: "smooth",
+    //   })
+    // );
 
-    scrollDivs.forEach((div) =>
-      div.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      })
-    );
+    // Scroll timebar to postion on load and then setinterval to move it
+    let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+    barRef.current.style.marginLeft = `${timeBarPosition}px`;
+    setInterval(() => {
+      let timeBarPosition;
+      totalMinutesElapsed += 0.5;
+      timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+      barRef.current.style.marginLeft = `${timeBarPosition}px`;
+    }, 30000);
   }, []);
 
   // Fetch each individual routine and populate main div with each task block
@@ -106,7 +98,7 @@ useEffect(() => {
             routineData.map((id) => fetchIndividualRoutine(id))
           );
           setDayData(dataArray);
-          // console.log(dataArray);
+          console.log(dataArray);
           setDataLoaded(true);
           setWeekdayTitle(dataArray[0]?.dayOfWeek);
         } else {
@@ -116,7 +108,7 @@ useEffect(() => {
         console.error("Error Fetching Data Today Container", error);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -138,7 +130,6 @@ useEffect(() => {
     }
   }
 
-
   return (
     <>
       {dateIndex === 1 ? (
@@ -146,7 +137,9 @@ useEffect(() => {
           Today, {datesArray[dateIndex]}
         </h1>
       ) : (
-        <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">{day}, {datesArray[dateIndex]}</h1>
+        <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">
+          {day}, {datesArray[dateIndex]}
+        </h1>
       )}
       <div
         id="scrollDiv"
@@ -170,7 +163,12 @@ useEffect(() => {
           ) : (
             <></>
           )}
-
+          <div
+            ref={barRef}
+            className={`${
+              dateIndex === 1 ? "block" : "hidden"
+            } fixed z-[9999] h-[200px] w-[2px] bg-black dark:bg-white -mt-1`}
+          ></div>
           <div className="flex pl-4 ">
             {dataLoaded &&
               dayData.map((data, index) => (
@@ -189,10 +187,9 @@ useEffect(() => {
                   day={day}
                 />
               ))}
-            {dataLoaded &&
-              allStartTimes.map((time, index) => (
-                <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
-              ))}
+            {allStartTimes.map((time, index) => (
+              <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
+            ))}
           </div>
           <div
             className={` fixed bottom-0 ${

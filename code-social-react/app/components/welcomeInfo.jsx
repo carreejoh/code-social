@@ -32,7 +32,10 @@ function WelcomeInfo() {
   useEffect(() => {
     if(Auth.loggedIn()) {
       let profile = Auth.getProfile()
-      setUsername(profile.data.username)
+      // if(!profile) {
+      //   return;
+      // }
+      setUsername(profile?.data?.username)
     }
   }, [])
 

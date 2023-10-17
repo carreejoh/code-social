@@ -17,23 +17,25 @@ module.exports = {
 
         // OG COLOR
 
-        darkestBaseGray: '#010508',
-        darkBaseGray: '#0D1117',
-        baseGray: '#161B22',
-        lightestGray: '#41474F',
-        baseWhite: '#E5E4E6',
-        darkBaseWhite: '#F2F4F7',
-        darkestBaseWhite: '#E5E4E6',
+        // darkestBaseGray: '#010508',
+        // darkBaseGray: '#0D1117',
+        // baseGray: '#161B22',
+        // lightestGray: '#41474F',
+        // baseWhite: '#E5E4E6',
+        // darkBaseWhite: '#F2F4F7',
+        // darkestBaseWhite: '#E5E4E6',
         // secondary: '#D926A9'
 
         // NEW NEW
 
-        // darkestBaseGray: '#0D1117',
-        // darkBaseGray: '#000000',
-        // baseGray: '#41474F',
-        // lightestGray: '#1B1E22'
-
-        
+        darkestBaseGray: '#010508',
+        darkBaseGray: '#0D1117',
+        baseGray: '#161B22',
+        lightestGray: '#41474F',
+        customCyan: '#1FB2A6',
+        customPurple: '#6419E6',
+        customPink: '#D926A9',
+        customBlue: '#204881'
       },
       keyframes: {
         slideInRight: {

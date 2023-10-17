@@ -24,13 +24,19 @@ function TaskBlock({
   const [titleInput, setTitleInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
+  const [relatedDays, setRelatedDays] = useState([]);
+
+  // Initialize useEffect
 
   useEffect(() => {
+    // Set title and description
     setTitleInput(title);
     setDescriptionInput(description);
+    // Verify User is logged in and change their username
     let user = Auth.getProfile();
     let username = user.data.username;
     setUsername(username);
+    // Check whether block has been "completed"
     let localStorageTask = localStorage.getItem(`${routineId}${date}`);
     if (!localStorageTask) {
       setTaskCompleteLocal(false);
@@ -39,7 +45,32 @@ function TaskBlock({
     if (localStorageTask && priority !== "Nan") {
       setTaskComplete(true);
     }
+    // Fetch which days routine block is also in for edit modal function
+    const getDays = fetchAllRoutineDays();
+    if(!getDays) {
+      return;
+    }
+
   }, []);
+
+  // Fetch for days of week for edit modal button
+
+  async function fetchAllRoutineDays() {
+    try {
+      const response = await fetch(
+        `http://localhost:5050/api/routines/individ/${routineId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      setRelatedDays(data.dayOfWeek)
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   // FOR COMPLETE BUTTON
 
@@ -115,7 +146,6 @@ function TaskBlock({
     if (!data) {
       console.error("fetch invalid, try again");
     }
-    console.log(data);
   }
 
   return (
@@ -130,7 +160,8 @@ function TaskBlock({
             ? `${taskLengths[length]} ${timeStart[startTime]} z-40 absolute`
             : taskLengthSmall[length]
         } ${
-          dateIndex === 0 ? " border-red-800" : "border-green-800"
+          dateIndex === 0 ? " border-yellow-600" : dateIndex === 1 ? "border-green-500" : "border-customBlue"
+          // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
         } border-[1px] `}
       >
         <div className="flex flex-col justify-between h-full">
@@ -208,17 +239,35 @@ function TaskBlock({
                 />
               </svg>
               {editBlock && (
-                <div className="h-32 w-96 z-[9999] fixed bg-darkestBaseGray -mt-[104px] p-1">
-                  <h1 className="text-sm text-black dark:text-white">
-                    Active Days
-                  </h1>
+                <div className="h-32 w-[350px] z-[9999] fixed bg-darkestBaseGray -mt-[104px] p-1 rounded-md">
+                  <div className="flex justify-between">
+                    <h1 className="text-sm text-black dark:text-white">
+                      Active Days
+                    </h1>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5 cursor-pointer"
+                      onClick={() => setEditBlock(false)}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
                   <div className="flex">
                     <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
+                      <span className="label-text mr-1">Mon</span>
                       <input
                         type="checkbox"
                         className="toggle toggle-accent"
                         name="tuesday"
+                        // defaultChecked={`${relatedDays.includes("sunday") ? "isChecked": ""}`}
                       />
                     </label>
                     <label className="cursor-pointer label">
@@ -230,15 +279,7 @@ function TaskBlock({
                       />
                     </label>
                     <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
+                      <span className="label-text mr-1">Wed</span>
                       <input
                         type="checkbox"
                         className="toggle toggle-accent"
@@ -248,16 +289,23 @@ function TaskBlock({
                   </div>
                   <div className="flex">
                     <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
+                      <span className="label-text mr-1">Thurs</span>
                       <input
                         type="checkbox"
                         className="toggle toggle-accent"
                         name="tuesday"
-                        checked="checked"
                       />
                     </label>
                     <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
+                      <span className="label-text mr-1">Fri</span>
+                      <input
+                        type="checkbox"
+                        className="toggle toggle-accent"
+                        name="tuesday"
+                      />
+                    </label>
+                    <label className="cursor-pointer label">
+                      <span className="label-text mr-1">Sat</span>
                       <input
                         type="checkbox"
                         className="toggle toggle-accent"

@@ -26,6 +26,15 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.scrollDiv::-webkit-scrollbar {
+  background: #161B22;
+  height: 10px;
+}
+.scrollDiv::-webkit-scrollbar-thumb {
+  background-color:#41474F;
+  border-radius: 10px;
+}
+
 @layer components {
 
 }
