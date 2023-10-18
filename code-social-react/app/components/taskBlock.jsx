@@ -17,6 +17,7 @@ function TaskBlock({
   dateIndex,
   day,
   description,
+  relatedDays
 }) {
   const [username, setUsername] = useState("");
   const [taskComplete, setTaskComplete] = useState(false);
@@ -24,7 +25,6 @@ function TaskBlock({
   const [titleInput, setTitleInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
-  const [relatedDays, setRelatedDays] = useState([]);
 
   // Initialize useEffect
 
@@ -45,32 +45,7 @@ function TaskBlock({
     if (localStorageTask && priority !== "Nan") {
       setTaskComplete(true);
     }
-    // Fetch which days routine block is also in for edit modal function
-    const getDays = fetchAllRoutineDays();
-    if(!getDays) {
-      return;
-    }
-
   }, []);
-
-  // Fetch for days of week for edit modal button
-
-  async function fetchAllRoutineDays() {
-    try {
-      const response = await fetch(
-        `http://localhost:5050/api/routines/individ/${routineId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-      setRelatedDays(data.dayOfWeek)
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
-  }
 
   // FOR COMPLETE BUTTON
 
@@ -118,7 +93,7 @@ function TaskBlock({
     }
   }
 
-  // When Title or Description are changed, setTimeout for minimal fetches
+  // When Description is changed, setTimeout for minimal fetches
 
   useEffect(() => {
     const fetchInterval = setTimeout(() => {
@@ -157,12 +132,12 @@ function TaskBlock({
       <div
         className={`bg-lightestGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
           blockSize === "fullsize"
-            ? `${taskLengths[length]} ${timeStart[startTime]} z-40 absolute`
+            ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
             : taskLengthSmall[length]
         } ${
           dateIndex === 0 ? " border-yellow-600" : dateIndex === 1 ? "border-green-500" : "border-customBlue"
           // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
-        } border-[1px] `}
+        } ${editBlock === true ? "z-50" : "z-40"} border-[1px] `}
       >
         <div className="flex flex-col justify-between h-full">
           <div>
@@ -171,13 +146,14 @@ function TaskBlock({
                 length === "length30" ? "" : "flex"
               } w-full justify-between`}
             >
-              <div className="-mt-[4px]">
-                <input
+              <div className="">
+                {/* <input
                   className={`text-sm font-semibold text-white bg-transparent focus:outline-none`}
                   value={titleInput}
                   onChange={(e) => setTitleInput(e.target.value)}
                   type="text"
-                ></input>
+                ></input> */}
+                <h1 className="text-sm font-semibold cursor-pointer" onClick={() => setEditBlock(true)}>{title}</h1>
                 <h1
                   className={`${
                     blockSize === "fullsize"
@@ -238,90 +214,16 @@ function TaskBlock({
                   d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
                 />
               </svg>
-              {editBlock && (
-                <div className="h-32 w-[350px] z-[9999] fixed bg-darkestBaseGray -mt-[104px] p-1 rounded-md">
-                  <div className="flex justify-between">
-                    <h1 className="text-sm text-black dark:text-white">
-                      Active Days
-                    </h1>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5 cursor-pointer"
-                      onClick={() => setEditBlock(false)}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex">
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Mon</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                        // defaultChecked={`${relatedDays.includes("sunday") ? "isChecked": ""}`}
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Wed</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                  </div>
-                  <div className="flex">
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Thurs</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Fri</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Sat</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                    <label className="cursor-pointer label">
-                      <span className="label-text mr-1">Tue</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-accent"
-                        name="tuesday"
-                      />
-                    </label>
-                  </div>
-                </div>
+              {editBlock &&  (
+                <TaskBlockEdit 
+                closeBtn={() => setEditBlock(false)}
+                length={length}
+                title={title}
+                description={description}
+                priority={priority}
+                relatedDays={relatedDays}
+                routineId={routineId}
+                />
               )}
             </div>
             <button

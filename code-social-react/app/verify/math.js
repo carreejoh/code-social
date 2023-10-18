@@ -1,12 +1,6 @@
 
 module.exports = {
     async timeStringToNumber(timeString) {
-        // if(timeString === "00:00") {
-        //     return 2500;
-        //   }
-        //   if(timeString === "00:30") {
-        //     return 2530;
-        //   }
           return parseInt(timeString.replace(':', ''), 10)
     },
     async convertToMinutes(number) {
@@ -19,7 +13,16 @@ module.exports = {
             200: 120,
             230: 150,
             270: 150,
-            300: 180
+            300: 180,
+            330: 210,
+            370: 210,
+            400: 240,
+            430: 270,
+            470: 270,
+            500: 300,
+            530: 330,
+            570: 330,
+            600: 360
         };
         return numberToMinutesMap[number] ?? 'Invalid'
     }

@@ -34,6 +34,7 @@ function RoutineModal() {
         let startTime = await MathMod.timeStringToNumber(routineData.startTime);
         let endTime = await MathMod.timeStringToNumber(routineData.endTime);
         let firstLength = endTime - startTime;
+        console.log(firstLength)
         let length = await MathMod.convertToMinutes(firstLength);
         let user = Auth.getProfile();
         let username = user.data.username;

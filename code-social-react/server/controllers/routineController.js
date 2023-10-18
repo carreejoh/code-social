@@ -100,9 +100,17 @@ module.exports = {
       if (!routine) {
         return res.status(400);
       }
-      res.status(200).json({ message: "Routine updated!" });
+      res.status(200).json(routine);
     } catch (err) {
       console.error(err);
+    }
+  },
+
+  async addRoutineToUser(req,res) {
+    try {
+
+    } catch(err) {
+      console.error(err)
     }
   },
 
@@ -151,10 +159,12 @@ module.exports = {
         updateOperations,
         { new: true }
       );
-      if(!user) {
-        return res.json({message: "User wasn't found"})
+      if (!user) {
+        return res.json({ message: "User wasn't found" });
       }
-      const routine = await Routine.findByIdAndDelete({ _id: req.params.routineId });
+      const routine = await Routine.findByIdAndDelete({
+        _id: req.params.routineId,
+      });
       if (!routine) {
         return res.json({
           message: "Lucky for you this routine doesn't exist",
@@ -166,3 +176,25 @@ module.exports = {
     }
   },
 };
+
+// const allDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+// const removeAllRoutineInstances = allDays.reduce(
+//   (ops, day) => {
+//     ops[`$pull`][day] = req.params.routineId;
+//     return ops;
+//   },
+//   { $pull: {} }
+// );
+// const addNewRoutineInstances = req.body.dayOfWeek.reduce(
+//   (ops, day) => {
+//     ops[`$push`][day] = routine._id;
+//     return ops;
+//   },
+//   { $push: {} }
+// );
+// const user = await User.findOneAndUpdate(
+//   { username: req.body.username},
+//   removeAllRoutineInstances,
+//   addNewRoutineInstances,
+//   {new: true}
+//   )
