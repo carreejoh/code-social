@@ -106,11 +106,26 @@ module.exports = {
     }
   },
 
-  async addRoutineToUser(req,res) {
+  async addRoutineToUser(req, res) {
     try {
-
-    } catch(err) {
-      console.error(err)
+      const updateOperations = req.body.dayOfWeek.reduce(
+        (ops, day) => {
+          ops[`$push`][day] = req.params.routineId;
+          return ops;
+        },
+        { $push: {} }
+      );
+      const user = await User.findOneAndUpdate(
+        { username: req.params.username },
+        updateOperations,
+        { new: true }
+      );
+      if(!user) {
+        res.status(400)
+      }
+      res.json(user);
+    } catch (err) {
+      console.error(err);
     }
   },
 

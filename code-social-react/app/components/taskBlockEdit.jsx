@@ -24,6 +24,18 @@ function TaskBlockEdit({
   const [newPriority, setNewPriority] = useState("");
   const [username, setUsername] = useState("");
 
+  const allDays = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+
+  console.log(relatedDays)
+
   useEffect(() => {
     let user = Auth.getProfile();
     let username = user.data.username;
@@ -31,15 +43,6 @@ function TaskBlockEdit({
     setTitleInput(title);
     setDescriptionInput(description);
     setNewPriority(priority);
-    const allDays = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-    ];
     allDays.forEach((day) => {
       if (relatedDays.includes("sunday")) {
         checkSunday(true);
@@ -81,59 +84,69 @@ function TaskBlockEdit({
       priority: newPriority,
       username: username,
     };
-    // const deleteAll = await removeRoutinesFromUser()
-    // if(deleteAll) {
-    //   console.log("success")
-    // }
+    const editRoutine = await editExistingRoutine(body)
+    const deleteAll = await removeRoutinesFromUser()
+    const addNew = await addRoutineToUser(body);
     closeBtn();
   }
 
-  // async function removeRoutinesFromUser() {
-  //   try {
-  //     const allDays = [
-  //       "sunday",
-  //       "monday",
-  //       "tuesday",
-  //       "wednesday",
-  //       "thursday",
-  //       "friday",
-  //       "saturday",
-  //     ];
-  //     const usableJson = JSON.stringify(allDays)
-  //     const response = await fetch(
-  //       `http://localhost:5050/api/routines/delete/${username}/${routineId}`,
-  //       {
-  //         method: "DELETE",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: usableJson
-  //       }
-  //     );
-  //     if(!response) {
-  //       console.log("GOD DAMN IT")
-  //       return false
-  //     }
-  //     return true
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
+  async function removeRoutinesFromUser() {
+    try {
+      const usableJson = JSON.stringify(allDays)
+      console.log(usableJson)
+      const response = await fetch(
+        `http://localhost:5050/api/routines/delete/${username}/${routineId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: usableJson
+        }
+      );
+      if(!response) {
+        return false
+      }
+      return true
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
-  // async function updateRoutineFetch(body) {
-  //   const usableJson = JSON.stringify(body);
-  //   console.log(usableJson)
-  //   const response = await fetch(
-  //     `http://localhost:5050/api/routines/individ/${routineId}`,
-  //     {
-  //       method: "PUT",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: usableJson,
-  //     }
-  //   );
-  //   const data = await response.json();
-  //   if (!data) {
-  //     console.error("fetch invalid, try again");
-  //   }
-  // }
+  async function editExistingRoutine(body) {
+    const usableJson = JSON.stringify(body);
+    console.log(usableJson)
+    const response = await fetch(
+      `http://localhost:5050/api/routines/individ/${routineId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: usableJson,
+      }
+    );
+    const data = await response.json();
+    if (!data) {
+      console.error("fetch invalid, try again");
+    }
+    return data;
+  }
+
+
+  async function addRoutineToUser(body) {
+    const usableJson = JSON.stringify(body);
+    console.log(usableJson)
+    const response = await fetch(
+      `http://localhost:5050/api/routines/add/${username}/${routineId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: usableJson,
+      }
+    );
+    const data = await response.json();
+    if (!data) {
+      console.error("fetch invalid, try again");
+    }
+    return data;
+  }
 
   return (
     <div
