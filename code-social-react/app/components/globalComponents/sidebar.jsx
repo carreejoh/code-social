@@ -1,97 +1,106 @@
 "use client";
 import NavBtn from "./secondaryNavBtn";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import SignUpModal from "./signupModal";
-import LoginModal from "./loginModal";
+// import { useState, useEffect, useRef } from "react";
+// import SignUpModal from "./signupModal";
+// import LoginModal from "./loginModal";
 import Auth from "../../verify/auth";
 import MathMod from "../../verify/math";
-import RoutineModal from "../routineModal"
+import RoutineModal from "../routineModal";
+import { Suspense } from "react";
+import LoginSignUpBtn from "./loginSignUpBtns";
+
+export const dynamic = "auto",
+  dynamicParams = true,
+  revalidate = Infinity,
+  fetchCache = "auto",
+  runtime = "nodejs",
+  preferredRegion = "auto";
 
 function Sidebar() {
-  const [signupModal, toggleSignupModal] = useState(false);
-  const [loginModal, toggleLoginModal] = useState(false);
+  // const [signupModal, toggleSignupModal] = useState(false);
+  // const [loginModal, toggleLoginModal] = useState(false);
 
-  function handleDarkLightMode(mode) {
-    let application = window.document.body.classList;
-    if(mode === "dark") {
-      application.add("dark")
-      localStorage.setItem("routineColorMode", "dark")
-      return;
-    }
-    if(mode === "light") {
-      application.remove("dark")
-      localStorage.setItem("routineColorMode", "light")
-      return;
-    }
-  }
+  // function handleDarkLightMode(mode) {
+  //   let application = window.document.body.classList;
+  //   if (mode === "dark") {
+  //     application.add("dark");
+  //     localStorage.setItem("routineColorMode", "dark");
+  //     return;
+  //   }
+  //   if (mode === "light") {
+  //     application.remove("dark");
+  //     localStorage.setItem("routineColorMode", "light");
+  //     return;
+  //   }
+  // }
 
-  useEffect(() => {
-    let colorMode = localStorage.getItem("routineColorMode");
-    if(colorMode === "dark") {
-      handleDarkLightMode("dark")
-    }
-  }, [])
-
-  
+  // useEffect(() => {
+  //   let colorMode = localStorage.getItem("routineColorMode");
+  //   if (colorMode === "dark") {
+  //     handleDarkLightMode("dark");
+  //   }
+  // }, []);
 
   return (
     <>
-
-      <div className="z-30 w-16 pt-3 h-[100vh] bg-darkBaseWhite dark:bg-darkestBaseGray fixed justify-center shadow-2xl">
+      <div className="z-30 w-16 h-[100vh] bg-darkBaseWhite dark:bg-darkestBaseGray fixed justify-center shadow-2xl">
         {/* <button
         className="btn"
         onClick={() => document.getElementById("add_routine_modal").showModal()}
       >
         open modal
       </button> */}
-    <dialog id="add_routine_modal" className="modal">
-      <RoutineModal/>
-    </dialog>
-        <Link href={"/"}>
-          <h1 className="text-center text-black dark:text-white text-3xl hover:scale-105 duration-100">
-            Ro
-          </h1>
-        </Link>
-        <div className="w-16 p-2 text-black dark:text-white text-center mt-6">
-          <button
-            className="mt-4 text-black dark:text-white"
-            onClick={() =>
-              document.getElementById("add_routine_modal").showModal()
-            }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-9 h-9"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </button>
+        <dialog id="add_routine_modal" className="modal">
+          <RoutineModal />
+        </dialog>
+        <div className="h-16 w-16 bg-darkestBaseGray text-center pt-3">
           <Link href={"/"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8 hover:scale-95 duration-100 inline-block mt-7"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-              />
-            </svg>
+            <h1 className="text-center text-black dark:text-white text-3xl hover:scale-105 duration-100 h-6">
+              Ro
+            </h1>
           </Link>
-          <Link href={"/stats"}>
+        </div>
+        <div className="h-full ">
+          <div className="w-16 p-2 text-black dark:text-white text-center">
+            <button
+              className="mt-4 text-black dark:text-white"
+              onClick={() =>
+                document.getElementById("add_routine_modal").showModal()
+              }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-9 h-9"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+            <Link href={"/"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-8 h-8 hover:scale-95 duration-100 inline-block mt-7"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                />
+              </svg>
+            </Link>
+            <Link href={"/stats"}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -128,71 +137,10 @@ function Sidebar() {
               />
             </svg>
           </Link>
-          {Auth.loggedIn() ? (
-            <button className="mt-10" onClick={() => Auth.logout()}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-8 h-8"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                />
-              </svg>
-            </button>
-          ) : (
-            <>
-              <button className="mt-10" onClick={() => toggleSignupModal(true)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-8 h-8"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                  />
-                </svg>
-              </button>
-              <button className="mt-2" onClick={() => toggleLoginModal(true)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-8 h-8"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                  />
-                </svg>
-              </button>
-            </>
-          )}
-          <button onClick={() => handleDarkLightMode("dark")}>
-            Dark 
-          </button>
-          <button onClick={() => handleDarkLightMode("light")}>
-            Light
-          </button>
+            <LoginSignUpBtn />
+          </div>
         </div>
       </div>
-      {signupModal && (
-        <SignUpModal closeModal={() => toggleSignupModal(false)} />
-      )}
-      {loginModal && <LoginModal closeModal={() => toggleLoginModal(false)} />}
     </>
   );
 }

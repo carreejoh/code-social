@@ -27,6 +27,7 @@ function RoutineModal() {
         formJson.saturday ? dayOfWeek.push("saturday") : "";
         postRoutine(formJson, dayOfWeek);
         console.log(formJson);
+        window.location.href = "/"
       }
     
       async function postRoutine(routineData, dayOfWeek) {

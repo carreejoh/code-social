@@ -61,32 +61,35 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
 
   // Auto scroll left based on time of day
 
-  useEffect(() => {
-    // Scroll main div to relevant time of day
-    let scrollDivs = document.querySelectorAll(".scrollDiv");
-    let date = new Date();
-    let currentHour = date.getHours();
-    let currentMinute = date.getMinutes();
-    let totalMinutesElapsed = currentHour * 60 + currentMinute;
+  // useEffect(() => {
+  //   // Scroll main div to relevant time of day
+  //   let scrollDivs = document.querySelectorAll(".scrollDiv");
+  //   let date = new Date();
+  //   let currentHour = date.getHours();
+  //   let currentMinute = date.getMinutes();
+  //   let totalMinutesElapsed = currentHour * 60 + currentMinute;
 
-    // let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
-    // scrollDivs.forEach((div) =>
-    //   div.scrollTo({
-    //     left: scrollPosition,
-    //     behavior: "smooth",
-    //   })
-    // );
+  //   // let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
+  //   // scrollDivs.forEach((div) =>
+  //   //   div.scrollTo({
+  //   //     left: scrollPosition,
+  //   //     behavior: "smooth",
+  //   //   })
+  //   // );
 
-    // Scroll timebar to postion on load and then setinterval to move it
-    let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
-    barRef.current.style.marginLeft = `${timeBarPosition}px`;
-    setInterval(() => {
-      let timeBarPosition;
-      totalMinutesElapsed += 0.5;
-      timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
-      barRef.current.style.marginLeft = `${timeBarPosition}px`;
-    }, 30000);
-  }, []);
+  //   // Scroll timebar to postion on load and then setinterval to move it
+  //   let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+  //   barRef.current.style.marginLeft = `${timeBarPosition}px`;
+  //   setInterval(() => {
+  //     if(barRef.current.style === null) {
+  //       return;
+  //     }
+  //     let timeBarPosition;
+  //     totalMinutesElapsed += 0.5;
+  //     timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+  //     barRef.current.style.marginLeft = `${timeBarPosition}px`;
+  //   }, 30000);
+  // }, []);
 
   // Fetch each individual routine and populate main div with each task block
 

@@ -173,7 +173,7 @@ function ScheduleContainer() {
           aria-label="List of schedules"
           options={{
             direction: "ttb",
-            height: "870px",
+            height: "902px",
             wheel: true,
             wheelSleep: 0,
             perPage: 3,
@@ -203,41 +203,6 @@ function ScheduleContainer() {
           </div>
         </Splide>
       )}
-
-      {/* <div className="w-[500px] h-72 bg-darkestBaseGray p-2 rounded-lg fixed right-6 bottom-6">
-          <h1 className="text-lg font-semibold">Quick Stats</h1>
-          <div className="h-64 w-[210px] mt-2">
-            <div className="flex">
-              <div className="w-32">
-                <div
-                  className="radial-progress text-secondary"
-                  style={{
-                    "--value": "70",
-                    "--size": "5rem",
-                    "--thickness": ".4rem",
-                  }}
-                >
-                  70%
-                </div>
-                  <h1 className="mt-1 text-xs text-gray-400">Highest Priority<br></br>Completion</h1>
-              </div>
-              <div className="w-32">
-                <div
-                  className="radial-progress text-primary"
-                  style={{
-                    "--value": "70",
-                    "--size": "5rem",
-                    "--thickness": ".4rem",
-                  }}
-                >
-                  70%
-                </div>
-                  <h1 className="mt-1 text-xs text-gray-400">High Priority<br></br>Completion</h1>
-              </div>
-            </div>
-            <div className="flex"></div>
-          </div>
-        </div> */}
     </div>
     // </div>
   );

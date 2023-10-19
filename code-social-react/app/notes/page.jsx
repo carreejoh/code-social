@@ -1,29 +1,38 @@
 "use client";
 import React, { useState } from "react";
-import { DndContext } from "@dnd-kit/core";
-import Draggable from "./components/draggable";
-import Droppable from "./components/droppable";
+import { useSelector, useDispatch } from "react-redux";
+import { increment } from "../features/counterSlice";
+
+import Blah from "./components/blah"
 
 function Notes() {
-  const [isDropped, setIsDropped] = useState(false);
-  const draggableMarkup = (
-    <Draggable>Drag me</Draggable>
-  );
-  function handleDragEnd(event) {
-    if (event.over && event.over.id === "droppable") {
-      setIsDropped(true);
-    }
-  }
+
+  const count = useSelector((state) => state.counter.value)
+  const dispatch = useDispatch()
+
   return (
-    <div className="w-full h-[90vh] bg-green-900 rounded-tl-lg pl-2 pr-2 pt-2">
-      <div className="h-12 w-full bg-orange-900"></div>
-      <div className="w-full h-full pt-2 z-30">
-      <DndContext onDragEnd={handleDragEnd}>
-      {!isDropped ? draggableMarkup : null}
-      <Droppable>
-        {isDropped ? draggableMarkup : 'Drop here'}
-      </Droppable>
-    </DndContext>
+    <div className="w-full h-[90vh] bg-darkBaseGray rounded-tl-lg ">
+      <div className="w-full h-full grid grid-cols-7">
+        <div className="col-span-1 h-full bg-transparent border-r-[2px] border-darkestBaseGray rounded-tl-lg"></div>
+        <div className="col-span-4 h-full bg-transparent overflow-y-scroll pt-2 pl-4 pr-4">
+          <h1>2023 Goals</h1>
+          <div className="w-full h-[90vh] pt-2">
+            <button
+              aria-label="Increment value"
+              onClick={() => dispatch(increment())}
+            >
+              Increment
+            </button>
+            <span>{count}</span>
+            <Blah/>
+            {/* <button
+              aria-label="Decrement value"
+              onClick={() => dispatch(decrement())}
+            >
+              Decrement
+            </button> */}
+          </div>
+        </div>
       </div>
     </div>
   );
