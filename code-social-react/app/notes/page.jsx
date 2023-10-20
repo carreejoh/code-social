@@ -1,14 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { increment } from "../features/counterSlice";
+import { addRoutine } from "../redux/reducers/counterSlice";
 
-import Blah from "./components/blah"
+// import Blah from "./components/blah"
 
 function Notes() {
-
-  const count = useSelector((state) => state.counter.value)
+  const routines = useSelector((state) => state.routines.routines);
   const dispatch = useDispatch()
+
+  const handleAddRoutine = () => {
+    const newRoutine = "This is a new routine";
+    dispatch(addRoutine(newRoutine));
+  };
 
   return (
     <div className="w-full h-[90vh] bg-darkBaseGray rounded-tl-lg ">
@@ -19,18 +23,11 @@ function Notes() {
           <div className="w-full h-[90vh] pt-2">
             <button
               aria-label="Increment value"
-              onClick={() => dispatch(increment())}
+              onClick={handleAddRoutine}
             >
               Increment
             </button>
-            <span>{count}</span>
-            <Blah/>
-            {/* <button
-              aria-label="Decrement value"
-              onClick={() => dispatch(decrement())}
-            >
-              Decrement
-            </button> */}
+            <span>{routines}</span>
           </div>
         </div>
       </div>

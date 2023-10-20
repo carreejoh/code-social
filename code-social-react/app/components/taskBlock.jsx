@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import { taskLengths, timeStart, weekdayToIndex } from "../verify/lengthArrays";
 import TaskBlockEdit from "./taskBlockEdit";
 import Auth from "../verify/auth";
+import { useSelector } from "react-redux";
+import { selectRoutineById } from "../redux/selectors";
+import { editRoutine } from "../redux/reducers/counterSlice";
+import { useDispatch } from 'react-redux';
 
 function TaskBlock({
   title,
@@ -25,6 +29,21 @@ function TaskBlock({
   const [titleInput, setTitleInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
+
+  const routine = useSelector(state => selectRoutineById(state, routineId))
+
+  const dispatch = useDispatch();
+
+  const handleEditRoutine = () => {
+    const updatedRoutine = {
+      id: routineId,
+      title: title,
+      description: descriptionInput
+    };
+    dispatch(editRoutine(updatedRoutine))
+  }
+
+  if(!routine) return <p>HUGE L</p>
 
   // Initialize useEffect
 
@@ -104,6 +123,7 @@ function TaskBlock({
   }, [titleInput, descriptionInput]);
 
   async function updateRoutineValues() {
+    handleEditRoutine()
     let body = {
       title: titleInput,
       description: descriptionInput,
@@ -153,16 +173,16 @@ function TaskBlock({
                   onChange={(e) => setTitleInput(e.target.value)}
                   type="text"
                 ></input> */}
-                <h1 className="text-sm font-semibold cursor-pointer" onClick={() => setEditBlock(true)}>{title}</h1>
-                <h1
+                <h1 className="text-sm font-semibold cursor-pointer" onClick={() => setEditBlock(true)}>{routine.title}</h1>
+                {/* <h1
                   className={`${
                     blockSize === "fullsize"
                       ? "text-md font-semibold"
                       : "text-[9px]"
                   } text-gray-400`}
                 >
-                  {time}
-                </h1>
+                  {routine.description}
+                </h1> */}
               </div>
               <div
                 className={`${priority === "Highest" ? "" : "hidden"} ${
@@ -186,7 +206,7 @@ function TaskBlock({
             <div className={`mt-1`}>
               <textarea
                 onChange={(e) => setDescriptionInput(e.target.value)}
-                defaultValue={descriptionInput}
+                defaultValue={routine.description}
                 className="text-sm text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
               ></textarea>
             </div>

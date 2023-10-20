@@ -3,6 +3,12 @@ import { editModalMarginLeft } from "../verify/lengthArrays";
 import { useState, useEffect } from "react";
 import Auth from "../verify/auth";
 
+// REDUX TEST
+
+import { useDispatch, useSelector } from "react-redux";
+import { addRoutine, updateRoutine, removeRoutine } from "../redux/reducers/routineBlockSlice";
+
+
 function TaskBlockEdit({
   closeBtn,
   length,
@@ -12,6 +18,10 @@ function TaskBlockEdit({
   relatedDays,
   routineId,
 }) {
+
+  const dispatch = useDispatch();
+  const routines = useSelector((state) => state.routines.routines);
+
   const [sunday, checkSunday] = useState(false);
   const [monday, checkMonday] = useState(false);
   const [tuesday, checkTuesday] = useState(false);
@@ -34,7 +44,9 @@ function TaskBlockEdit({
     "saturday",
   ];
 
-  console.log(relatedDays)
+  const handleAddRoutine = (routine) => {
+    dispatch(addRoutine(routine))
+  }
 
   useEffect(() => {
     let user = Auth.getProfile();

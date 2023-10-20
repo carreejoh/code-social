@@ -4,6 +4,10 @@ import TodayContainer from "./todayContainer";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide-core.min.css";
 import Auth from "../verify/auth";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addRoutine
+} from "../redux/reducers/counterSlice";
 
 function ScheduleContainer() {
   const splideRef = useRef();
@@ -15,6 +19,12 @@ function ScheduleContainer() {
   const [splideRendered, setSplideRendered] = useState(false);
   const [relevantDayList, setDayList] = useState([]);
 
+  const dispatch = useDispatch();
+  // const routines = useSelector((state) => state.routines.routines);
+
+  const handleAddRoutine = (routine) => {
+    dispatch(addRoutine(routine));
+  };
   // Make array starting with yesterday
 
   const daysOfWeek = [
@@ -79,7 +89,7 @@ function ScheduleContainer() {
   async function fetchRoutineController(username) {
     try {
       const weekArray = createWeekArray();
-      const response = await fetchIndividualDay(username);
+      const response = await fetchAllRoutineIds(username);
       if (!response) {
         return;
       }
@@ -87,6 +97,9 @@ function ScheduleContainer() {
       if (!orderedDays) {
         return;
       }
+      const ids = [].concat(...Object.values(response).filter(Array.isArray));
+      const uniqueIds = [...new Set(ids)];
+      getAllIndividualRoutineData(uniqueIds)
     } catch (err) {
       console.error(err);
     }
@@ -114,7 +127,19 @@ function ScheduleContainer() {
 
   // API call
 
-  async function fetchIndividualDay(username) {
+  async function getAllIndividualRoutineData(idList) {
+    try {
+      if(Array.isArray(idList)) {
+        idList.forEach((id) => {
+          fetchIndividualRoutine(id)
+        })
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function fetchAllRoutineIds(username) {
     try {
       const response = await fetch(
         `http://localhost:5050/api/routines/${username}`,
@@ -130,10 +155,30 @@ function ScheduleContainer() {
     }
   }
 
+  async function fetchIndividualRoutine(routineId) {
+    try {
+      const response = await fetch(
+        `http://localhost:5050/api/routines/individ/${routineId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      handleAddRoutine(data)
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
       <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16 bg-baseWhite dark:bg-darkestBaseGray">
-        <button onClick={goPrev} className="prev-button z-[100]  rounded-full justify-center items-center">
+        <button
+          onClick={goPrev}
+          className="prev-button z-[100]  rounded-full justify-center items-center"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -149,7 +194,10 @@ function ScheduleContainer() {
             />
           </svg>
         </button>
-        <button onClick={goNext} className="next-button z-[100]  rounded-full justify-center items-center">
+        <button
+          onClick={goNext}
+          className="next-button z-[100]  rounded-full justify-center items-center"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

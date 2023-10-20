@@ -1,6 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { increment } from "../../features/counterSlice";
+import { increment } from "../../redux/reducers/counterSlice";
 
 function Blah() {
 
