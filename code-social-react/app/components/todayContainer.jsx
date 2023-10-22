@@ -12,8 +12,6 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   const barRef = useRef(null);
   const [datesArray, setDatesArray] = useState([]);
 
-  // console.log(routineData + day)
-
   const date = new Date();
   const dayOfWeekNumber = date.getDay();
 
@@ -61,35 +59,35 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
 
   // Auto scroll left based on time of day
 
-  // useEffect(() => {
-  //   // Scroll main div to relevant time of day
-  //   let scrollDivs = document.querySelectorAll(".scrollDiv");
-  //   let date = new Date();
-  //   let currentHour = date.getHours();
-  //   let currentMinute = date.getMinutes();
-  //   let totalMinutesElapsed = currentHour * 60 + currentMinute;
+  useEffect(() => {
+    // Scroll main div to relevant time of day
+    let scrollDivs = document.querySelectorAll(".currentDay");
+    let date = new Date();
+    let currentHour = date.getHours();
+    let currentMinute = date.getMinutes();
+    let totalMinutesElapsed = currentHour * 60 + currentMinute;
 
-  //   // let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
-  //   // scrollDivs.forEach((div) =>
-  //   //   div.scrollTo({
-  //   //     left: scrollPosition,
-  //   //     behavior: "smooth",
-  //   //   })
-  //   // );
+    let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
+    scrollDivs.forEach((div) =>
+      div.scrollTo({
+        left: scrollPosition,
+        behavior: "smooth",
+      })
+    );
 
-  //   // Scroll timebar to postion on load and then setinterval to move it
-  //   let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
-  //   barRef.current.style.marginLeft = `${timeBarPosition}px`;
-  //   setInterval(() => {
-  //     if(barRef.current.style === null) {
-  //       return;
-  //     }
-  //     let timeBarPosition;
-  //     totalMinutesElapsed += 0.5;
-  //     timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
-  //     barRef.current.style.marginLeft = `${timeBarPosition}px`;
-  //   }, 30000);
-  // }, []);
+    // Scroll timebar to postion on load and then setinterval to move it
+    let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+    barRef.current.style.marginLeft = `${timeBarPosition}px`;
+    setInterval(() => {
+      if(barRef.current.style === null) {
+        return;
+      }
+      let timeBarPosition;
+      totalMinutesElapsed += 0.5;
+      timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
+      barRef.current.style.marginLeft = `${timeBarPosition}px`;
+    }, 30000);
+  }, []);
 
   // Fetch each individual routine and populate main div with each task block
 
@@ -144,14 +142,9 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
         </h1>
       )}
       <div
-        id="scrollDiv"
-        className={`scrollDiv pt-4 ${
+        className={`scrollDiv ${dateIndex === 1 ? "currentDay" : ""} pt-4 ${
           size === "fullsize" ? "overflow-x-scroll overflow-y-hidden " : ""
-        } ${
-          daysOfWeek[dayOfWeekNumber] === weekdayTitle
-            ? "bg-baseGray bg-opacity-20"
-            : ""
-        }`}
+        } `}
       >
         <div className={`${containerLength[size]} `}>
           {daysOfWeek[dayOfWeekNumber] === weekdayTitle ? (
@@ -177,22 +170,31 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
                 <TaskBlock
                   key={index}
                   blockSize={size}
-                  title={data.title}
-                  time={data.time}
-                  priority={data.priority}
-                  length={data.length}
-                  startTime={data.startTime}
+                  title={data?.title}
+                  time={data?.time}
+                  priority={data?.priority}
+                  length={data?.length}
+                  startTime={data?.startTime}
                   dateIndex={dateIndex}
-                  routineId={data.id}
-                  description={data.description}
+                  routineId={data?.id}
+                  description={data?.description}
                   date={datesArray[dateIndex]}
                   day={day}
-                  relatedDays={data.dayOfWeek}
+                  relatedDays={data?.dayOfWeek}
                 />
               ))}
             {allStartTimes.map((time, index) => (
               <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
             ))}
+            {/* {routineData && routineData.map((data, index) => {
+              <TaskBlock
+                key={index}
+                routineId={data.id}
+              />
+            })}
+            {allStartTimes.map((time, index) => (
+              <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
+            ))} */}
           </div>
           <div
             className={` fixed bottom-0 ${

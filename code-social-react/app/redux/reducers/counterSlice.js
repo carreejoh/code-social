@@ -12,7 +12,7 @@ export const routineSlice = createSlice({
         editRoutine: (state, action) => {
             // Find the index of the routine by ID
             const index = state.routines.findIndex(
-              routine => routine.id === action.payload.id
+              routine => routine?.id === action.payload.id
             );
       
             if (index !== -1) {

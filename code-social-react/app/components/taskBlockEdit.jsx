@@ -6,8 +6,8 @@ import Auth from "../verify/auth";
 // REDUX TEST
 
 import { useDispatch, useSelector } from "react-redux";
-import { addRoutine, updateRoutine, removeRoutine } from "../redux/reducers/routineBlockSlice";
-
+import { addRoutine, editRoutine } from "../redux/reducers/counterSlice";
+import { selectRoutineById } from "../redux/selectors";
 
 function TaskBlockEdit({
   closeBtn,
@@ -20,7 +20,7 @@ function TaskBlockEdit({
 }) {
 
   const dispatch = useDispatch();
-  const routines = useSelector((state) => state.routines.routines);
+  let routine = useSelector(state => selectRoutineById(state, routineId))
 
   const [sunday, checkSunday] = useState(false);
   const [monday, checkMonday] = useState(false);
@@ -44,8 +44,15 @@ function TaskBlockEdit({
     "saturday",
   ];
 
-  const handleAddRoutine = (routine) => {
-    dispatch(addRoutine(routine))
+  const handleEditRoutine = () => {
+    let updatedRoutine = {
+      id: routineId,
+      title: titleInput,
+      description: descriptionInput,
+      priority: newPriority
+    };
+    dispatch(editRoutine(updatedRoutine))
+    console.log(routine)
   }
 
   useEffect(() => {
@@ -100,12 +107,14 @@ function TaskBlockEdit({
     const deleteAll = await removeRoutinesFromUser()
     const addNew = await addRoutineToUser(body);
     closeBtn();
+    window.location.href = "/"
   }
 
   async function removeRoutinesFromUser() {
     try {
-      const usableJson = JSON.stringify(allDays)
+      const usableJson = JSON.stringify({dayOfWeek: allDays})
       console.log(usableJson)
+      console.log(routineId)
       const response = await fetch(
         `http://localhost:5050/api/routines/delete/${username}/${routineId}`,
         {
@@ -114,7 +123,8 @@ function TaskBlockEdit({
           body: usableJson
         }
       );
-      if(!response) {
+      const data = await response.json()
+      if(!data) {
         return false
       }
       return true
@@ -144,7 +154,6 @@ function TaskBlockEdit({
 
   async function addRoutineToUser(body) {
     const usableJson = JSON.stringify(body);
-    console.log(usableJson)
     const response = await fetch(
       `http://localhost:5050/api/routines/add/${username}/${routineId}`,
       {
@@ -168,7 +177,7 @@ function TaskBlockEdit({
         <input
           className={`text-md font-semibold text-black dark:text-white bg-transparent focus:outline-none`}
           defaultValue={title}
-          onChange={(e) => setTitleInput(e.target.value)}
+          onChange={(e) => {setTitleInput(e.target.value); handleEditRoutine()}}
           type="text"
         ></input>
         <svg
@@ -189,7 +198,7 @@ function TaskBlockEdit({
       </div>
       <div className="">
         <textarea
-          onChange={(e) => setDescriptionInput(e.target.value)}
+          onChange={(e) => {setDescriptionInput(e.target.value); handleEditRoutine()}}
           defaultValue={description}
           className="text-sm text-gray-400 w-full h-[80px] max-h-[80px] min-h-[80px] resize-none bg-transparent focus:outline-none border-lightestGray"
         ></textarea>

@@ -30,21 +30,23 @@ function TaskBlock({
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
 
-  const routine = useSelector(state => selectRoutineById(state, routineId))
+  let routine = useSelector(state => selectRoutineById(state, routineId))
 
   const dispatch = useDispatch();
 
   const handleEditRoutine = () => {
-    const updatedRoutine = {
+    let updatedRoutine = {
+
+    }
+    updatedRoutine = {
       id: routineId,
       title: title,
-      description: descriptionInput
+      description: descriptionInput,
     };
     dispatch(editRoutine(updatedRoutine))
   }
 
   if(!routine) return <p>HUGE L</p>
-
   // Initialize useEffect
 
   useEffect(() => {
@@ -115,6 +117,7 @@ function TaskBlock({
   // When Description is changed, setTimeout for minimal fetches
 
   useEffect(() => {
+    handleEditRoutine()
     const fetchInterval = setTimeout(() => {
       updateRoutineValues();
     }, 3000);
@@ -123,7 +126,6 @@ function TaskBlock({
   }, [titleInput, descriptionInput]);
 
   async function updateRoutineValues() {
-    handleEditRoutine()
     let body = {
       title: titleInput,
       description: descriptionInput,
@@ -205,7 +207,7 @@ function TaskBlock({
             </div>
             <div className={`mt-1`}>
               <textarea
-                onChange={(e) => setDescriptionInput(e.target.value)}
+                onChange={(e) => {setDescriptionInput(e.target.value); handleEditRoutine()}}
                 defaultValue={routine.description}
                 className="text-sm text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
               ></textarea>

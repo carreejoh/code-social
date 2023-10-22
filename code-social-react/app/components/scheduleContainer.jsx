@@ -5,13 +5,10 @@ import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide-core.min.css";
 import Auth from "../verify/auth";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addRoutine
-} from "../redux/reducers/counterSlice";
+import { addRoutine } from "../redux/reducers/counterSlice";
 
 function ScheduleContainer() {
   const splideRef = useRef();
-  const [activeSlide, setActiveSlide] = useState(0);
   const [timeInMinutes, setTimeInMinutes] = useState(
     new Date().getHours() * 60 + new Date().getMinutes()
   );
@@ -99,7 +96,7 @@ function ScheduleContainer() {
       }
       const ids = [].concat(...Object.values(response).filter(Array.isArray));
       const uniqueIds = [...new Set(ids)];
-      getAllIndividualRoutineData(uniqueIds)
+      getAllIndividualRoutineData(uniqueIds);
     } catch (err) {
       console.error(err);
     }
@@ -129,10 +126,10 @@ function ScheduleContainer() {
 
   async function getAllIndividualRoutineData(idList) {
     try {
-      if(Array.isArray(idList)) {
+      if (Array.isArray(idList)) {
         idList.forEach((id) => {
-          fetchIndividualRoutine(id)
-        })
+          fetchIndividualRoutine(id);
+        });
       }
     } catch (err) {
       console.error(err);
@@ -165,7 +162,8 @@ function ScheduleContainer() {
         }
       );
       const data = await response.json();
-      handleAddRoutine(data)
+      console.log(data)
+      handleAddRoutine(data);
       return data;
     } catch (err) {
       console.error(err);
