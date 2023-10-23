@@ -174,7 +174,7 @@ function TaskBlockEdit({
     >
       <div className="flex justify-between border-b-[1px] border-lightestGray">
         <input
-          className={`text-md font-semibold text-black dark:text-white bg-transparent focus:outline-none`}
+          className={`text-md font-semibold text-white dark:text-white bg-transparent focus:outline-none`}
           defaultValue={title}
           onChange={(e) => {setTitleInput(e.target.value); handleEditRoutine()}}
           type="text"

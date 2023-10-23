@@ -17,7 +17,7 @@ function ScheduleContainer() {
   const [dayData, setDayData] = useState([]);
   const [splideRendered, setSplideRendered] = useState(false);
   const [relevantDayList, setDayList] = useState([]);
-  const [quickStats, toggleQuickStats] = useState(false);
+  const [quickStats, toggleQuickStats] = useState(true);
 
   const dispatch = useDispatch();
   // const routines = useSelector((state) => state.routines.routines);
@@ -174,8 +174,11 @@ function ScheduleContainer() {
 
   return (
     <>
-      <HomepageStats quickStats={quickStats} />
+      <HomepageStats quickStats={quickStats} toggleQuickStats={toggleQuickStats}/>
       <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+        <div className={`${quickStats === false ? "hidden" : "block"} fixed z-[1000] right-0 top-[130px] h-10 w-24 bg-darkestBaseGray p-2 rounded-tl-2xl rounded-bl-2xl -mr-2 hover:mr-0 duration-75`}>
+          <button className={`font-semibold `} onClick={() => toggleQuickStats(!quickStats)}>Stats</button>
+        </div>
         <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16">
           <button
             onClick={goPrev}
@@ -214,9 +217,6 @@ function ScheduleContainer() {
                 d="M19.5 8.25l-7.5 7.5-7.5-7.5"
               />
             </svg>
-          </button>
-          <button onClick={() => toggleQuickStats(!quickStats)}>
-            STATS
           </button>
         </div>
         {splideRendered === true && (

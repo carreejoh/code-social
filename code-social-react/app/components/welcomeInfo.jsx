@@ -53,7 +53,7 @@ function WelcomeInfo() {
     //     <h1 className="text-lg ml-12 text-black dark:text-white">Saturday, 10/19/2023</h1>
     //   </div>
     // </div>
-    <div className="w-full h-16 dark:bg-darkestBaseGray justify-between items-center pl-12 pr-12 flex">
+    <div className="w-full h-16 bg-darkestBaseWhite dark:bg-darkestBaseGray justify-between shadow-2xl items-center pl-12 pr-12 flex">
       <div className="w-72">
         <h1 className="font-semibold text-black dark:text-white text-lg">
           Welcome {username}!

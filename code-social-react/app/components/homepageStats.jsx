@@ -19,7 +19,7 @@ import {
 } from "../redux/selectors";
 import Auth from "../verify/auth";
 
-function HomepageStats({ quickStats }) {
+function HomepageStats({ quickStats, toggleQuickStats }) {
   const totalComp = useSelector(selectTotal);
   const highestComp = useSelector(selectHighestComp);
   const highComp = useSelector(selectHighComp);
@@ -37,7 +37,7 @@ function HomepageStats({ quickStats }) {
         let user = Auth.getProfile();
         let username = user.data.username;
         setUserStatsRedux(username);
-      }, 15000);
+      }, 7000);
     }
   }, []);
 
@@ -76,7 +76,24 @@ function HomepageStats({ quickStats }) {
         quickStats === false ? "translate-x-0" : "translate-x-[340px]"
       } duration-150 ease-in-out w-[340px] h-[55vh] p-2 rounded-tl-lg rounded-bl-lg bg-darkestBaseGray fixed z-[1000] right-0 top-[9%]`}
     >
-      <h1 className="font-semibold">Quick Stats</h1>
+      <div className="w-full flex justify-between">
+        <h1 className="font-semibold">Quick Stats</h1>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6 cursor-pointer"
+          onClick={() => toggleQuickStats(!quickStats)}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </div>
       <div className="w-full grid grid-cols-2 mt-2 gap-2">
         <div className="col-span-1 h-36 p-1 ">
           <h2 className="text-gray-500 text-sm">Tasks Completed:</h2>
@@ -89,20 +106,14 @@ function HomepageStats({ quickStats }) {
         <div className="col-span-1 h-36 p-1">
           <h2 className="text-gray-500 text-sm">Highest Priority Completed:</h2>
           <div className="w-full flex ml-6 mt-4">
-            <h1 className="text-[50px] font-semibold">
-              {highestComp}
-            </h1>
-            <div className="text-lg badge-md badge badge-secondary">
-              !!!
-            </div>
+            <h1 className="text-[50px] font-semibold">{highestComp}</h1>
+            <div className="text-lg badge-md badge badge-secondary">!!!</div>
           </div>
         </div>
         <div className="col-span-1 h-36 p-1">
           <h2 className="text-gray-500 text-sm">High Priority Completed:</h2>
           <div className="w-full flex ml-6 mt-4">
-            <h1 className="text-[50px] font-semibold">
-              {highComp}
-            </h1>
+            <h1 className="text-[50px] font-semibold">{highComp}</h1>
             <div className="text-lg badge-md badge badge-primary">!</div>
           </div>
         </div>

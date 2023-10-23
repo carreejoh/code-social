@@ -151,18 +151,18 @@ function TaskBlock({
          />
       </dialog> */}
       <div
-        className={`bg-lightestGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
+        className={`bg-darkestBaseWhite dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
           blockSize === "fullsize"
             ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
             : taskLengthSmall[length]
         } ${
           dateIndex === 0
-            ? " border-yellow-600"
+            ? " dark:border-yellow-600 border-yellow-800"
             : dateIndex === 1
-            ? "border-green-500"
-            : "border-customBlue"
+            ? "dark:border-green-500 border-green-800"
+            : "dark:border-customBlue border-customBlue"
           // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
-        } ${editBlock === true ? "z-50" : "z-40"} border-[1px] `}
+        } ${editBlock === true ? "z-50" : "z-40"} dark:border-[1px] border-[2px] `}
       >
         <div className="flex flex-col justify-between h-full">
           <div>
@@ -179,7 +179,7 @@ function TaskBlock({
                   type="text"
                 ></input> */}
                 <h1
-                  className="text-sm font-semibold cursor-pointer"
+                  className="text-sm font-semibold cursor-pointer text-black dark:text-white"
                   onClick={() => setEditBlock(true)}
                 >
                   {routine.title}
@@ -220,7 +220,7 @@ function TaskBlock({
                   handleEditRoutine();
                 }}
                 defaultValue={routine.description}
-                className="text-sm text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
+                className="text-sm text-black dark:text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
               ></textarea>
             </div>
           </div>
@@ -239,7 +239,7 @@ function TaskBlock({
                 onClick={() => setEditBlock(true)}
                 className={`${
                   editBlock ? "hidden" : ""
-                } w-6 h-6 cursor-pointer hover:scale-95 duration-100`}
+                } w-6 h-6 text-black dark:text-white cursor-pointer hover:scale-95 duration-100`}
               >
                 <path
                   strokeLinecap="round"
@@ -261,7 +261,7 @@ function TaskBlock({
             </div>
             <button
               onClick={() => completeTask()}
-              className={`btn btn-xs btn-success btn-outline ${
+              className={`btn btn-xs btn-outline hover:bg-green text-green-700 dark:text-green-500 ${
                 taskComplete === false ? "block" : "hidden"
               } ${dateIndex >= 2 ? "hidden" : "block"} ${
                 priority === "Nan" ? "hidden" : "block"
@@ -275,7 +275,7 @@ function TaskBlock({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={`h-7 w-7 text-green-500 ${
+              className={`h-7 w-7 text-green-700 dark:text-green-500 ${
                 taskComplete === true ? "block" : "hidden"
               } `}
             >

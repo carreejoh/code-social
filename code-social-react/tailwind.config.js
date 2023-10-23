@@ -35,7 +35,12 @@ module.exports = {
         customCyan: '#1FB2A6',
         customPurple: '#6419E6',
         customPink: '#D926A9',
-        customBlue: '#204881'
+        customBlue: '#204881',
+
+        baseWhite: `#EDEDEC`,
+        darkBaseWhite: `#EDEDEC`,
+        darkestBaseWhite: '#D1CBCE',
+        lightModeGray: '#4F4E53'
       },
       keyframes: {
         slideInRight: {
