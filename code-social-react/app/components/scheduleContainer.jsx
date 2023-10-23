@@ -6,6 +6,8 @@ import "@splidejs/splide/dist/css/splide-core.min.css";
 import Auth from "../verify/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addRoutine } from "../redux/reducers/counterSlice";
+import HomepageStats from "./homepageStats";
+import Home from "../page";
 
 function ScheduleContainer() {
   const splideRef = useRef();
@@ -15,6 +17,7 @@ function ScheduleContainer() {
   const [dayData, setDayData] = useState([]);
   const [splideRendered, setSplideRendered] = useState(false);
   const [relevantDayList, setDayList] = useState([]);
+  const [quickStats, toggleQuickStats] = useState(false);
 
   const dispatch = useDispatch();
   // const routines = useSelector((state) => state.routines.routines);
@@ -162,7 +165,6 @@ function ScheduleContainer() {
         }
       );
       const data = await response.json();
-      console.log(data)
       handleAddRoutine(data);
       return data;
     } catch (err) {
@@ -171,86 +173,91 @@ function ScheduleContainer() {
   }
 
   return (
-    <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
-      <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16 bg-baseWhite dark:bg-darkestBaseGray">
-        <button
-          onClick={goPrev}
-          className="prev-button z-[100]  rounded-full justify-center items-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-10 h-10"
+    <>
+      <HomepageStats quickStats={quickStats} />
+      <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+        <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16">
+          <button
+            onClick={goPrev}
+            className="prev-button z-[100] bg-darkestBaseGray h-12 w-12 pl-1 rounded-full justify-center items-center"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.5 15.75l7.5-7.5 7.5 7.5"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={goNext}
-          className="next-button z-[100]  rounded-full justify-center items-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-10 h-10"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-10 h-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 15.75l7.5-7.5 7.5 7.5"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={goNext}
+            className="next-button z-[100] mt-2 bg-darkestBaseGray h-12 w-12 pt-1 pl-1 rounded-full justify-center items-center"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-10 h-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button onClick={() => toggleQuickStats(!quickStats)}>
+            STATS
+          </button>
+        </div>
+        {splideRendered === true && (
+          <Splide
+            hasTrack={false}
+            ref={splideRef}
+            aria-label="List of schedules"
+            options={{
+              direction: "ttb",
+              height: "902px",
+              wheel: true,
+              wheelSleep: 0,
+              perPage: 3,
+              perMove: 1,
+              // type: "loop",
+            }}
+          >
+            <div className="w-[calc(100vw-64px)] h-full pt-2">
+              <SplideTrack>
+                {dayData.map((data, index) => (
+                  <SplideSlide key={index} className="">
+                    <div
+                      className={`transition-all duration-[400ms] ease-in-out h-full`}
+                    >
+                      <TodayContainer
+                        // size={activeSlide === index ? "fullsize" : "small"}
+                        size={"fullsize"}
+                        routineData={data}
+                        day={relevantDayList[index]}
+                        dateIndex={index}
+                      />
+                    </div>
+                  </SplideSlide>
+                ))}
+              </SplideTrack>
+              <div className="splide__arrows"></div>
+            </div>
+          </Splide>
+        )}
       </div>
-      {splideRendered === true && (
-        <Splide
-          hasTrack={false}
-          ref={splideRef}
-          aria-label="List of schedules"
-          options={{
-            direction: "ttb",
-            height: "902px",
-            wheel: true,
-            wheelSleep: 0,
-            perPage: 3,
-            perMove: 1,
-            // type: "loop",
-          }}
-        >
-          <div className="w-[calc(100vw-64px)] h-full pt-2">
-            <SplideTrack>
-              {dayData.map((data, index) => (
-                <SplideSlide key={index} className="">
-                  <div
-                    className={`transition-all duration-[400ms] ease-in-out h-full`}
-                  >
-                    <TodayContainer
-                      // size={activeSlide === index ? "fullsize" : "small"}
-                      size={"fullsize"}
-                      routineData={data}
-                      day={relevantDayList[index]}
-                      dateIndex={index}
-                    />
-                  </div>
-                </SplideSlide>
-              ))}
-            </SplideTrack>
-            <div className="splide__arrows"></div>
-          </div>
-        </Splide>
-      )}
-    </div>
-    // </div>
+    </>
   );
 }
 

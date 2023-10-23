@@ -29,6 +29,9 @@ const statSchema = new Schema(
         },
         graphData: {
             type: [Number]
+        },
+        latestDate: {
+            type: String
         }
     },
     {

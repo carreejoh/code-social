@@ -45,6 +45,7 @@ module.exports = {
         highestCompleted: 0,
         weekdayOccur: [0,0,0,0,0,0,0],
         weekdayCompleted: [0,0,0,0,0,0,0],
+        latestDate: ""
       }
       const user = await User.create(req.body);
       const token = signToken(user);

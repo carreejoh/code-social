@@ -65,7 +65,7 @@ function WelcomeInfo() {
         {/* <h1>Calender</h1> */}
       </div>
       <div className="w-72 text-right">
-      <h1 className="text-lg text-black dark:text-white">
+      <h1 className="text-lg font-semibold text-black dark:text-white">
           Saturday, 10/19/2023
         </h1>
       </div>

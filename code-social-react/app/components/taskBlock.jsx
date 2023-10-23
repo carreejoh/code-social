@@ -7,7 +7,8 @@ import Auth from "../verify/auth";
 import { useSelector } from "react-redux";
 import { selectRoutineById } from "../redux/selectors";
 import { editRoutine } from "../redux/reducers/counterSlice";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { incrementTotal, incrementHighest, incrementHigh, setHighestPer, setHighPer } from "../redux/reducers/statsSlice";
 
 function TaskBlock({
   title,
@@ -21,7 +22,7 @@ function TaskBlock({
   dateIndex,
   day,
   description,
-  relatedDays
+  relatedDays,
 }) {
   const [username, setUsername] = useState("");
   const [taskComplete, setTaskComplete] = useState(false);
@@ -30,24 +31,30 @@ function TaskBlock({
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
 
-  let routine = useSelector(state => selectRoutineById(state, routineId))
+  let routine = useSelector((state) => selectRoutineById(state, routineId));
 
   const dispatch = useDispatch();
 
   const handleEditRoutine = () => {
-    let updatedRoutine = {
-
-    }
+    let updatedRoutine = {};
     updatedRoutine = {
       id: routineId,
       title: title,
       description: descriptionInput,
     };
-    dispatch(editRoutine(updatedRoutine))
-  }
+    dispatch(editRoutine(updatedRoutine));
+  };
 
-  if(!routine) return <p>HUGE L</p>
-  // Initialize useEffect
+  if (!routine) return <p>HUGE L</p>;
+
+  useEffect(() => {
+    handleEditRoutine();
+    const fetchInterval = setTimeout(() => {
+      updateRoutineValues();
+    }, 3000);
+
+    return () => clearTimeout(fetchInterval);
+  }, [titleInput, descriptionInput]);
 
   useEffect(() => {
     // Set title and description
@@ -68,9 +75,30 @@ function TaskBlock({
     }
   }, []);
 
-  // FOR COMPLETE BUTTON
+  useEffect(() => {
+    if (dateIndex === 1) {
+      let localStorageOccurance = localStorage.getItem(
+        `${routineId}${date}occur`
+      );
+      if (localStorageOccurance === true) {
+        return;
+      }
+      if (!localStorageOccurance) {
+        localStorage.setItem(`${routineId}${date}occur`, true);
+        incrementStatOccured();
+        return;
+      }
+    }
+  }, []);
 
   async function completeTask() {
+    dispatch(incrementTotal(1));
+    if(priority === "Highest") {
+      dispatch(incrementHighest(1))
+    }
+    if(priority === "High") {
+      dispatch(incrementHigh(1))
+    }
     let localStorageTask = localStorage.getItem(`${routineId}${date}`);
     if (!localStorageTask) {
       setTaskComplete(true);
@@ -90,59 +118,30 @@ function TaskBlock({
       priority === "High" ? (body.highComp += 1) : (body.highComp += 0);
       body.weekCompIndex = weekdayToIndex[day];
       const usableJson = JSON.stringify(body);
-      const userStats = await incrementUserStats(usableJson);
+      const userStats = await incrementUserStats(usableJson, username);
       localStorage.setItem(`${routineId}${date}`, true);
     } else {
       console.log("This task already compelte ");
     }
   }
 
-  async function incrementUserStats(statsBody) {
-    try {
-      const response = await fetch(
-        `http://localhost:5050/api/users/stats/${username}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: statsBody,
-        }
-      );
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   // When Description is changed, setTimeout for minimal fetches
 
-  useEffect(() => {
-    handleEditRoutine()
-    const fetchInterval = setTimeout(() => {
-      updateRoutineValues();
-    }, 3000);
-
-    return () => clearTimeout(fetchInterval);
-  }, [titleInput, descriptionInput]);
-
-  async function updateRoutineValues() {
+  async function incrementStatOccured() {
     let body = {
-      title: titleInput,
-      description: descriptionInput,
+      highOc: 0,
+      highestOc: 0,
+      highComp: 0,
+      highestComp: 0,
+      weekOccurIndex: 0,
+      weekOccurIncre: 0,
+      weekCompIndex: 0,
+      weekCompIncre: 0,
     };
+    priority === "Highest" ? (body.highestOc += 1) : (body.highestOc += 0);
+    priority === "High" ? (body.highOc += 1) : (body.highOc += 0);
     const usableJson = JSON.stringify(body);
-    const response = await fetch(
-      `http://localhost:5050/api/routines/individ/${routineId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: usableJson,
-      }
-    );
-    const data = await response.json();
-    if (!data) {
-      console.error("fetch invalid, try again");
-    }
+      const userStats = await incrementUserStats(usableJson, username);
   }
 
   return (
@@ -157,7 +156,11 @@ function TaskBlock({
             ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
             : taskLengthSmall[length]
         } ${
-          dateIndex === 0 ? " border-yellow-600" : dateIndex === 1 ? "border-green-500" : "border-customBlue"
+          dateIndex === 0
+            ? " border-yellow-600"
+            : dateIndex === 1
+            ? "border-green-500"
+            : "border-customBlue"
           // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
         } ${editBlock === true ? "z-50" : "z-40"} border-[1px] `}
       >
@@ -175,7 +178,12 @@ function TaskBlock({
                   onChange={(e) => setTitleInput(e.target.value)}
                   type="text"
                 ></input> */}
-                <h1 className="text-sm font-semibold cursor-pointer" onClick={() => setEditBlock(true)}>{routine.title}</h1>
+                <h1
+                  className="text-sm font-semibold cursor-pointer"
+                  onClick={() => setEditBlock(true)}
+                >
+                  {routine.title}
+                </h1>
                 {/* <h1
                   className={`${
                     blockSize === "fullsize"
@@ -207,7 +215,10 @@ function TaskBlock({
             </div>
             <div className={`mt-1`}>
               <textarea
-                onChange={(e) => {setDescriptionInput(e.target.value); handleEditRoutine()}}
+                onChange={(e) => {
+                  setDescriptionInput(e.target.value);
+                  handleEditRoutine();
+                }}
                 defaultValue={routine.description}
                 className="text-sm text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
               ></textarea>
@@ -236,15 +247,15 @@ function TaskBlock({
                   d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
                 />
               </svg>
-              {editBlock &&  (
-                <TaskBlockEdit 
-                closeBtn={() => setEditBlock(false)}
-                length={length}
-                title={title}
-                description={description}
-                priority={priority}
-                relatedDays={relatedDays}
-                routineId={routineId}
+              {editBlock && (
+                <TaskBlockEdit
+                  closeBtn={() => setEditBlock(false)}
+                  length={length}
+                  title={title}
+                  description={description}
+                  priority={priority}
+                  relatedDays={relatedDays}
+                  routineId={routineId}
                 />
               )}
             </div>
@@ -279,6 +290,50 @@ function TaskBlock({
       </div>
     </>
   );
-}
 
+  // ALL FETCH/API FUNCTIONS
+
+  async function updateRoutineValues() {
+    let body = {
+      title: titleInput,
+      description: descriptionInput,
+    };
+    const usableJson = JSON.stringify(body);
+    const response = await fetch(
+      `http://localhost:5050/api/routines/individ/${routineId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: usableJson,
+      }
+    );
+    const data = await response.json();
+    if (!data) {
+      console.error("fetch invalid, try again");
+    }
+  }
+  
+  async function incrementUserStats(statsBody) {
+    let user = await Auth.getProfile();
+    let username = user.data.username;
+    try {
+      const response = await fetch(
+        `http://localhost:5050/api/users/stats/${username}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: statsBody,
+        }
+        );
+        const data = await response.json();
+        console.log(data.statSheet)
+        dispatch(setHighestPer(data.statsheet.highestPriorityPercent))
+        dispatch(setHighPer(data.statSheet.highPriorityPercent))
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
+  }
 export default TaskBlock;

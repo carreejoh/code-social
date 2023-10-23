@@ -107,7 +107,6 @@ function TaskBlockEdit({
     const deleteAll = await removeRoutinesFromUser()
     const addNew = await addRoutineToUser(body);
     closeBtn();
-    window.location.href = "/"
   }
 
   async function removeRoutinesFromUser() {
