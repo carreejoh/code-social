@@ -8,7 +8,13 @@ import { useSelector } from "react-redux";
 import { selectRoutineById } from "../redux/selectors";
 import { editRoutine } from "../redux/reducers/counterSlice";
 import { useDispatch } from "react-redux";
-import { incrementTotal, incrementHighest, incrementHigh, setHighestPer, setHighPer } from "../redux/reducers/statsSlice";
+import {
+  incrementTotal,
+  incrementHighest,
+  incrementHigh,
+  setHighestPer,
+  setHighPer,
+} from "../redux/reducers/statsSlice";
 
 function TaskBlock({
   title,
@@ -30,9 +36,7 @@ function TaskBlock({
   const [titleInput, setTitleInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
   const [editBlock, setEditBlock] = useState(false);
-
   let routine = useSelector((state) => selectRoutineById(state, routineId));
-
   const dispatch = useDispatch();
 
   const handleEditRoutine = () => {
@@ -45,37 +49,40 @@ function TaskBlock({
     dispatch(editRoutine(updatedRoutine));
   };
 
-  if (!routine) return <p>HUGE L</p>;
-
   useEffect(() => {
+    setTitleInput(title);
+    setDescriptionInput(description);
+    setTaskOccurance();
+    setUsernameOnLoad();
+    checkIfCompleted();
+  });
+
+  function setUsernameOnLoad() {
+    let user = Auth.getProfile();
+    let username = user.data.username;
+    setUsername(username);
+  }
+
+  function checkIfCompleted() {
+    let localStorageTask = localStorage.getItem(`${routineId}${date}`);
+    if (!localStorageTask) {
+      setTaskCompleteLocal(false);
+    }
+    if (localStorageTask && priority !== "Nan") {
+      setTaskComplete(true);
+    }
+  }
+
+  const saveDescriptionTimeout = () => {
     handleEditRoutine();
     const fetchInterval = setTimeout(() => {
       updateRoutineValues();
     }, 3000);
 
     return () => clearTimeout(fetchInterval);
-  }, [titleInput, descriptionInput]);
+  };
 
-  useEffect(() => {
-    // Set title and description
-    setTitleInput(title);
-    setDescriptionInput(description);
-    // Verify User is logged in and change their username
-    let user = Auth.getProfile();
-    let username = user.data.username;
-    setUsername(username);
-    // Check whether block has been "completed"
-    let localStorageTask = localStorage.getItem(`${routineId}${date}`);
-    if (!localStorageTask) {
-      setTaskCompleteLocal(false);
-      return;
-    }
-    if (localStorageTask && priority !== "Nan") {
-      setTaskComplete(true);
-    }
-  }, []);
-
-  useEffect(() => {
+  function setTaskOccurance() {
     if (dateIndex === 1) {
       let localStorageOccurance = localStorage.getItem(
         `${routineId}${date}occur`
@@ -89,15 +96,15 @@ function TaskBlock({
         return;
       }
     }
-  }, []);
+  }
 
   async function completeTask() {
     dispatch(incrementTotal(1));
-    if(priority === "Highest") {
-      dispatch(incrementHighest(1))
+    if (priority === "Highest") {
+      dispatch(incrementHighest(1));
     }
-    if(priority === "High") {
-      dispatch(incrementHigh(1))
+    if (priority === "High") {
+      dispatch(incrementHigh(1));
     }
     let localStorageTask = localStorage.getItem(`${routineId}${date}`);
     if (!localStorageTask) {
@@ -141,15 +148,11 @@ function TaskBlock({
     priority === "Highest" ? (body.highestOc += 1) : (body.highestOc += 0);
     priority === "High" ? (body.highOc += 1) : (body.highOc += 0);
     const usableJson = JSON.stringify(body);
-      const userStats = await incrementUserStats(usableJson, username);
+    const userStats = await incrementUserStats(usableJson, username);
   }
 
   return (
     <>
-      {/* <dialog id="edit_modal" >
-        <TaskBlockEdit
-         />
-      </dialog> */}
       <div
         className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
           blockSize === "fullsize"
@@ -162,7 +165,9 @@ function TaskBlock({
             ? "dark:border-green-500 border-green-800"
             : "dark:border-customBlue border-customBlue"
           // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
-        } ${editBlock === true ? "z-50" : "z-40"} dark:border-[1px] border-[2px] `}
+        } ${
+          editBlock === true ? "z-50" : "z-40"
+        } dark:border-[1px] border-[2px] `}
       >
         <div className="flex flex-col justify-between h-full">
           <div>
@@ -172,27 +177,12 @@ function TaskBlock({
               } w-full justify-between`}
             >
               <div className="">
-                {/* <input
-                  className={`text-sm font-semibold text-white bg-transparent focus:outline-none`}
-                  value={titleInput}
-                  onChange={(e) => setTitleInput(e.target.value)}
-                  type="text"
-                ></input> */}
                 <h1
                   className="text-sm font-semibold cursor-pointer text-black dark:text-white"
                   onClick={() => setEditBlock(true)}
                 >
                   {routine.title}
                 </h1>
-                {/* <h1
-                  className={`${
-                    blockSize === "fullsize"
-                      ? "text-md font-semibold"
-                      : "text-[9px]"
-                  } text-gray-400`}
-                >
-                  {routine.description}
-                </h1> */}
               </div>
               <div
                 className={`${priority === "Highest" ? "" : "hidden"} ${
@@ -218,6 +208,7 @@ function TaskBlock({
                 onChange={(e) => {
                   setDescriptionInput(e.target.value);
                   handleEditRoutine();
+                  saveDescriptionTimeout();
                 }}
                 defaultValue={routine.description}
                 className="text-sm text-black dark:text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
@@ -312,7 +303,7 @@ function TaskBlock({
       console.error("fetch invalid, try again");
     }
   }
-  
+
   async function incrementUserStats(statsBody) {
     let user = await Auth.getProfile();
     let username = user.data.username;
@@ -324,16 +315,15 @@ function TaskBlock({
           headers: { "Content-Type": "application/json" },
           body: statsBody,
         }
-        );
-        const data = await response.json();
-        console.log(data.statSheet)
-        dispatch(setHighestPer(data.statsheet.highestPriorityPercent))
-        dispatch(setHighPer(data.statSheet.highPriorityPercent))
-        return data;
-      } catch (err) {
-        console.error(err);
-      }
+      );
+      const data = await response.json();
+      console.log(data.statSheet);
+      dispatch(setHighestPer(data.statsheet.highestPriorityPercent));
+      dispatch(setHighPer(data.statSheet.highPriorityPercent));
+      return data;
+    } catch (err) {
+      console.error(err);
     }
-    
   }
+}
 export default TaskBlock;

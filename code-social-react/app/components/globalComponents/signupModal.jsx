@@ -8,12 +8,13 @@ import {
 import Auth from "../../verify/auth";
 
 function SignUpModal({ closeModal }) {
-  //UseState for managing form
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, showError] = useState(false);
+  const [errorMessage, showErrorMessage] = useState("");
+
 
   //Verify email and password on front-end, and make POST request
 
@@ -25,15 +26,18 @@ function SignUpModal({ closeModal }) {
     const pswdLength = await passwordLength(password);
 
     if (checkPswd !== true) {
-      alert("Password and confirm password are different!");
+      showError(true)
+      showErrorMessage("Passwords don't match.")
       return;
     }
     if (checkEmail !== true) {
-      alert("Invalid email address!");
+      showError(true)
+      showErrorMessage("Invalid email address.")
       return;
     }
     if (pswdLength !== true) {
-      alert("Password must be at least 8 characters long!");
+      showError(true)
+      showErrorMessage("Password must be 8 characters long.")
       return;
     }
     SignUp();
@@ -46,6 +50,16 @@ function SignUpModal({ closeModal }) {
       body: JSON.stringify({ username, email, password }),
     });
     const userToken = await newUser.json();
+    if(userToken.message === "This email is being used") {
+      showError(true)
+      showErrorMessage("This email is taken.")
+      return;
+    }
+    if(userToken.message === "This username is being used") {
+      showError(true)
+      showErrorMessage("This username is taken.")
+      return;
+    }
     Auth.login(userToken.token);
     localStorage.setItem("codeSpotUser", `${username}`);
   }
@@ -73,7 +87,12 @@ function SignUpModal({ closeModal }) {
             />
           </svg>
         </div>
-        <form className=" mt-3">
+        {error && (
+          <div className="w-full bg-red-900 mt-1 border-[2px] border-red-400 p-1">
+            <h1 className="text-sm text-white">{errorMessage}</h1>
+          </div>
+        )}
+        <form className=" mt-1">
           <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"

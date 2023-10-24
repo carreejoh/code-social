@@ -86,7 +86,7 @@ function LoginSignUpBtn() {
               />
             </svg>
           </button>
-          <button className="mt-2" onClick={() => toggleLoginModal(true)}>
+          <button className="mt-1" onClick={() => toggleLoginModal(true)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

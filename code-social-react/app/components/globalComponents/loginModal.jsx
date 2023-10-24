@@ -5,8 +5,11 @@ import Auth from "../../verify/auth";
 function LoginModal({ closeModal }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, showError] = useState(false);
+  const [errorMessage, showErrorMessage] = useState("");
 
-  async function Login() {
+  async function Login(event) {
+    event.preventDefault();
     try {
       if (username && password) {
         const response = await fetch("http://localhost:5050/api/users/login", {
@@ -15,8 +18,21 @@ function LoginModal({ closeModal }) {
           body: JSON.stringify({ username, password }),
         });
         const userToken = await response.json();
+        if (userToken.message === "Incorrect Username") {
+          showError(true);
+          showErrorMessage("Username is incorrect.")
+          return;
+        }
+        if (userToken.message === "Incorrect Password") {
+          showError(true)
+          showErrorMessage("Password is incorrect.")
+          return;
+        }
         Auth.login(userToken.token);
         localStorage.setItem("codeSpotUser", `${username}`);
+      } else {
+        showError(true)
+        showErrorMessage("Please enter username and password.")
       }
     } catch (err) {
       console.error(err);
@@ -26,7 +42,7 @@ function LoginModal({ closeModal }) {
   return (
     <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-10">
       <div className="w-80 bg-lightModeGray dark:bg-darkestBaseGray rounded-lg p-2 text-left">
-      <div className="w-full flex justify-between">
+        <div className="w-full flex justify-between">
           <h1 className="text-black dark:text-white font-semibold">Login</h1>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,8 +60,13 @@ function LoginModal({ closeModal }) {
             />
           </svg>
         </div>
-        <form className="mt-3">
-        <h1 className="text-black dark:text-white text-sm">Username</h1>
+        {error && (
+          <div className="w-full bg-red-900 mt-1 border-[2px] border-red-400 p-1">
+            <h1 className="text-sm text-white">{errorMessage}</h1>
+          </div>
+        )}
+        <form className="mt-1">
+          <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"
             className="text-white focus:outline-none"

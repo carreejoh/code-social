@@ -47,6 +47,14 @@ module.exports = {
         weekdayCompleted: [0,0,0,0,0,0,0],
         latestDate: ""
       }
+      const existingUser = await User.findOne({ email: req.body.email }) 
+      if(existingUser) {
+        return res.status(404).json({message: "This email is being used"})
+      }
+      const existingUserUsername = await User.findOne({ username: req.body.username }) 
+      if(existingUserUsername) {
+        return res.status(404).json({message: "This username is being used"})
+      }
       const user = await User.create(req.body);
       const token = signToken(user);
       res.status(200).json({ token });
@@ -60,6 +68,7 @@ module.exports = {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
         return res.status(404).json({ message: "Incorrect Username" });
+        
       }
       if (user.password != req.body.password) {
         return res.status(404).json({ message: "Incorrect Password" });

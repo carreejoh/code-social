@@ -30,7 +30,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
   useEffect(() => {
     if (Auth.loggedIn()) {
       let user = Auth.getProfile();
-      let username = user.data.username;
+      let username = user?.data.username;
       setUserStatsRedux(username);
       setInterval(() => {
         let user = Auth.getProfile();

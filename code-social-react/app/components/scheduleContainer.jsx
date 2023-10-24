@@ -7,7 +7,7 @@ import Auth from "../verify/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addRoutine } from "../redux/reducers/counterSlice";
 import HomepageStats from "./homepageStats";
-import Home from "../page";
+import DummyTaskBlock from "./dummyTaskBlock"
 
 function ScheduleContainer() {
   const splideRef = useRef();
@@ -34,8 +34,8 @@ function ScheduleContainer() {
     "wednesday",
     "thursday",
     "friday",
-    "saturday"
-  ]
+    "saturday",
+  ];
 
   const goNext = () => splideRef.current.splide.go("+");
   const goPrev = () => splideRef.current.splide.go("-");
@@ -47,7 +47,7 @@ function ScheduleContainer() {
       ...daysOfWeek.slice(0, currentDayIndex - 1),
     ];
     setDayList(sortedDays);
-  }, [daysOfWeek]);
+  }, []);
 
   // Scroll to relevant postion
 
@@ -58,7 +58,7 @@ function ScheduleContainer() {
       let username = user?.data?.username;
       fetchRoutineController(username);
     }
-  }, [fetchRoutineController]);
+  });
 
   // For Clock
   useEffect(() => {
@@ -68,8 +68,6 @@ function ScheduleContainer() {
         currentTime.getHours() * 60 + currentTime.getMinutes();
       setTimeInMinutes(currentMinutes);
     }, 60000);
-
-    console.log(timeInMinutes);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -174,52 +172,67 @@ function ScheduleContainer() {
 
   return (
     <>
-      <HomepageStats quickStats={quickStats} toggleQuickStats={toggleQuickStats}/>
-      <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
-        <div className={`${quickStats === false ? "hidden" : "block"} fixed z-[1000] right-0 top-[130px] h-10 w-24 bg-darkestBaseGray p-2 rounded-tl-2xl rounded-bl-2xl -mr-2 hover:mr-0 duration-75`}>
-          <button className={`font-semibold `} onClick={() => toggleQuickStats(!quickStats)}>Stats</button>
-        </div>
-        <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16">
-          <button
-            onClick={goPrev}
-            className="prev-button z-[100] bg-darkestBaseGray h-12 w-12 pl-1 rounded-full justify-center items-center"
+      {Auth.loggedIn() && (
+        <HomepageStats
+          quickStats={quickStats}
+          toggleQuickStats={toggleQuickStats}
+        />
+      )}
+      {Auth.loggedIn() === true ? (
+        <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+          <div
+            className={`${
+              quickStats === false ? "hidden" : "block"
+            } fixed z-[1000] right-0 top-[130px] h-10 w-24 bg-darkestBaseGray p-2 rounded-tl-2xl rounded-bl-2xl -mr-2 hover:mr-0 duration-75`}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10"
+            <button
+              className={`font-semibold `}
+              onClick={() => toggleQuickStats(!quickStats)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 15.75l7.5-7.5 7.5 7.5"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={goNext}
-            className="next-button z-[100] mt-2 bg-darkestBaseGray h-12 w-12 pt-1 pl-1 rounded-full justify-center items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10"
+              Stats
+            </button>
+          </div>
+          <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16">
+            <button
+              onClick={goPrev}
+              className="prev-button z-[100] bg-darkestBaseGray h-12 w-12 pl-1 rounded-full justify-center items-center"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-              />
-            </svg>
-          </button>
-        </div>
-        {splideRendered === true && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 15.75l7.5-7.5 7.5 7.5"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={goNext}
+              className="next-button z-[100] mt-2 bg-darkestBaseGray h-12 w-12 pt-1 pl-1 rounded-full justify-center items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+          </div>
+
           <Splide
             hasTrack={false}
             ref={splideRef}
@@ -255,8 +268,32 @@ function ScheduleContainer() {
               <div className="splide__arrows"></div>
             </div>
           </Splide>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg pl-64 pr-64 pt-32">
+          <div className="w-full h-48 flex">
+            <div className="h-32 mt-11">
+              <h1 className="text-black dark:text-white text-2xl font-semibold w-72">
+                Simplify your schedule
+              </h1>
+              <h3 className="text-black dark:text-white text-sm w-72 mt-2">Create reusable routines that are easy to manage.</h3>
+            </div>
+            <DummyTaskBlock title={"Meditate"} complete={true} length={30} priority={"High"}/>
+            <DummyTaskBlock title={"Eat/Commute"} complete={false} length={90}/>
+            <DummyTaskBlock title={"Swim"} complete={true} length={60} priority={"Highest"}/>
+            <DummyTaskBlock title={"Relax"} complete={false} length={60} />
+          </div>
+          {/* <div className="w-full h-48 flex mt-24">
+            <div className="h-32 mt-11">
+              <h1 className="text-black dark:text-white text-2xl font-semibold w-72">
+                Track your stats
+              </h1>
+              <h3 className="text-black dark:text-white text-sm w-72 mt-2">Track all relevant statistics, and use them to stay focused.</h3>
+            </div>
+            
+          </div> */}
+        </div>
+      )}
     </>
   );
 }
