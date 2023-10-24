@@ -292,7 +292,7 @@ function TaskBlockEdit({
           </div>
           <button
             onClick={() => updateRoutineMaster()}
-            className="hover:scale-95 duration-100 text-black dark:text-white "
+            className="hover:scale-95 duration-100 text-white dark:text-white "
           >
             Save
           </button>

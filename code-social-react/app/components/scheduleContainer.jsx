@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import TodayContainer from "./todayContainer";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide-core.min.css";
@@ -34,8 +34,8 @@ function ScheduleContainer() {
     "wednesday",
     "thursday",
     "friday",
-    "saturday",
-  ];
+    "saturday"
+  ]
 
   const goNext = () => splideRef.current.splide.go("+");
   const goPrev = () => splideRef.current.splide.go("-");
@@ -47,7 +47,7 @@ function ScheduleContainer() {
       ...daysOfWeek.slice(0, currentDayIndex - 1),
     ];
     setDayList(sortedDays);
-  }, []);
+  }, [daysOfWeek]);
 
   // Scroll to relevant postion
 
@@ -58,7 +58,7 @@ function ScheduleContainer() {
       let username = user?.data?.username;
       fetchRoutineController(username);
     }
-  }, []);
+  }, [fetchRoutineController]);
 
   // For Clock
   useEffect(() => {

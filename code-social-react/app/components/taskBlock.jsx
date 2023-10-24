@@ -151,7 +151,7 @@ function TaskBlock({
          />
       </dialog> */}
       <div
-        className={`bg-darkestBaseWhite dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
+        className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
           blockSize === "fullsize"
             ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
             : taskLengthSmall[length]

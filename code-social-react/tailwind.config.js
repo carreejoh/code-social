@@ -40,7 +40,7 @@ module.exports = {
         baseWhite: `#EDEDEC`,
         darkBaseWhite: `#EDEDEC`,
         darkestBaseWhite: '#D1CBCE',
-        lightModeGray: '#4F4E53'
+        lightModeGray: '#8F8E93 '
       },
       keyframes: {
         slideInRight: {

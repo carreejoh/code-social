@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { samePassword, emailValidation, passwordLength } from "../../verify/verify";
+import {
+  samePassword,
+  emailValidation,
+  passwordLength,
+} from "../../verify/verify";
 import Auth from "../../verify/auth";
 
 function SignUpModal({ closeModal }) {
@@ -29,7 +33,7 @@ function SignUpModal({ closeModal }) {
       return;
     }
     if (pswdLength !== true) {
-      alert("Password must be at least 8 characters long!")
+      alert("Password must be at least 8 characters long!");
       return;
     }
     SignUp();
@@ -41,48 +45,68 @@ function SignUpModal({ closeModal }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),
     });
-    const userToken = await newUser.json()
+    const userToken = await newUser.json();
     Auth.login(userToken.token);
-    localStorage.setItem("codeSpotUser", `${username}`)
+    localStorage.setItem("codeSpotUser", `${username}`);
   }
 
   // Actual content
 
   return (
-    <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-60">
-      <div className="w-80 h-96 bg-slate-600 rounded-lg p-2">
-        <h1>Sign-Up</h1>
-        <button onClick={closeModal}>Close</button>
-        <form className="">
-          <h1>Username</h1>
+    <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-10">
+      <div className="w-80 bg-lightModeGray dark:bg-darkestBaseGray rounded-lg p-2 text-left">
+        <div className="w-full flex justify-between">
+          <h1 className="text-black dark:text-white font-semibold">Sign-Up</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 cursor-pointer"
+            onClick={closeModal}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <form className=" mt-3">
+          <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"
-            className="text-black"
+            className="text-white focus:outline-none"
             onChange={(e) => setUsername(e.target.value)}
             max={30}
           ></input>
-          <h1>Email</h1>
+          <h1 className="text-black dark:text-white text-sm mt-2"> Email</h1>
           <input
-            placeholder="username"
-            className="text-black"
+            placeholder=""
+            className="text-white focus:outline-none"
             onChange={(e) => setEmail(e.target.value)}
             max={50}
           ></input>
-          <h1>Password</h1>
+          <h1 className="text-black dark:text-white text-sm mt-2">Password</h1>
           <input
-            placeholder="username"
-            className="text-black"
+            placeholder=""
+            className="text-white focus:outline-none"
             onChange={(e) => setPassword(e.target.value)}
             max={100}
           ></input>
-          <h1>Confirm Password</h1>
+          <h1 className="text-black dark:text-white text-sm mt-2">
+            Confirm Password
+          </h1>
           <input
-            placeholder="username"
-            className="text-black"
+            placeholder=""
+            className="text-white focus:outline-none"
             onChange={(e) => setConfirmPassword(e.target.value)}
             max={100}
           ></input>
-          <button onClick={SignUpVerify}>Submit</button>
+          <div className="w-full mt-2 text-right">
+            <button onClick={SignUpVerify}>Submit</button>
+          </div>
         </form>
       </div>
     </div>

@@ -24,26 +24,44 @@ function LoginModal({ closeModal }) {
   }
 
   return (
-    <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-60">
-      <div className="w-80 h-96 bg-slate-600 rounded-lg p-2">
-        <h1>Login</h1>
-        <button onClick={closeModal}>Close</button>
-        <form className="">
-          <h1>Username</h1>
+    <div className="z-50 inset-0 fixed flex items-center justify-center bg-black bg-opacity-10">
+      <div className="w-80 bg-lightModeGray dark:bg-darkestBaseGray rounded-lg p-2 text-left">
+      <div className="w-full flex justify-between">
+          <h1 className="text-black dark:text-white font-semibold">Login</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 cursor-pointer"
+            onClick={closeModal}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <form className="mt-3">
+        <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"
-            className="text-black"
+            className="text-white focus:outline-none"
             onChange={(e) => setUsername(e.target.value)}
             max={30}
           ></input>
-          <h1>Password</h1>
+          <h1 className="text-black dark:text-white text-sm mt-2">Password</h1>
           <input
             placeholder="username"
-            className="text-black"
+            className="text-white focus:outline-none"
             onChange={(e) => setPassword(e.target.value)}
             max={100}
           ></input>
-          <button onClick={Login}>Submit</button>
+          <div className="w-full mt-2 text-right">
+            <button onClick={Login}>Submit</button>
+          </div>
         </form>
       </div>
     </div>
