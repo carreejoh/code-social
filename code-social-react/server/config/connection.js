@@ -1,13 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// require('MONGODB_URI').config();
+require("dotenv").config();
 
-// const mongoURI = process.env.MONGODB_URI
+// process.env.MONGODB_URI
 
-mongoose.connect('mongodb://127.0.0.1:27017/RoutineDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// const mongooseURL = 'mongodb://127.0.0.1:27017/RoutineDB'
+
+mongoose.connect(
+  'mongodb://127.0.0.1:27017/RoutineDB',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 module.exports = mongoose.connection;
-

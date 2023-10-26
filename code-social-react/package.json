@@ -8,6 +8,9 @@
     "start": "concurrently \"next start\" \"node server/server.js\"",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "18.x || 16.x"
+  },
   "dependencies": {
     "@apollo/client": "^3.8.4",
     "@dnd-kit/core": "^6.0.8",
