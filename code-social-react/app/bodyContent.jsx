@@ -20,7 +20,7 @@ function BodyContent({ children }) {
         <div className="h-16">
           <WelcomeInfo />
         </div>
-        <div className=" bg-darkestBaseWhite dark:bg-darkestBaseGray ">
+        <div className=" bg-darkestBaseGray dark:bg-darkestBaseGray ">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </div>
       </div>

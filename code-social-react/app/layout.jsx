@@ -24,7 +24,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className}`}>
         <Provider store={store}>
-          <BodyContent children={children} />
+          <BodyContent>
+            {children}
+          </BodyContent>
         </Provider>
       </body>
     </html>

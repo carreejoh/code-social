@@ -179,7 +179,7 @@ function ScheduleContainer() {
         />
       )}
       {Auth.loggedIn() === true ? (
-        <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+        <div className="w-full h-full bg-darkestBaseGray dark:bg-darkBaseGray rounded-tl-lg">
           <div
             className={`${
               quickStats === false ? "hidden" : "block"

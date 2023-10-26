@@ -44,7 +44,7 @@ function SignUpModal({ closeModal }) {
   }
 
   async function SignUp() {
-    const newUser = await fetch("http://localhost:5050/api/users", {
+    const newUser = await fetch("api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),

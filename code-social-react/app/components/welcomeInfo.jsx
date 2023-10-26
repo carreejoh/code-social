@@ -53,19 +53,19 @@ function WelcomeInfo() {
     //     <h1 className="text-lg ml-12 text-black dark:text-white">Saturday, 10/19/2023</h1>
     //   </div>
     // </div>
-    <div className="w-full h-16 bg-darkestBaseWhite dark:bg-darkestBaseGray justify-between items-center pl-12 pr-12 flex">
+    <div className="w-full h-16 bg-darkestBaseGray dark:bg-darkestBaseGray justify-between items-center pl-12 pr-12 flex">
       <div className="w-72">
-        <h1 className="font-semibold text-black dark:text-white text-lg">
+        <h1 className="font-semibold text-white dark:text-white text-lg">
           Welcome {username}!
         </h1>
       </div>
       <div className="flex h-16 items-center">
         {/* <h1 className="text-sm">Active Task:</h1>
-        <h1 className="font-semibold text-black dark:text-white text-lg ml-2">"Upper Body, Arms / Chest"</h1> */}
+        <h1 className="font-semibold text-white dark:text-white text-lg ml-2">"Upper Body, Arms / Chest"</h1> */}
         {/* <h1>Calender</h1> */}
       </div>
       <div className="w-72 text-right">
-      <h1 className="text-lg font-semibold text-black dark:text-white">
+      <h1 className="text-lg font-semibold text-white dark:text-white">
           Saturday, 10/19/2023
         </h1>
       </div>

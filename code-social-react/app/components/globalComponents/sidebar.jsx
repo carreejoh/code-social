@@ -44,7 +44,7 @@ function Sidebar() {
 
   return (
     <>
-      <div className="z-30 w-16 h-[100vh] bg-darkestBaseWhite dark:bg-darkestBaseGray fixed justify-center">
+      <div className="z-30 w-16 h-[100vh] bg-darkestBaseGray dark:bg-darkestBaseGray fixed justify-center">
         {/* <button
         className="btn"
         onClick={() => document.getElementById("add_routine_modal").showModal()}
@@ -54,17 +54,17 @@ function Sidebar() {
         <dialog id="add_routine_modal" className="modal">
           <RoutineModal />
         </dialog>
-        <div className="h-16 w-16 bg-darkestBaseWhite dark:bg-darkestBaseGray text-center pt-3">
+        <div className="h-16 w-16 bg-darkestBaseGray dark:bg-darkestBaseGray text-center pt-3">
           <Link href={"/"}>
-            <h1 className="text-center text-black dark:text-white text-3xl hover:scale-105 duration-100 h-6">
+            <h1 className="text-center text-white text-3xl hover:scale-105 duration-100 h-6">
               Ro
             </h1>
           </Link>
         </div>
         <div className="h-full ">
-          <div className="w-16 p-2 text-black dark:text-white text-center">
+          <div className="w-16 p-2 text-white text-center">
             <button
-              className="mt-4 text-black dark:text-white"
+              className="mt-4 text-white"
               onClick={() =>
                 document.getElementById("add_routine_modal").showModal()
               }
