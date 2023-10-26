@@ -26,7 +26,7 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
 // const PORT = process.env.PORT || 5050;
-const PORT = process.env.MONGODB_URI
+const PORT = process.env.PORT || 5050
 const app = express();
 
 const oneDay = 1000 * 60 * 60 * 24;
