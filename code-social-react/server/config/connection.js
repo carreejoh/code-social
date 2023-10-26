@@ -7,7 +7,7 @@ require("dotenv").config();
 // const mongooseURL = 'mongodb://127.0.0.1:27017/RoutineDB'
 
 mongoose.connect(
-  'mongodb://127.0.0.1:27017/RoutineDB',
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/RoutineDB',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -56,7 +56,7 @@ function WelcomeInfo() {
     <div className="w-full h-16 bg-darkestBaseGray dark:bg-darkestBaseGray justify-between items-center pl-12 pr-12 flex">
       <div className="w-72">
         <h1 className="font-semibold text-white dark:text-white text-lg">
-          Welcome {username}!
+          Hello {username}!
         </h1>
       </div>
       <div className="flex h-16 items-center">
