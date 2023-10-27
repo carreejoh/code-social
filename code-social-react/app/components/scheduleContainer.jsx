@@ -47,7 +47,7 @@ function ScheduleContainer() {
       ...daysOfWeek.slice(0, currentDayIndex - 1),
     ];
     setDayList(sortedDays);
-  }, []);
+  }, [daysOfWeek]);
 
   // Scroll to relevant postion
 

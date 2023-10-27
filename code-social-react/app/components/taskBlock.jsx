@@ -55,7 +55,7 @@ function TaskBlock({
     setTaskOccurance();
     setUsernameOnLoad();
     checkIfCompleted();
-  });
+  }, []);
 
   function setUsernameOnLoad() {
     let user = Auth.getProfile();
