@@ -6,6 +6,7 @@ import {
   passwordLength,
 } from "../../verify/verify";
 import Auth from "../../verify/auth";
+import PostUser from "../../api/postUser";
 
 function SignUpModal({ closeModal }) {
   const [username, setUsername] = useState("");
@@ -44,9 +45,9 @@ function SignUpModal({ closeModal }) {
   }
 
   async function SignUp() {
-    const newUser = await fetch("https://data.mongodb-api.com/app/data-eljud/endpoint/data/v1", {
+    const newUser = await fetch("http://localhost:5050/api/users", {
       method: "POST",
-      headers: { "Content-Type": "application/json", 'API-Key': 'xJHTznTflS7Eu2BawQyPutxcCPKYfkRtXO3g7vGOtwIFfchVaVJEm04D41BnV3H8' },
+      headers: { "Content-Type": "application/json"},
       body: JSON.stringify({ username, email, password }),
     });
     const userToken = await newUser.json();
