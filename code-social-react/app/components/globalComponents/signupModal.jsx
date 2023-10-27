@@ -44,9 +44,9 @@ function SignUpModal({ closeModal }) {
   }
 
   async function SignUp() {
-    const newUser = await fetch("api/users", {
+    const newUser = await fetch("https://data.mongodb-api.com/app/data-eljud/endpoint/data/v1", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", 'API-Key': 'xJHTznTflS7Eu2BawQyPutxcCPKYfkRtXO3g7vGOtwIFfchVaVJEm04D41BnV3H8' },
       body: JSON.stringify({ username, email, password }),
     });
     const userToken = await newUser.json();
