@@ -140,7 +140,7 @@ function ScheduleContainer() {
   async function fetchAllRoutineIds(username) {
     try {
       const response = await fetch(
-        `http://localhost:5050/api/routines/${username}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/${username}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -156,7 +156,7 @@ function ScheduleContainer() {
   async function fetchIndividualRoutine(routineId) {
     try {
       const response = await fetch(
-        `http://localhost:5050/api/routines/individ/${routineId}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

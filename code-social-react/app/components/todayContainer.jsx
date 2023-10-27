@@ -117,7 +117,7 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   async function fetchIndividualRoutine(routineId) {
     try {
       const response = await fetch(
-        `http://localhost:5050/api/routines/individ/${routineId}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

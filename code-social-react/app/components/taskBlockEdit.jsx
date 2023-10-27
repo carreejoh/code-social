@@ -115,7 +115,7 @@ function TaskBlockEdit({
       console.log(usableJson)
       console.log(routineId)
       const response = await fetch(
-        `http://localhost:5050/api/routines/delete/${username}/${routineId}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/delete/${username}/${routineId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -136,7 +136,7 @@ function TaskBlockEdit({
     const usableJson = JSON.stringify(body);
     console.log(usableJson)
     const response = await fetch(
-      `http://localhost:5050/api/routines/individ/${routineId}`,
+      `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -154,7 +154,7 @@ function TaskBlockEdit({
   async function addRoutineToUser(body) {
     const usableJson = JSON.stringify(body);
     const response = await fetch(
-      `http://localhost:5050/api/routines/add/${username}/${routineId}`,
+      `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/add/${username}/${routineId}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

@@ -291,7 +291,7 @@ function TaskBlock({
     };
     const usableJson = JSON.stringify(body);
     const response = await fetch(
-      `http://localhost:5050/api/routines/individ/${routineId}`,
+      `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -309,7 +309,7 @@ function TaskBlock({
     let username = user.data.username;
     try {
       const response = await fetch(
-        `http://localhost:5050/api/users/stats/${username}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/users/stats/${username}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
