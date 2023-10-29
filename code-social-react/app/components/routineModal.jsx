@@ -14,6 +14,8 @@ function RoutineModal() {
   const [friday, checkFriday] = useState(false);
   const [saturday, checkSaturday] = useState(false);
   const [priority, setPriority] = useState("Nan");
+  const [error, showError] = useState(false);
+  const [errorMessage, showErrorMessage] = useState("");
 
   const startTimeRef = useRef("");
   const endTimeRef = useRef("");
@@ -49,6 +51,18 @@ function RoutineModal() {
     let username = user.data.username;
     let title = titleRef.current.value;
     let description = descriptionRef.current.value;
+
+    if(firstLength === 0) {
+      showError(true);
+      showErrorMessage("Invalid length of time.")
+      return;
+    }
+
+    if(firstLength < 0) {
+      showError(true);
+      showErrorMessage("Routine cannot pass through 12:00 AM.")
+      return;
+    }
 
     if (!username) {
       alert("Log in to save routines");
@@ -91,15 +105,18 @@ function RoutineModal() {
       !saturday &&
       !sunday
     ) {
-      alert("No days selected");
+      showError(true);
+      showErrorMessage("At least one day must be selected.")
       return false;
     }
     if (startTimeRef === "" || endTimeRef === "") {
-      alert("Please select start and end times");
+      showError(true);
+      showErrorMessage("Please select start and end times.")
       return false;
     }
     if (titleRef.current.value === "") {
-      alert("Please add a title");
+      showError(true);
+      showErrorMessage("Routine must have a title.")
       return false;
     }
   }
@@ -108,6 +125,11 @@ function RoutineModal() {
     <>
       <div className="modal-box bg-darkestBaseGray dark:bg-darkestBaseGray p-2 rounded-lg ">
         {/* <label>Title</label> */}
+        {error && (
+          <div className="w-full bg-red-900 mt-1 border-[2px] border-red-400 p-1 mb-2">
+            <h1 className="text-sm text-white">{errorMessage}</h1>
+          </div>
+        )}
         <div className="flex w-full justify-between h-8">
 
           <input
