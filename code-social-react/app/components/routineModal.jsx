@@ -73,7 +73,9 @@ function RoutineModal() {
       }
     );
     const routine = await newRoutine.json();
-    console.log(routine);
+    if(routine.message === "Routine created and user updated") {
+      window.location.href = "/" 
+    }
   }
 
   // Validate all criteria is met
