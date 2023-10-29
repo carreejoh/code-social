@@ -20,16 +20,6 @@ function RoutineModal() {
   const titleRef = useRef("");
   const descriptionRef = useRef("");
 
-  const allDays = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-
   async function handleRoutineForm() {
     let dayOfWeek = [];
     const verifyForm = await checkFormData();
@@ -47,7 +37,6 @@ function RoutineModal() {
     saturday === true ? dayOfWeek.push("saturday") : "";
 
     postRoutine(dayOfWeek);
-    window.location.href = "/"
   }
 
   async function postRoutine(dayOfWeek) {
@@ -115,7 +104,7 @@ function RoutineModal() {
 
   return (
     <>
-      <div className="modal-box dark:bg-darkestBaseGray p-2 rounded-lg ">
+      <div className="modal-box bg-darkestBaseGray dark:bg-darkestBaseGray p-2 rounded-lg ">
         {/* <label>Title</label> */}
         <div className="flex w-full justify-between h-8">
 
@@ -350,7 +339,7 @@ function RoutineModal() {
           <button
             onClick={() => handleRoutineForm()}
             type="submit"
-            className="hover:scale-95 duration-100 text-black dark:text-white "
+            className="hover:scale-95 duration-100 text-white dark:text-white "
           >
             Save
           </button>

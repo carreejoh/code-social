@@ -32,6 +32,16 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
     "saturday",
   ];
 
+  const daysOfWeekCapitol = {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+  }
+
   const containerLength = {
     fullsize:
       "w-[6178px] h-56 transform duration-[500ms] ease-[cubic-bezier(0.17,0.67,0.06,0.96)]",
@@ -138,7 +148,7 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
         </h1>
       ) : (
         <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">
-          {day}, {datesArray[dateIndex]}
+          {daysOfWeekCapitol[day]}, {datesArray[dateIndex]}
         </h1>
       )}
       <div

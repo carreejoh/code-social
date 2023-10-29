@@ -160,14 +160,14 @@ function TaskBlock({
             : taskLengthSmall[length]
         } ${
           dateIndex === 0
-            ? " dark:border-yellow-600 border-yellow-800"
+            ? " dark:border-yellow-600 border-yellow-500"
             : dateIndex === 1
-            ? "dark:border-green-500 border-green-800"
+            ? "dark:border-green-500 border-green-500"
             : "dark:border-customBlue border-customBlue"
           // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
         } ${
           editBlock === true ? "z-50" : "z-40"
-        } dark:border-[1px] border-[2px] `}
+        } dark:border-[1px] border-[1px] `}
       >
         <div className="flex flex-col justify-between h-full">
           <div>
@@ -252,7 +252,7 @@ function TaskBlock({
             </div>
             <button
               onClick={() => completeTask()}
-              className={`btn btn-xs btn-outline hover:bg-green text-green-700 dark:text-green-500 ${
+              className={`btn btn-xs dark:btn-outline btn-success hover:bg-green text-black dark:text-green-500 ${
                 taskComplete === false ? "block" : "hidden"
               } ${dateIndex >= 2 ? "hidden" : "block"} ${
                 priority === "Nan" ? "hidden" : "block"
@@ -266,7 +266,7 @@ function TaskBlock({
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={`h-7 w-7 text-green-700 dark:text-green-500 ${
+              className={`h-7 w-7 text-green-500 dark:text-green-500 ${
                 taskComplete === true ? "block" : "hidden"
               } `}
             >
