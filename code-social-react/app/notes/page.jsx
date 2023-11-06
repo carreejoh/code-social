@@ -2,34 +2,34 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addRoutine } from "../redux/reducers/counterSlice";
+import Note from "../notes/components/note"
 
 // import Blah from "./components/blah"
 
 function Notes() {
-  const routines = useSelector((state) => state.routines.routines);
-  const dispatch = useDispatch()
-
-  const handleAddRoutine = () => {
-    const newRoutine = "This is a new routine";
-    dispatch(addRoutine(newRoutine));
-  };
+  
 
   return (
-    <div className="w-full h-[90vh] bg-darkBaseGray rounded-tl-lg ">
-      <div className="w-full h-full grid grid-cols-7">
-        <div className="col-span-1 h-full bg-transparent border-r-[2px] border-darkestBaseGray rounded-tl-lg"></div>
-        <div className="col-span-4 h-full bg-transparent overflow-y-scroll pt-2 pl-4 pr-4">
-          <h1>2023 Goals</h1>
-          <div className="w-full h-[90vh] pt-2">
-            <button
-              aria-label="Increment value"
-              onClick={handleAddRoutine}
-            >
-              Increment
-            </button>
-            <span>{routines}</span>
-          </div>
-        </div>
+    <div className="w-full h-[93.2vh] bg-darkBaseGray pl-20 pr-20 pb-10 overflow-y-scroll">
+      <div className=" pt-4">
+        <h1 className="text-2xl font-semibold">Notes:</h1>
+      </div>
+      <h1 className="text-md font-semibold mt-8">School</h1>
+      <div className="w-full grid grid-cols-6 mt-2 gap-8 gap-y-4">
+        <Note size={"large"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
+        <Note size={"large"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
+        <Note size={"large"} title={"title"}/>
+      </div>
+      <h1 className="text-md font-semibold mt-8">Gym</h1>
+      <div className="w-full grid grid-cols-6 mt-2 gap-8 gap-y-4">
+        <Note size={"large"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
+        <Note size={"large"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
+        <Note size={"small"} title={"title"}/>
       </div>
     </div>
   );

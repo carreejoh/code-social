@@ -7,7 +7,8 @@ import Auth from "../verify/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addRoutine } from "../redux/reducers/counterSlice";
 import HomepageStats from "./homepageStats";
-import DummyTaskBlock from "./dummyTaskBlock"
+import DummyTaskBlock from "./dummyTaskBlock";
+import HomepageGeneral from "./homepageGeneral";
 
 function ScheduleContainer() {
   const splideRef = useRef();
@@ -18,6 +19,9 @@ function ScheduleContainer() {
   const [splideRendered, setSplideRendered] = useState(false);
   const [relevantDayList, setDayList] = useState([]);
   const [quickStats, toggleQuickStats] = useState(true);
+  const [generalInfo, toggleGeneralInfo] = useState(true);
+  const [indexBeforeGeneralInfo, toggleIndexBeforeGeneralInfo] =
+    useState(false);
 
   const dispatch = useDispatch();
   // const routines = useSelector((state) => state.routines.routines);
@@ -123,52 +127,32 @@ function ScheduleContainer() {
     }
   }
 
-  // API call
-
-  async function getAllIndividualRoutineData(idList) {
-    try {
-      if (Array.isArray(idList)) {
-        idList.forEach((id) => {
-          fetchIndividualRoutine(id);
-        });
-      }
-    } catch (err) {
-      console.error(err);
+  const moveWelcomeDiv = (event) => {
+    const splideIndex =
+      splideRef.current.splide.Components.Controller.getIndex();
+    if (splideIndex > 1) {
+      return;
     }
-  }
-
-  async function fetchAllRoutineIds(username) {
-    try {
-      const response = await fetch(
-        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/${username}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error(err);
+    if (event.deltaY > 0 && generalInfo === true) {
+      toggleGeneralInfo(false);
+      toggleIndexBeforeGeneralInfo(false);
+      splideRef.current.splide.go(0);
     }
-  }
-
-  async function fetchIndividualRoutine(routineId) {
-    try {
-      const response = await fetch(
-        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-      handleAddRoutine(data);
-      return data;
-    } catch (err) {
-      console.error(err);
+    if (
+      event.deltaY < 0 &&
+      splideIndex === 0 &&
+      indexBeforeGeneralInfo === false
+    ) {
+      toggleIndexBeforeGeneralInfo(true);
+      return;
     }
-  }
+    if (
+      event.deltaY < 0 &&
+      splideIndex === 0 
+    ) {
+      toggleGeneralInfo(true);
+    }
+  };
 
   return (
     <>
@@ -179,7 +163,10 @@ function ScheduleContainer() {
         />
       )}
       {Auth.loggedIn() === true ? (
-        <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg">
+        <div
+          className="w-full h-full bg-baseWhite dark:bg-darkBaseGray "
+          onWheel={moveWelcomeDiv}
+        >
           <div
             className={`${
               quickStats === false ? "hidden" : "block"
@@ -233,10 +220,28 @@ function ScheduleContainer() {
             </button>
           </div>
 
+          <div
+            className={`${
+              generalInfo === true
+                ? "translate-y-0 block h-[30vh]"
+                : "translate-y-[-940px] h-[10vh]"
+            } w-full z-[40] fixed duration-[200ms] ease-in-out`}
+            onWheel={moveWelcomeDiv}
+          >
+            {dayData && <HomepageGeneral dayData={dayData[1]} />}
+          </div>
+
+          <div
+            className={`${
+              generalInfo === true ? "pt-[300px] block" : "pt-[0px]"
+            } duration-[200ms] ease-in-out`}
+          ></div>
+
           <Splide
             hasTrack={false}
             ref={splideRef}
             aria-label="List of schedules"
+            // onMoved={checkSplideActive}
             options={{
               direction: "ttb",
               height: "902px",
@@ -276,11 +281,27 @@ function ScheduleContainer() {
               <h1 className="text-black dark:text-white text-2xl font-semibold w-72">
                 Simplify your schedule
               </h1>
-              <h3 className="text-black dark:text-white text-sm w-72 mt-2">Create reusable routines that are easy to manage.</h3>
+              <h3 className="text-black dark:text-white text-sm w-72 mt-2">
+                Create reusable routines that are easy to manage.
+              </h3>
             </div>
-            <DummyTaskBlock title={"Meditate"} complete={true} length={30} priority={"High"}/>
-            <DummyTaskBlock title={"Eat/Commute"} complete={false} length={90}/>
-            <DummyTaskBlock title={"Swim"} complete={true} length={60} priority={"Highest"}/>
+            <DummyTaskBlock
+              title={"Meditate"}
+              complete={true}
+              length={30}
+              priority={"High"}
+            />
+            <DummyTaskBlock
+              title={"Eat/Commute"}
+              complete={false}
+              length={90}
+            />
+            <DummyTaskBlock
+              title={"Swim"}
+              complete={true}
+              length={60}
+              priority={"Highest"}
+            />
             <DummyTaskBlock title={"Relax"} complete={false} length={60} />
           </div>
           {/* <div className="w-full h-48 flex mt-24">
@@ -296,6 +317,50 @@ function ScheduleContainer() {
       )}
     </>
   );
+  async function getAllIndividualRoutineData(idList) {
+    try {
+      if (Array.isArray(idList)) {
+        idList.forEach((id) => {
+          fetchIndividualRoutine(id);
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function fetchAllRoutineIds(username) {
+    try {
+      const response = await fetch(
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/${username}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function fetchIndividualRoutine(routineId) {
+    try {
+      const response = await fetch(
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/individ/${routineId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      handleAddRoutine(data);
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
 
 export default ScheduleContainer;
