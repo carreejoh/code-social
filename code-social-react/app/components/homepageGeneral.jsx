@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
+import HomepageStats from "./homepageStats";
 
 function HomepageGeneral({ dayData }) {
   const [currentTask, setCurrentTask] = useState({});
@@ -91,40 +92,39 @@ function HomepageGeneral({ dayData }) {
   }
 
   return (
-    <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36">
-      <h1 className="text-2xl text-black dark:text-white font-semibold">
+    <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36 bg-baseGray border-b-2 border-darkestBaseGray">
+      <h1 className="text-3xl text-black dark:text-white font-semibold">
         Dashboard
       </h1>
       {/* <h3 className="text-black dark:text-white">{currentTaskTitle}</h3> */}
       <div className="w-full h-56 pt-2 pb-2 grid grid-cols-3 gap-4 ">
-        <div className="p-1 rounded-lg col-span-1 ">
-          {/* <h2 className=" text-gray-500 dark:text-gray-300 text-sm mt-4">
+        <div className="p-2 rounded-lg col-span-1 border-[1px] border-lightestGray">
+          <h2 className=" text-gray-500 dark:text-gray-300 text-sm">
             Current task:
-          </h2> */}
+          </h2>
           <div className="flex">
-            <h2 className="text-3xl text-black dark:text-white font-semibold">
+            <h2 className="text-2xl text-black dark:text-white font-semibold">
               {currentTaskTitle}
             </h2>
             <div
               className={`${
                 currentTask.priority === "Highest" ? "" : "hidden"
-              }  ml-1 badge font-semibold badge-secondary`}
+              }  ml-1 badge text-lg font-semibold badge-secondary`}
             >
               !!!
             </div>
             <div
               className={`${
                 currentTask.priority === "High" ? "" : "hidden"
-              } ml-1 badge text-white font-semibold badge-primary`}
+              } ml-1 badge text-lg text-white font-semibold badge-primary`}
             >
               !
             </div>
           </div>
           <p>{currentTask.description}</p>
         </div>
-        {/* <div className="p-1 rounded-lg col-span-1 border-[1px] border-customBlue dark:bg-baseGray bg-darkestBaseWhite shadow-xl dark:shadow-customWhite">
 
-        </div> */}
+        <HomepageStats />
       </div>
     </div>
   );

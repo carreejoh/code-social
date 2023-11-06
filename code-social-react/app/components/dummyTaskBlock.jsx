@@ -8,27 +8,21 @@ function DummyTaskBlock({ title, priority, desc, length, complete }) {
   };
 
   return (
-    <div
-      className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg ${taskLengths[length]} mr-[3px] h-48 dark:border-customBlue border-customBlue border-[1px]`}
-    >
+    <div className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg ${taskLengths[length]} mr-[3px] h-48 dark:border-customBlue border-customBlue border-[1px]`}>
       <div className="flex justify-between h-8">
         <h1 className="text-black dark:text-white text-sm font-semibold">
           {title}
         </h1>
         <div
-          className={`${
-            priority === "Highest" ? "" : "hidden"
-          }  badge font-semibold badge-secondary`}
-        >
-          !!!
-        </div>
-        <div
-          className={`${
-            priority === "High" ? "" : "hidden"
-          } badge text-white font-semibold badge-primary`}
-        >
-          !
-        </div>
+                className={`${priority === "Highest" ? "" : "hidden"}  badge font-semibold badge-secondary`}
+              >
+                !!!
+              </div>
+              <div
+                className={`${priority === "High" ? "" : "hidden"} badge text-white font-semibold badge-primary`}
+              >
+                !
+              </div>
       </div>
       <p className="text-gray-500 text-sm">{desc}</p>
       <div className="flex h-8 justify-between items-center mt-[116px]">

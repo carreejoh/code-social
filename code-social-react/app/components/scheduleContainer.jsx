@@ -156,18 +156,18 @@ function ScheduleContainer() {
 
   return (
     <>
-      {Auth.loggedIn() && (
+      {/* {Auth.loggedIn() && (
         <HomepageStats
           quickStats={quickStats}
           toggleQuickStats={toggleQuickStats}
         />
-      )}
+      )} */}
       {Auth.loggedIn() === true ? (
         <div
-          className="w-full h-full bg-baseWhite dark:bg-darkBaseGray "
+          className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg"
           onWheel={moveWelcomeDiv}
         >
-          <div
+          {/* <div
             className={`${
               quickStats === false ? "hidden" : "block"
             } fixed z-[1000] right-0 top-[130px] h-10 w-24 bg-darkestBaseGray p-2 rounded-tl-2xl rounded-bl-2xl -mr-2 hover:mr-0 duration-75`}
@@ -178,7 +178,7 @@ function ScheduleContainer() {
             >
               Stats
             </button>
-          </div>
+          </div> */}
           <div className="fixed z-[100] right-8 bottom-8 p-3 text-center w-16">
             <button
               onClick={goPrev}
