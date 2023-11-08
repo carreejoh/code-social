@@ -92,7 +92,7 @@ function HomepageGeneral({ dayData }) {
   }
 
   return (
-    <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36 bg-baseGray border-b-2 border-darkestBaseGray">
+    <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36 bg-baseWhite dark:bg-baseGray border-b-2 border-darkestBaseGray">
       <h1 className="text-3xl text-black dark:text-white font-semibold">
         Dashboard
       </h1>
@@ -124,7 +124,7 @@ function HomepageGeneral({ dayData }) {
           <p>{currentTask.description}</p>
         </div>
 
-        <HomepageStats />
+        {/* <HomepageStats /> */}
       </div>
     </div>
   );
