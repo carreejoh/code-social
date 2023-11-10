@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import HomepageStats from "./homepageStats";
+import StringLink from "./stringLink";
+import Auth from "../verify/auth"
 
 function HomepageGeneral({ dayData }) {
   const [currentTask, setCurrentTask] = useState({});
@@ -8,11 +10,21 @@ function HomepageGeneral({ dayData }) {
     useState("No Active Routines");
   const [currentTime, setCurrentTime] = useState(0);
   const [routineData, setRoutineData] = useState();
+  const [stringLink, setStringLink] = useState("")
 
   useEffect(() => {
     getRoutineTimesMaster();
     clock();
   }, [dayData]);
+
+  useEffect(() => {
+    let user = Auth.getProfile();
+    let username = user.data.username
+    if(!username) {
+      return;
+    }
+    getStringLink(username)
+  }, [Auth])
 
   useEffect(() => {
     checkRoutineTimes();
@@ -91,6 +103,19 @@ function HomepageGeneral({ dayData }) {
     }
   }
 
+  async function getStringLink(username) {
+    try{
+        const user = await fetch(`https://routine-server-87a5f72bed6e.herokuapp.com/api/users/${username}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        })
+        const data = await user.json();
+        setStringLink(data.linkString)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
   return (
     <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36 bg-baseWhite dark:bg-baseGray border-b-2 border-darkestBaseGray">
       <h1 className="text-3xl text-black dark:text-white font-semibold">
@@ -123,7 +148,7 @@ function HomepageGeneral({ dayData }) {
           </div>
           <p>{currentTask.description}</p>
         </div>
-
+        <StringLink stringLink={stringLink}/>
         {/* <HomepageStats /> */}
       </div>
     </div>

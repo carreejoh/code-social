@@ -7,6 +7,7 @@ import {
 } from "../../verify/verify";
 import Auth from "../../verify/auth";
 import PostUser from "../../api/postUser";
+import helpers from "../../verify/helpers";
 
 function SignUpModal({ closeModal }) {
   const [username, setUsername] = useState("");
@@ -45,10 +46,11 @@ function SignUpModal({ closeModal }) {
   }
 
   async function SignUp() {
+    const linkString = await helpers.makeRandomLink();
     const newUser = await fetch("https://routine-server-87a5f72bed6e.herokuapp.com/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json"},
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, linkString }),
     });
     const userToken = await newUser.json();
     if(userToken.message === "This email is being used") {

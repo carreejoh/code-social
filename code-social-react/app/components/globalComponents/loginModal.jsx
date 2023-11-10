@@ -12,6 +12,7 @@ function LoginModal({ closeModal }) {
     event.preventDefault();
     try {
       if (username && password) {
+        // https://routine-server-87a5f72bed6e.herokuapp.com/api/users/login
         const response = await fetch("https://routine-server-87a5f72bed6e.herokuapp.com/api/users/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
