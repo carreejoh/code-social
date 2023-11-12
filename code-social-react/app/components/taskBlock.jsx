@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { taskLengths, timeStart, weekdayToIndex } from "../verify/lengthArrays";
 import TaskBlockEdit from "./taskBlockEdit";
 import Auth from "../verify/auth";
@@ -15,6 +15,8 @@ import {
   setHighestPer,
   setHighPer,
 } from "../redux/reducers/statsSlice";
+import LoadingSpinner from "./globalComponents/loadingSpinner";
+import useSWR from 'swr'
 
 function TaskBlock({
   title,
@@ -29,6 +31,7 @@ function TaskBlock({
   day,
   description,
   relatedDays,
+  reloadComponent
 }) {
   const [username, setUsername] = useState("");
   const [taskComplete, setTaskComplete] = useState(false);
@@ -98,6 +101,11 @@ function TaskBlock({
     }
   }
 
+  // const fetcher = (...args) => fetch(...args).then(res => res.json())
+  // const {data, error, isLoading} = useSWR(`https://routine-server-87a5f72bed6e.herokuapp.com/api/users/stats/${username}`, fetcher)
+
+  // if(isLoading) return <div><LoadingSpinner/></div>
+
   async function completeTask() {
     dispatch(incrementTotal(1));
     if (priority === "Highest") {
@@ -152,134 +160,137 @@ function TaskBlock({
   }
 
   return (
-    <>
-      <div
-        className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
-          blockSize === "fullsize"
-            ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
-            : taskLengthSmall[length]
-        } ${
-          dateIndex === 0
-            ? " dark:border-yellow-600 border-yellow-500"
-            : dateIndex === 1
-            ? "dark:border-green-500 border-green-500"
-            : "dark:border-customBlue border-customBlue"
-          // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
-        } ${
-          editBlock === true ? "z-50" : "z-40"
-        } dark:border-[1px] border-[1px] `}
-      >
-        <div className="flex flex-col justify-between h-full">
-          <div>
-            <div
-              className={`${
-                length === "length30" ? "" : "flex"
-              } w-full justify-between`}
-            >
-              <div className="">
-                <h1
-                  className="text-sm font-semibold cursor-pointer text-black dark:text-white"
-                  onClick={() => setEditBlock(true)}
+    <Suspense fallback={<LoadingSpinner />}>
+      <>
+        <div
+          className={`bg-lightModeGray dark:bg-baseGray shadow-xl p-2 rounded-lg mr-[2px]  ${
+            blockSize === "fullsize"
+              ? `${taskLengths[length]} ${timeStart[startTime]} absolute`
+              : taskLengthSmall[length]
+          } ${
+            dateIndex === 0
+              ? " dark:border-yellow-600 border-yellow-500"
+              : dateIndex === 1
+              ? "dark:border-green-500 border-green-500"
+              : "dark:border-customBlue border-customBlue"
+            // dateIndex === 0 ? " border-customPurple" : dateIndex === 1 ? "border-customPink" : "border-customCyan"
+          } ${
+            editBlock === true ? "z-50" : "z-40"
+          } dark:border-[1px] border-[1px] `}
+        >
+          <div className="flex flex-col justify-between h-full">
+            <div>
+              <div
+                className={`${
+                  length === "length30" ? "" : "flex"
+                } w-full justify-between`}
+              >
+                <div className="">
+                  <h1
+                    className="text-sm font-semibold cursor-pointer text-black dark:text-white"
+                    onClick={() => setEditBlock(true)}
+                  >
+                    {routine.title}
+                  </h1>
+                </div>
+                <div
+                  className={`${priority === "Highest" ? "" : "hidden"} ${
+                    blockSize === "fullsize"
+                      ? "text-lg badge-md"
+                      : "text-xs badge-xs"
+                  } badge font-semibold badge-secondary`}
                 >
-                  {routine.title}
-                </h1>
+                  !!!
+                </div>
+                <div
+                  className={`${priority === "High" ? "" : "hidden"} ${
+                    blockSize === "fullsize"
+                      ? "text-lg badge-md"
+                      : "text-xs badge-xs"
+                  } badge text-white font-semibold badge-primary`}
+                >
+                  !
+                </div>
               </div>
-              <div
-                className={`${priority === "Highest" ? "" : "hidden"} ${
-                  blockSize === "fullsize"
-                    ? "text-lg badge-md"
-                    : "text-xs badge-xs"
-                } badge font-semibold badge-secondary`}
-              >
-                !!!
-              </div>
-              <div
-                className={`${priority === "High" ? "" : "hidden"} ${
-                  blockSize === "fullsize"
-                    ? "text-lg badge-md"
-                    : "text-xs badge-xs"
-                } badge text-white font-semibold badge-primary`}
-              >
-                !
+              <div className={`mt-1`}>
+                <textarea
+                  onChange={(e) => {
+                    setDescriptionInput(e.target.value);
+                    handleEditRoutine();
+                    saveDescriptionTimeout();
+                  }}
+                  defaultValue={routine.description}
+                  className="text-sm text-black dark:text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
+                ></textarea>
               </div>
             </div>
-            <div className={`mt-1`}>
-              <textarea
-                onChange={(e) => {
-                  setDescriptionInput(e.target.value);
-                  handleEditRoutine();
-                  saveDescriptionTimeout();
-                }}
-                defaultValue={routine.description}
-                className="text-sm text-black dark:text-gray-400 w-full h-[120px] max-h-[120px] min-h-[120px] resize-none bg-transparent focus:focus:outline-none"
-              ></textarea>
-            </div>
-          </div>
-          <div
-            className={`justify-between h-6 ${
-              blockSize === "fullsize" ? "flex" : "hidden"
-            }`}
-          >
-            <div className="flex">
+            <div
+              className={`justify-between h-6 ${
+                blockSize === "fullsize" ? "flex" : "hidden"
+              }`}
+            >
+              <div className="flex">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  onClick={() => setEditBlock(true)}
+                  className={`${
+                    editBlock ? "hidden" : ""
+                  } w-6 h-6 text-black dark:text-white cursor-pointer hover:scale-95 duration-100`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                  />
+                </svg>
+                {editBlock && (
+                  <TaskBlockEdit
+                    closeBtn={() => setEditBlock(false)}
+                    length={length}
+                    title={title}
+                    description={description}
+                    priority={priority}
+                    relatedDays={relatedDays}
+                    routineId={routineId}
+                    reloadComponent={reloadComponent}
+                  />
+                )}
+              </div>
+              <button
+                onClick={() => completeTask()}
+                className={`btn btn-xs dark:btn-outline btn-success hover:bg-green text-black dark:text-green-500 ${
+                  taskComplete === false ? "block" : "hidden"
+                } ${dateIndex >= 2 ? "hidden" : "block"} ${
+                  priority === "Nan" ? "hidden" : "block"
+                } ${taskCompleteLocal === false ? "block" : "hidden"}`}
+              >
+                Complete
+              </button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                onClick={() => setEditBlock(true)}
-                className={`${
-                  editBlock ? "hidden" : ""
-                } w-6 h-6 text-black dark:text-white cursor-pointer hover:scale-95 duration-100`}
+                className={`h-7 w-7 text-green-500 dark:text-green-500 ${
+                  taskComplete === true ? "block" : "hidden"
+                } `}
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              {editBlock && (
-                <TaskBlockEdit
-                  closeBtn={() => setEditBlock(false)}
-                  length={length}
-                  title={title}
-                  description={description}
-                  priority={priority}
-                  relatedDays={relatedDays}
-                  routineId={routineId}
-                />
-              )}
             </div>
-            <button
-              onClick={() => completeTask()}
-              className={`btn btn-xs dark:btn-outline btn-success hover:bg-green text-black dark:text-green-500 ${
-                taskComplete === false ? "block" : "hidden"
-              } ${dateIndex >= 2 ? "hidden" : "block"} ${
-                priority === "Nan" ? "hidden" : "block"
-              } ${taskCompleteLocal === false ? "block" : "hidden"}`}
-            >
-              Complete
-            </button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className={`h-7 w-7 text-green-500 dark:text-green-500 ${
-                taskComplete === true ? "block" : "hidden"
-              } `}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
           </div>
         </div>
-      </div>
-    </>
+      </>
+    </Suspense>
   );
 
   // ALL FETCH/API FUNCTIONS

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import Sidebar from "./components/globalComponents/sidebar";
 import WelcomeInfo from "./components/welcomeInfo";
+import LoadingSpinner from "./components/globalComponents/loadingSpinner";
 
 export const dynamic = "auto",
   dynamicParams = true,
@@ -21,7 +22,7 @@ function BodyContent({ children }) {
           <WelcomeInfo />
         </div>
         <div className=" bg-darkestBaseGray dark:bg-darkestBaseGray ">
-          <Suspense fallback={<Loading />}>{children}</Suspense>
+          <Suspense fallback={<LoadingSpinner/>}>{children}</Suspense>
         </div>
       </div>
     </>

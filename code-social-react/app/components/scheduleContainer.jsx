@@ -9,8 +9,10 @@ import { addRoutine } from "../redux/reducers/counterSlice";
 import HomepageStats from "./homepageStats";
 import DummyTaskBlock from "./dummyTaskBlock";
 import HomepageGeneral from "./homepageGeneral";
+import { Suspense } from "react";
+import LoadingSpinner from "./globalComponents/loadingSpinner"
 
-function ScheduleContainer() {
+function ScheduleContainer({reloadComponent}) {
   const splideRef = useRef();
   const [timeInMinutes, setTimeInMinutes] = useState(
     new Date().getHours() * 60 + new Date().getMinutes()
@@ -22,7 +24,6 @@ function ScheduleContainer() {
   const [generalInfo, toggleGeneralInfo] = useState(true);
   const [indexBeforeGeneralInfo, toggleIndexBeforeGeneralInfo] =
     useState(false);
-
   const dispatch = useDispatch();
   // const routines = useSelector((state) => state.routines.routines);
 
@@ -146,16 +147,13 @@ function ScheduleContainer() {
       toggleIndexBeforeGeneralInfo(true);
       return;
     }
-    if (
-      event.deltaY < 0 &&
-      splideIndex === 0 
-    ) {
+    if (event.deltaY < 0 && splideIndex === 0) {
       toggleGeneralInfo(true);
     }
   };
 
   return (
-    <>
+    <Suspense fallback={<Loading/>}>
       {/* {Auth.loggedIn() && (
         <HomepageStats
           quickStats={quickStats}
@@ -237,42 +235,45 @@ function ScheduleContainer() {
             } duration-[200ms] ease-in-out`}
           ></div>
 
-          <Splide
-            hasTrack={false}
-            ref={splideRef}
-            aria-label="List of schedules"
-            // onMoved={checkSplideActive}
-            options={{
-              direction: "ttb",
-              height: "902px",
-              wheel: true,
-              wheelSleep: 0,
-              perPage: 3,
-              perMove: 1,
-              // type: "loop",
-            }}
-          >
-            <div className="w-[calc(100vw-64px)] h-full pt-2">
-              <SplideTrack>
-                {dayData.map((data, index) => (
-                  <SplideSlide key={index} className="">
-                    <div
-                      className={`transition-all duration-[400ms] ease-in-out h-full`}
-                    >
-                      <TodayContainer
-                        // size={activeSlide === index ? "fullsize" : "small"}
-                        size={"fullsize"}
-                        routineData={data}
-                        day={relevantDayList[index]}
-                        dateIndex={index}
-                      />
-                    </div>
-                  </SplideSlide>
-                ))}
-              </SplideTrack>
-              <div className="splide__arrows"></div>
-            </div>
-          </Splide>
+          <Suspense fallback={<Loading/>}>
+            <Splide
+              hasTrack={false}
+              ref={splideRef}
+              aria-label="List of schedules"
+              // onMoved={checkSplideActive}
+              options={{
+                direction: "ttb",
+                height: "902px",
+                wheel: true,
+                wheelSleep: 0,
+                perPage: 3,
+                perMove: 1,
+                // type: "loop",
+              }}
+            >
+              <div className="w-[calc(100vw-64px)] h-full pt-2">
+                <SplideTrack>
+                  {dayData.map((data, index) => (
+                    <SplideSlide key={index} className="">
+                      <div
+                        className={`transition-all duration-[400ms] ease-in-out h-full`}
+                      >
+                        <TodayContainer
+                          // size={activeSlide === index ? "fullsize" : "small"}
+                          size={"fullsize"}
+                          routineData={data}
+                          day={relevantDayList[index]}
+                          dateIndex={index}
+                          reloadComponent={reloadComponent}
+                        />
+                      </div>
+                    </SplideSlide>
+                  ))}
+                </SplideTrack>
+                <div className="splide__arrows"></div>
+              </div>
+            </Splide>
+          </Suspense>
         </div>
       ) : (
         <div className="w-full h-full bg-baseWhite dark:bg-darkBaseGray rounded-tl-lg pl-64 pr-64 pt-32">
@@ -315,7 +316,7 @@ function ScheduleContainer() {
           </div> */}
         </div>
       )}
-    </>
+    </Suspense>
   );
   async function getAllIndividualRoutineData(idList) {
     try {
@@ -361,6 +362,10 @@ function ScheduleContainer() {
       console.error(err);
     }
   }
+}
+
+function Loading() {
+  return <h1>LOADING...</h1>
 }
 
 export default ScheduleContainer;

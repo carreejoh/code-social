@@ -1,11 +1,22 @@
-
+"use client"
 import ScheduleContainer from "./components/scheduleContainer";
 // import WelcomeInfo from "./components/welcomeInfo";
-// import { Suspense } from "react";
+import { Suspense, useState } from "react";
+import LoadingSpinner from "./components/globalComponents/loadingSpinner";
 
 function Home() {
+
+  // Reload only this component on any edit
+  const [key, setKey] = useState(0);
+
+  const reloadComponent = () => {
+    setKey(prevKey => prevKey + 1);
+  }
+
   return (
-      <ScheduleContainer/>
+    <Suspense fallback={<LoadingSpinner />}>
+      <ScheduleContainer key={key} reloadComponent={reloadComponent}/>
+    </Suspense>
   );
 }
 

@@ -2,10 +2,11 @@
 
 import TaskBlock from "./taskBlock";
 import TimeLine from "./timeline";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import EmptyBlock from "./emptyBlock";
+import LoadingSpinner from "./globalComponents/loadingSpinner";
 
-function TodayContainer({ size, routineData, day, dateIndex }) {
+function TodayContainer({ size, routineData, day, dateIndex, reloadComponent }) {
   const [dayData, setDayData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [weekdayTitle, setWeekdayTitle] = useState("");
@@ -16,10 +17,10 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   const dayOfWeekNumber = date.getDay();
 
   const allStartTimes = [
-    0, 30, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700,
-    730, 800, 830, 900, 930, 1000, 1030, 1100, 1130, 1200, 1230, 1300, 1330,
-    1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930,
-    2000, 2030, 2100, 2130, 2200, 2230, 2300, 2330,
+    0, 30, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700, 730,
+    800, 830, 900, 930, 1000, 1030, 1100, 1130, 1200, 1230, 1300, 1330, 1400,
+    1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930, 2000,
+    2030, 2100, 2130, 2200, 2230, 2300, 2330,
   ];
 
   const daysOfWeek = [
@@ -33,14 +34,14 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   ];
 
   const daysOfWeekCapitol = {
-    "sunday": "Sunday",
-    "monday": "Monday",
-    "tuesday": "Tuesday",
-    "wednesday": "Wednesday",
-    "thursday": "Thursday",
-    "friday": "Friday",
-    "saturday": "Saturday",
-  }
+    sunday: "Sunday",
+    monday: "Monday",
+    tuesday: "Tuesday",
+    wednesday: "Wednesday",
+    thursday: "Thursday",
+    friday: "Friday",
+    saturday: "Saturday",
+  };
 
   const containerLength = {
     fullsize:
@@ -89,7 +90,7 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
     let timeBarPosition = Math.floor(totalMinutesElapsed * 4.29 - 10);
     barRef.current.style.marginLeft = `${timeBarPosition}px`;
     setInterval(() => {
-      if(barRef.current.style === null) {
+      if (barRef.current.style === null) {
         return;
       }
       let timeBarPosition;
@@ -141,62 +142,70 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
   }
 
   return (
-    <>
-      {dateIndex === 1 ? (
-        <h1 className="text-lg ml-20 font-semibold text-black dark:text-white h-4">
-          Today, {datesArray[dateIndex]}
-        </h1>
-      ) : (
-        <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">
-          {daysOfWeekCapitol[day]}, {datesArray[dateIndex]}
-        </h1>
-      )}
-      <div
-        className={`scrollDiv ${dateIndex === 1 ? "currentDay" : ""} pt-4 ${
-          size === "fullsize" ? "overflow-x-scroll overflow-y-hidden " : ""
-        } `}
-      >
-        <div className={`${containerLength[size]} `}>
-          {daysOfWeek[dayOfWeekNumber] === weekdayTitle ? (
+    <Suspense fallback={<Loading />}>
+      <>
+        {dateIndex === 1 ? (
+          <h1 className="text-lg ml-20 font-semibold text-black dark:text-white h-4">
+            Today, {datesArray[dateIndex]}
+          </h1>
+        ) : (
+          <h1 className="text-lg font-semibold ml-20 text-black dark:text-white h-4">
+            {daysOfWeekCapitol[day]}, {datesArray[dateIndex]}
+          </h1>
+        )}
+        <div
+          className={`scrollDiv ${dateIndex === 1 ? "currentDay" : ""} pt-4 ${
+            size === "fullsize" ? "overflow-x-scroll overflow-y-hidden " : ""
+          } `}
+        >
+          <div className={`${containerLength[size]} `}>
+            {daysOfWeek[dayOfWeekNumber] === weekdayTitle ? (
+              <div
+                ref={barRef}
+                id="timeBar"
+                className={`${
+                  size === "fullsize" ? "fixed h-72" : "h-32"
+                } z-40 w-[2px] bg-white mt-[-24px] ml-9`}
+              ></div>
+            ) : (
+              <></>
+            )}
             <div
               ref={barRef}
-              id="timeBar"
               className={`${
-                size === "fullsize" ? "fixed h-72" : "h-32"
-              } z-40 w-[2px] bg-white mt-[-24px] ml-9`}
+                dateIndex === 1 ? "block" : "hidden"
+              } fixed z-[9999] h-[200px] w-[2px] bg-black dark:bg-white -mt-1`}
             ></div>
-          ) : (
-            <></>
-          )}
-          <div
-            ref={barRef}
-            className={`${
-              dateIndex === 1 ? "block" : "hidden"
-            } fixed z-[9999] h-[200px] w-[2px] bg-black dark:bg-white -mt-1`}
-          ></div>
-          <div className="flex pl-4 ">
-            {dataLoaded &&
-              dayData.map((data, index) => (
-                <TaskBlock
-                  key={index}
-                  blockSize={size}
-                  title={data?.title}
-                  time={data?.time}
-                  priority={data?.priority}
-                  length={data?.length}
-                  startTime={data?.startTime}
-                  dateIndex={dateIndex}
-                  routineId={data?.id}
-                  description={data?.description}
-                  date={datesArray[dateIndex]}
-                  day={day}
-                  relatedDays={data?.dayOfWeek}
-                />
-              ))}
-            {allStartTimes.map((time, index) => (
-              <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
-            ))}
-            {/* {routineData && routineData.map((data, index) => {
+            <div className="flex pl-4 ">
+              <Suspense fallback={<Loading />}>
+                {dataLoaded &&
+                  dayData.map((data, index) => (
+                    <TaskBlock
+                      key={index}
+                      blockSize={size}
+                      title={data?.title}
+                      time={data?.time}
+                      priority={data?.priority}
+                      length={data?.length}
+                      startTime={data?.startTime}
+                      dateIndex={dateIndex}
+                      routineId={data?.id}
+                      description={data?.description}
+                      date={datesArray[dateIndex]}
+                      day={day}
+                      relatedDays={data?.dayOfWeek}
+                      reloadComponent={reloadComponent}
+                    />
+                  ))}
+                {allStartTimes.map((time, index) => (
+                  <EmptyBlock
+                    key={index}
+                    startTime={time}
+                    dateIndex={dateIndex}
+                  />
+                ))}
+              </Suspense>
+              {/* {routineData && routineData.map((data, index) => {
               <TaskBlock
                 key={index}
                 routineId={data.id}
@@ -205,18 +214,23 @@ function TodayContainer({ size, routineData, day, dateIndex }) {
             {allStartTimes.map((time, index) => (
               <EmptyBlock key={index} startTime={time} dateIndex={dateIndex} />
             ))} */}
-          </div>
-          <div
-            className={` fixed bottom-0 ${
-              size === "fullsize" ? "block" : "hidden"
-            }`}
-          >
-            <TimeLine />
+            </div>
+            <div
+              className={` fixed bottom-0 ${
+                size === "fullsize" ? "block" : "hidden"
+              }`}
+            >
+              <TimeLine />
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
+    </Suspense>
   );
+}
+
+function Loading() {
+  return <h1>LOADING...</h1>
 }
 
 export default TodayContainer;
