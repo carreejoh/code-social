@@ -117,14 +117,14 @@ function HomepageGeneral({ dayData }) {
 }
 
   return (
-    <div className="h-[30vh] w-full rounded-tl-lg p-2 pt-4 pl-20 pr-36 bg-baseWhite dark:bg-baseGray border-b-2 border-darkestBaseGray">
+    <div className=" w-full rounded-tl-lg p-2 pt-4 sm:pr-20 xl:pl-20 xl:pr-36 bg-baseWhite dark:bg-baseGray border-b-2 border-darkestBaseGray">
       <h1 className="text-3xl text-black dark:text-white font-semibold">
         Dashboard
       </h1>
       {/* <h3 className="text-black dark:text-white">{currentTaskTitle}</h3> */}
       <div className="w-full h-56 pt-2 pb-2 grid grid-cols-3 gap-4 ">
-        <div className="p-2 rounded-lg col-span-1 border-[1px] border-lightestGray">
-          <h2 className=" text-gray-500 dark:text-gray-300 text-sm">
+        <div className="p-2 rounded-lg col-span-1 border-[1px] border-lightestGray overflow-hidden">
+          <h2 className=" text-gray-500 dark:text-gray-400 text-sm">
             Current task:
           </h2>
           <div className="flex">
@@ -148,8 +148,8 @@ function HomepageGeneral({ dayData }) {
           </div>
           <p>{currentTask.description}</p>
         </div>
+        <HomepageStats />
         <StringLink stringLink={stringLink}/>
-        {/* <HomepageStats /> */}
       </div>
     </div>
   );

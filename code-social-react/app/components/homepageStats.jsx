@@ -93,17 +93,17 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
     //   </svg>
     // </div>
     <>
-      <div className="p-2 rounded-lg col-span-1 ">
+      <div className="p-2 col-span-1 border-[1px] border-lightestGray overflow-hidden rounded-lg">
         <div className="w-full h-full">
-          <h2 className=" text-gray-500 dark:text-gray-300 text-sm">
-            Statistics:
+          <h2 className=" text-gray-500 dark:text-gray-400 text-sm">
+            Quick Stats:
           </h2>
           <div className="w-full h-[164px] flex mt-1 pb-8 pt-6 justify-around">
             <div className="flex flex-col justify-around text-center h-full w-36">
               <h2 className="dark:text-white text-black text-sm">
                 Tasks Completed:
               </h2>
-              <h1 className="text-6xl text-black dark:text-white font-semibold">
+              <h1 className="text-7xl text-black dark:text-white font-semibold">
                 {totalComp}
               </h1>
             </div>
@@ -112,7 +112,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
                 Highest Priority Completed:
               </h2>
               <div className="w-full flex justify-center">
-                <h1 className="text-[50px] text-black dark:text-white font-semibold">
+                <h1 className="text-[60px] text-black dark:text-white font-semibold">
                   {highestComp}
                 </h1>
                 <div className="text-lg badge-md badge badge-secondary">
@@ -125,7 +125,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
                 High Priority Completed:
               </h2>
               <div className="w-full flex justify-center">
-                <h1 className="text-[50px] text-black dark:text-white font-semibold">
+                <h1 className="text-[60px] text-black dark:text-white font-semibold">
                   {highComp}
                 </h1>
                 <div className="text-lg badge-md badge badge-primary">!</div>
@@ -134,7 +134,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
           </div>
         </div>
       </div>
-      <div className="p-2 flex rounded-lg col-span-1 pt-4 ">
+      {/* <div className="p-2 flex rounded-lg col-span-1 pt-4 ">
         <div className="h-32 w-48 justify-center text-center">
           <h2 className="dark:text-gray-500 text-black text-sm">
             Highest Completion Percentage:
@@ -153,64 +153,6 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
           </div>
         </div>
         <div className="h-32 w-48 justify-center text-center">
-          <h2 className="dark:text-gray-500 text-black text-sm">
-            High Completion Percentage:
-          </h2>
-          <div
-            className="radial-progress mt-2 duration-1000 ease-in-out text-customPurple"
-            style={{
-              "--value": `${highPer}`,
-              "--size": "120px",
-              "--thickness": "6px",
-            }}
-          >
-            <h1 className="font-semibold text-2xl text-black dark:text-white">
-              {highPer}%
-            </h1>
-          </div>
-        </div>
-      </div>
-      {/* <div className="w-full h-full flex items-center">
-        <div className="h-32 w-32 justify-center text-center">
-          <h2 className="dark:text-gray-500 text-black text-sm">
-            Highest Priority Completed:
-          </h2>
-          <div className="w-full flex justify-center">
-            <h1 className="text-[50px] text-black dark:text-white font-semibold">
-              {highestComp}
-            </h1>
-            <div className="text-lg badge-md badge badge-secondary">!!!</div>
-          </div>
-        </div>
-        <div className="h-32 w-32 justify-center text-center">
-          <h2 className="dark:text-gray-500 text-black text-sm">
-            High Priority Completed:
-          </h2>
-          <div className="w-full flex ml-6 mt-4">
-            <h1 className="text-[50px] text-black dark:text-white font-semibold">
-              {highComp}
-            </h1>
-            <div className="text-lg badge-md badge badge-primary">!</div>
-          </div>
-        </div>
-        <div className="h-32 w-32 justify-center text-center">
-          <h2 className="dark:text-gray-500 text-black text-sm">
-            Highest Completion Percentage:
-          </h2>
-          <div
-            className="radial-progress mt-2 duration-1000 ease-in-out text-customPink"
-            style={{
-              "--value": `${highestPer}`,
-              "--size": "120px",
-              "--thickness": "6px",
-            }}
-          >
-            <h1 className="font-semibold text-2xl text-black dark:text-white">
-              {highestPer}%
-            </h1>
-          </div>
-        </div>
-        <div className="col-span-1 h-36 p-1">
           <h2 className="dark:text-gray-500 text-black text-sm">
             High Completion Percentage:
           </h2>
