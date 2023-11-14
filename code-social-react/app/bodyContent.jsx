@@ -3,7 +3,7 @@ import { Suspense } from "react";
 // import dynamic from "next/dynamic";
 import Loading from "./loading";
 import Sidebar from "./components/globalComponents/sidebar";
-import WelcomeInfo from "./components/welcomeInfo";
+import WelcomeInfo from "./components/homeComponents/welcomeInfo";
 import LoadingSpinner from "./components/globalComponents/loadingSpinner";
 
 export const dynamic = "auto",

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Auth from "../verify/auth";
+import Auth from "../../verify/auth";
 
 function WelcomeInfo() {
   const [username, setUsername] = useState(undefined);

@@ -1,4 +1,4 @@
-import { timeStart } from "../verify/lengthArrays";
+import { timeStart } from "../../verify/lengthArrays";
 
 function EmptyBlock({startTime, dateIndex}) {
 

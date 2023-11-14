@@ -4,7 +4,7 @@ import TaskBlock from "./taskBlock";
 import TimeLine from "./timeline";
 import { useState, useEffect, useRef, Suspense } from "react";
 import EmptyBlock from "./emptyBlock";
-import LoadingSpinner from "./globalComponents/loadingSpinner";
+import LoadingSpinner from "../globalComponents/loadingSpinner";
 
 function TodayContainer({ size, routineData, day, dateIndex, reloadComponent }) {
   const [dayData, setDayData] = useState([]);

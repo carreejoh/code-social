@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { taskLengths, timeStart, weekdayToIndex } from "../verify/lengthArrays";
+import { taskLengths, timeStart, weekdayToIndex } from "../../verify/lengthArrays";
 import TaskBlockEdit from "./taskBlockEdit";
-import Auth from "../verify/auth";
+import Auth from "../../verify/auth";
 import { useSelector } from "react-redux";
-import { selectRoutineById } from "../redux/selectors";
-import { editRoutine } from "../redux/reducers/counterSlice";
+import { selectRoutineById } from "../../redux/selectors";
+import { editRoutine } from "../../redux/reducers/counterSlice";
 import { useDispatch } from "react-redux";
 import {
   incrementTotal,
@@ -14,8 +14,8 @@ import {
   incrementHigh,
   setHighestPer,
   setHighPer,
-} from "../redux/reducers/statsSlice";
-import LoadingSpinner from "./globalComponents/loadingSpinner";
+} from "../../redux/reducers/statsSlice";
+import LoadingSpinner from "../globalComponents/loadingSpinner";
 import useSWR from 'swr'
 
 function TaskBlock({
@@ -336,5 +336,6 @@ function TaskBlock({
       console.error(err);
     }
   }
+
 }
 export default TaskBlock;

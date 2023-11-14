@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import HomepageStats from "./homepageStats";
 import StringLink from "./stringLink";
-import Auth from "../verify/auth"
+import Auth from "../../verify/auth"
 
 function HomepageGeneral({ dayData }) {
   const [currentTask, setCurrentTask] = useState({});

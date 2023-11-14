@@ -9,15 +9,15 @@ import {
   setHigh,
   setHighestPer,
   setHighPer,
-} from "../redux/reducers/statsSlice";
+} from "../../redux/reducers/statsSlice";
 import {
   selectTotal,
   selectHighestComp,
   selectHighComp,
   selectHighestPer,
   selectHighPer,
-} from "../redux/selectors";
-import Auth from "../verify/auth";
+} from "../../redux/selectors";
+import Auth from "../../verify/auth";
 
 function HomepageStats({ quickStats, toggleQuickStats }) {
   const totalComp = useSelector(selectTotal);

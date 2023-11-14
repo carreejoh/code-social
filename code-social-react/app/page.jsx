@@ -1,5 +1,5 @@
 "use client"
-import ScheduleContainer from "./components/scheduleContainer";
+import ScheduleContainer from "./components/homeComponents/scheduleContainer";
 // import WelcomeInfo from "./components/welcomeInfo";
 import { Suspense, useState } from "react";
 import LoadingSpinner from "./components/globalComponents/loadingSpinner";

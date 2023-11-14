@@ -1,11 +1,10 @@
-"use client"
+"use client";
 
-import MathMod from "../verify/math"
-import Auth from "../verify/auth"
+import MathMod from "../../verify/math";
+import Auth from "../../verify/auth";
 import { useState, useRef } from "react";
 
 function RoutineModal() {
-
   const [sunday, checkSunday] = useState(false);
   const [monday, checkMonday] = useState(false);
   const [tuesday, checkTuesday] = useState(false);
@@ -43,7 +42,9 @@ function RoutineModal() {
 
   async function postRoutine(dayOfWeek) {
     // Convert form data to api data
-    let startTime = await MathMod.timeStringToNumber(startTimeRef.current.value);
+    let startTime = await MathMod.timeStringToNumber(
+      startTimeRef.current.value
+    );
     let endTime = await MathMod.timeStringToNumber(endTimeRef.current.value);
     let firstLength = endTime - startTime;
     let length = await MathMod.convertToMinutes(firstLength);
@@ -52,15 +53,20 @@ function RoutineModal() {
     let title = titleRef.current.value;
     let description = descriptionRef.current.value;
 
-    if(firstLength === 0) {
+    let now = new Date();
+    let creation = now.getTime();
+
+    let markedComplete = 0;
+
+    if (firstLength === 0) {
       showError(true);
-      showErrorMessage("Invalid length of time.")
+      showErrorMessage("Invalid length of time.");
       return;
     }
 
-    if(firstLength < 0) {
+    if (firstLength < 0) {
       showError(true);
-      showErrorMessage("Routine cannot pass through 12:00 AM.")
+      showErrorMessage("Routine cannot pass through 12:00 AM.");
       return;
     }
 
@@ -69,8 +75,10 @@ function RoutineModal() {
       return;
     }
 
+// https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/create
+
     const newRoutine = await fetch(
-      "https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/create",
+      "http://localhost:5050/api/routines/create",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -83,12 +91,14 @@ function RoutineModal() {
           startTime,
           endTime,
           priority,
+          creation,
+          markedComplete
         }),
       }
     );
     const routine = await newRoutine.json();
-    if(routine.message === "Routine created and user updated") {
-      window.location.href = "/" 
+    if (routine.message === "Routine created and user updated") {
+      window.location.href = "/";
     }
   }
 
@@ -106,17 +116,17 @@ function RoutineModal() {
       !sunday
     ) {
       showError(true);
-      showErrorMessage("At least one day must be selected.")
+      showErrorMessage("At least one day must be selected.");
       return false;
     }
     if (startTimeRef === "" || endTimeRef === "") {
       showError(true);
-      showErrorMessage("Please select start and end times.")
+      showErrorMessage("Please select start and end times.");
       return false;
     }
     if (titleRef.current.value === "") {
       showError(true);
-      showErrorMessage("Routine must have a title.")
+      showErrorMessage("Routine must have a title.");
       return false;
     }
   }
@@ -131,7 +141,6 @@ function RoutineModal() {
           </div>
         )}
         <div className="flex w-full justify-between h-8">
-
           <input
             ref={titleRef}
             type="text"
@@ -287,50 +296,57 @@ function RoutineModal() {
         <div className="flex">
           <button
             onClick={() => checkSunday(!sunday)}
-            className={`${sunday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              sunday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Sun
           </button>
           <button
             onClick={() => checkMonday(!monday)}
-            className={`${monday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              monday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Mon
           </button>
           <button
             onClick={() => checkTuesday(!tuesday)}
-            className={`${tuesday === true ? "text-blue-500  " : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              tuesday === true ? "text-blue-500  " : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Tue
           </button>
           <button
             onClick={() => checkWednesday(!wednesday)}
-            className={`${wednesday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              wednesday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Wed
           </button>
           <button
             onClick={() => checkThursday(!thursday)}
-            className={`${thursday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              thursday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Thurs
           </button>
           <button
             onClick={() => checkFriday(!friday)}
-            className={`${friday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              friday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Fri
           </button>
           <button
             onClick={() => checkSaturday(!saturday)}
-            className={`${saturday === true ? "text-blue-500" : "text-gray-500"
-              } mr-3 text-md font-semibold duration-75`}
+            className={`${
+              saturday === true ? "text-blue-500" : "text-gray-500"
+            } mr-3 text-md font-semibold duration-75`}
           >
             Sat
           </button>
@@ -340,22 +356,25 @@ function RoutineModal() {
           <div className="flex">
             <button
               onClick={() => setPriority("Nan")}
-              className={`${priority === "Nan" ? "text-gray-200" : "text-gray-500"
-                } mr-3 font-semibold`}
+              className={`${
+                priority === "Nan" ? "text-gray-200" : "text-gray-500"
+              } mr-3 font-semibold`}
             >
               Lowest
             </button>
             <button
               onClick={() => setPriority("High")}
-              className={`${priority === "High" ? "text-customPurple" : "text-gray-500"
-                } mr-3 font-semibold`}
+              className={`${
+                priority === "High" ? "text-customPurple" : "text-gray-500"
+              } mr-3 font-semibold`}
             >
               High
             </button>
             <button
               onClick={() => setPriority("Highest")}
-              className={`${priority === "Highest" ? "text-customPink" : "text-gray-500"
-                } mr-3 font-semibold`}
+              className={`${
+                priority === "Highest" ? "text-customPink" : "text-gray-500"
+              } mr-3 font-semibold`}
             >
               Highest
             </button>
@@ -370,7 +389,7 @@ function RoutineModal() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export default RoutineModal;

@@ -45,12 +45,16 @@ function SignUpModal({ closeModal }) {
     SignUp();
   }
 
+// https://routine-server-87a5f72bed6e.herokuapp.com
+
   async function SignUp() {
+    let now = new Date();
+    let creation = now.getTime();
     const linkString = await helpers.makeRandomLink();
-    const newUser = await fetch("https://routine-server-87a5f72bed6e.herokuapp.com/api/users", {
+    const newUser = await fetch("http://localhost:5050/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json"},
-      body: JSON.stringify({ username, email, password, linkString }),
+      body: JSON.stringify({ username, email, password, linkString, creation }),
     });
     const userToken = await newUser.json();
     if(userToken.message === "This email is being used") {

@@ -1,13 +1,13 @@
 "use client";
-import { editModalMarginLeft } from "../verify/lengthArrays";
+import { editModalMarginLeft } from "../../verify/lengthArrays";
 import { useState, useEffect } from "react";
-import Auth from "../verify/auth";
+import Auth from "../../verify/auth";
 
 // REDUX TEST
 
 import { useDispatch, useSelector } from "react-redux";
-import { addRoutine, editRoutine } from "../redux/reducers/counterSlice";
-import { selectRoutineById } from "../redux/selectors";
+import { addRoutine, editRoutine } from "../../redux/reducers/counterSlice";
+import { selectRoutineById } from "../../redux/selectors";
 
 function TaskBlockEdit({
   closeBtn,

@@ -3,14 +3,14 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import TodayContainer from "./todayContainer";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide-core.min.css";
-import Auth from "../verify/auth";
+import Auth from "../../verify/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { addRoutine } from "../redux/reducers/counterSlice";
+import { addRoutine } from "../../redux/reducers/counterSlice";
 import HomepageStats from "./homepageStats";
 import DummyTaskBlock from "./dummyTaskBlock";
 import HomepageGeneral from "./homepageGeneral";
 import { Suspense } from "react";
-import LoadingSpinner from "./globalComponents/loadingSpinner"
+import LoadingSpinner from "../globalComponents/loadingSpinner"
 
 function ScheduleContainer({reloadComponent}) {
   const splideRef = useRef();

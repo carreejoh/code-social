@@ -41,13 +41,13 @@ function StatsMasterDiv() {
   }
 
   return (
-    <div className="w-full pl-16 pr-16 pt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+    <div className="w-full lg:pl-12 lg:pr-12 md:pl-4 md:pr-4 pt-4 grid sm:grid-cols-2 pl-4 pr-4 gap-x-4 gap-y-3">
       {userData && (
         <>
           <GeneralStats userData={userData}/>
-          <ProductiveDay userData={userData}/>
-          <PriorityPercent />
-          <div className="col-span-1 h-72 bg-darkestBaseGray rounded-lg shadow-2xl"></div>
+          {/* <ProductiveDay userData={userData}/> */}
+          <PriorityPercent userData={userData}/>
+          <div className="col-span-1 h-72 dark:bg-baseGray bg-white rounded-lg shadow-2xl"></div>
         </>
       )}
     </div>
