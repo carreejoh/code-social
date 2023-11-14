@@ -230,7 +230,7 @@ function ScheduleContainer({reloadComponent}) {
             } w-full z-[40] fixed duration-[200ms] ease-in-out`}
             onWheel={moveWelcomeDiv}
           >
-            {dayData && <HomepageGeneral dayData={dayData[1]} />}
+            {/* {dayData && <HomepageGeneral dayData={dayData[1]} />} */}
           </div>
 
           <div
