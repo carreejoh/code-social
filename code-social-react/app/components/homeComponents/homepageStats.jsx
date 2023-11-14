@@ -37,15 +37,19 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
         let username = user.data.username;
         setUserStatsRedux(username);
       }, 7000);
+      while(!username) {
+        
+      }
+      async function setUserStatsRedux(username) {
+        const userStats = await fetchUserStats(username);
+        dispatch(setTotal(userStats.totalCompleted));
+        dispatch(setHighest(userStats.highestCompleted));
+        dispatch(setHigh(userStats.highCompleted));
+        dispatch(setHighestPer(userStats.highestPriorityPercent));
+        dispatch(setHighPer(userStats.highPriorityPercent));
+      }
     }
-    async function setUserStatsRedux(username) {
-      const userStats = await fetchUserStats(username);
-      dispatch(setTotal(userStats.totalCompleted));
-      dispatch(setHighest(userStats.highestCompleted));
-      dispatch(setHigh(userStats.highCompleted));
-      dispatch(setHighestPer(userStats.highestPriorityPercent));
-      dispatch(setHighPer(userStats.highPriorityPercent));
-    }
+
   }, [dispatch]);
 
   async function fetchUserStats(username) {

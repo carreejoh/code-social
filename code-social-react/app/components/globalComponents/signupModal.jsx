@@ -51,7 +51,7 @@ function SignUpModal({ closeModal }) {
     let now = new Date();
     let creation = now.getTime();
     const linkString = await helpers.makeRandomLink();
-    const newUser = await fetch("http://localhost:5050/api/users", {
+    const newUser = await fetch("https://routine-server-87a5f72bed6e.herokuapp.com/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({ username, email, password, linkString, creation }),

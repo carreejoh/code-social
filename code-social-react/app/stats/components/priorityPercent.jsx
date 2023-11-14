@@ -18,7 +18,7 @@ function PriorityPercent({ userData }) {
             </div>
           </div>
           <div
-            className="radial-progress ml-10 mt-2"
+            className="radial-progress ml-10 mt-2 text-black dark:text-white font-semibold text-xl"
             style={{ "--value": userData.statSheet?.highestPriorityPercent, "--size": "140px", "--thickness": "8px" }}
           >
             {userData.statSheet?.highestPriorityPercent}%
@@ -31,7 +31,7 @@ function PriorityPercent({ userData }) {
             <div className="text-lg badge-md badge badge-primary ml-2">!</div>
           </div>
           <div
-            className="radial-progress ml-10 mt-2"
+            className="radial-progress ml-10 mt-2 text-black dark:text-white font-semibold text-xl"
             style={{ "--value": userData.statSheet?.highPriorityPercent, "--size": "140px", "--thickness": "8px" }}
           >
             {userData.statSheet?.highPriorityPercent}%

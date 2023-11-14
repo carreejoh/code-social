@@ -21,7 +21,7 @@ function StatsMasterDiv() {
   async function fetchUserStats(username) {
     try {
       const response = await fetch(
-        `http://localhost:5050/api/users/stats/${username}`,
+        `https://routine-server-87a5f72bed6e.herokuapp.com/api/users/stats/${username}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

@@ -15,19 +15,19 @@ function GeneralStats({userData}) {
       <div className="grid grid-cols-2 gap-2">
         <div className="col-span-1 h-28 pt-6  pl-5">
           <h1 className="text-sm text-gray-500">Tasks Completed</h1>
-          <h1 className="text-4xl font-bold">{userData.statSheet?.totalCompleted}</h1>
+          <h1 className="text-4xl text-black dark:text-white font-bold">{userData.statSheet?.totalCompleted}</h1>
         </div>
         <div className="col-span-1 h-28 pt-6  pl-5">
           <h1 className="text-sm text-gray-500">Days on Ro</h1>
-          <h1 className="text-4xl font-bold">{daysOnRo}</h1>
+          <h1 className="text-4xl text-black dark:text-white font-bold">{daysOnRo}</h1>
         </div>
         <div className="col-span-1 h-28 pt-6  pl-5">
           <h1 className="text-sm text-gray-500">Highest Priority Completed</h1>
-          <h1 className="text-4xl font-bold">{userData.statSheet?.highestCompleted}</h1>
+          <h1 className="text-4xl text-black dark:text-white font-bold">{userData.statSheet?.highestCompleted}</h1>
         </div>
         <div className="col-span-1 h-28 pt-6  pl-5">
           <h1 className="text-sm text-gray-500">High Priority Completed</h1>
-          <h1 className="text-4xl font-bold">{userData.statSheet?.highCompleted}</h1>
+          <h1 className="text-4xl text-black dark:text-white font-bold">{userData.statSheet?.highCompleted}</h1>
         </div>
       </div>
     </div>

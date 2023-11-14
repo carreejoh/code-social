@@ -78,7 +78,7 @@ function RoutineModal() {
 // https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/create
 
     const newRoutine = await fetch(
-      "http://localhost:5050/api/routines/create",
+      "https://routine-server-87a5f72bed6e.herokuapp.com/api/routines/create",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
