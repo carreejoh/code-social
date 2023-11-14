@@ -40,10 +40,10 @@ module.exports = {
         customPink: '#D926A9',
         customBlue: '#204881',
 
-        baseWhite: `#EDEDEC`,
-        darkBaseWhite: `#EDEDEC`,
-        darkestBaseWhite: '#D1CBCE',
-        lightModeGray: '#8F8E93 '
+        baseWhite: `#E5E4E4`,
+        darkBaseWhite: `#E5E4E4`,
+        darkestBaseWhite: '#FFFFFF',
+        lightModeGray: '#FFFFFF '
       },
       keyframes: {
         slideInRight: {

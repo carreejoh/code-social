@@ -117,13 +117,13 @@ function HomepageGeneral({ dayData }) {
 }
 
   return (
-    <div className=" w-full rounded-tl-lg p-2 pt-4 sm:pr-20 xl:pl-20 xl:pr-36 bg-baseWhite dark:bg-baseGray border-b-2 border-darkestBaseGray">
+    <div className=" w-full rounded-tl-lg p-2 pt-4 sm:pr-20 xl:pl-20 xl:pr-36 bg-white dark:bg-baseGray shadow-xl">
       <h1 className="text-3xl text-black dark:text-white font-semibold">
         Dashboard
       </h1>
       {/* <h3 className="text-black dark:text-white">{currentTaskTitle}</h3> */}
       <div className="w-full h-56 pt-2 pb-2 grid grid-cols-3 gap-4 ">
-        <div className="p-2 rounded-lg col-span-1 border-[1px] border-lightestGray overflow-hidden">
+        <div className="p-2 rounded-lg col-span-1 border-[1px] border-lightestGray overflow-hidden dark:bg-transparent bg-white shadow-lg">
           <h2 className=" text-gray-500 dark:text-gray-400 text-sm">
             Current task:
           </h2>

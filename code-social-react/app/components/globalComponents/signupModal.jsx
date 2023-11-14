@@ -99,21 +99,21 @@ function SignUpModal({ closeModal }) {
           <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setUsername(e.target.value)}
             max={30}
           ></input>
           <h1 className="text-black dark:text-white text-sm mt-2"> Email</h1>
           <input
             placeholder=""
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setEmail(e.target.value)}
             max={50}
           ></input>
           <h1 className="text-black dark:text-white text-sm mt-2">Password</h1>
           <input
             placeholder=""
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setPassword(e.target.value)}
             max={100}
           ></input>
@@ -122,7 +122,7 @@ function SignUpModal({ closeModal }) {
           </h1>
           <input
             placeholder=""
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setConfirmPassword(e.target.value)}
             max={100}
           ></input>

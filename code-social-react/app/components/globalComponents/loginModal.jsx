@@ -70,14 +70,14 @@ function LoginModal({ closeModal }) {
           <h1 className="text-black dark:text-white text-sm">Username</h1>
           <input
             placeholder="username"
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setUsername(e.target.value)}
             max={30}
           ></input>
           <h1 className="text-black dark:text-white text-sm mt-2">Password</h1>
           <input
-            placeholder="username"
-            className="text-white focus:outline-none"
+            placeholder="password"
+            className="text-white focus:outline-none bg-baseGray"
             onChange={(e) => setPassword(e.target.value)}
             max={100}
           ></input>

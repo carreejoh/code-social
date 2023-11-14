@@ -93,7 +93,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
     //   </svg>
     // </div>
     <>
-      <div className="p-2 col-span-1 border-[1px] border-lightestGray overflow-hidden rounded-lg">
+      <div className="p-2 col-span-1 border-[1px] border-lightestGray overflow-hidden rounded-lg dark:bg-transparent bg-white shadow-lg">
         <div className="w-full h-full">
           <h2 className=" text-gray-500 dark:text-gray-400 text-sm">
             Quick Stats:

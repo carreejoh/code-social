@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function StringLink({ stringLink }) {
   return (
-    <div className="col-span-1 p-2 border-[1px] border-lightestGray overflow-hidden rounded-lg">
+    <div className="col-span-1 p-2 border-[1px] border-lightestGray overflow-hidden rounded-lg dark:bg-transparent bg-white shadow-lg">
       <h1 className="text-gray-500 dark:text-gray-400 text-sm">
         Notification Code:
       </h1>
@@ -16,7 +16,7 @@ function StringLink({ stringLink }) {
       </h1>
       <h1 className="text-yellow-600 italic mt-2 text-sm">Google is currently reviewing my extension. The link goes to GitHub.</h1>
       <h1 className="text-gray-500 dark:text-gray-400 text-sm mt-2">Your notification code:</h1>
-      {stringLink}
+      <h1 className="text-black dark:text-white">{stringLink}</h1>
     </div>
   );
 }
