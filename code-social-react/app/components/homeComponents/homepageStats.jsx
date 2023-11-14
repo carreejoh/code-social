@@ -63,7 +63,7 @@ function HomepageStats({ quickStats, toggleQuickStats }) {
         alert("Fetching failed, please try again");
         return;
       }
-      return data;
+      return data.statSheet;
     } catch (err) {
       console.error(err);
     }
