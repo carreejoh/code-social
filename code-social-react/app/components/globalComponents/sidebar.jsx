@@ -56,7 +56,7 @@ function Sidebar() {
         </div>
         <div className="h-full ">
           <div className="w-16 p-2 text-white text-center">
-            {Auth.loggedIn() && (
+            {/* {Auth.loggedIn() && ( */}
               <button
                 className="mt-4 text-white"
                 onClick={() =>
@@ -78,7 +78,7 @@ function Sidebar() {
                   />
                 </svg>
               </button>
-            )}
+            {/* )} */}
             <Link href={"/"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

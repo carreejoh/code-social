@@ -60,6 +60,7 @@ function ScheduleContainer({reloadComponent}) {
   useEffect(() => {
     if (Auth.loggedIn()) {
       let user = Auth.getProfile();
+      console.log("SCHEDULER CONTAINER" + user)
       let username = user.data.username;
       fetchRoutineController(username);
     }
