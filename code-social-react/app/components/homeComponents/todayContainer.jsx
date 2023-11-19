@@ -73,10 +73,18 @@ function TodayContainer({ size, routineData, day, dateIndex, reloadComponent }) 
   useEffect(() => {
     // Scroll main div to relevant time of day
     let scrollDivs = document.querySelectorAll(".currentDay");
+    let scrollDivsOther = document.querySelectorAll(".notCurrentDay")
     let date = new Date();
     let currentHour = date.getHours();
     let currentMinute = date.getMinutes();
     let totalMinutesElapsed = currentHour * 60 + currentMinute;
+
+    scrollDivsOther.forEach((div) => {
+      div.scrollTo({
+        left: 1029,
+        behavior: "smooth"
+      })
+    })
 
     let scrollPosition = Math.floor(totalMinutesElapsed * 4.29 - 350);
     scrollDivs.forEach((div) =>
@@ -154,7 +162,7 @@ function TodayContainer({ size, routineData, day, dateIndex, reloadComponent }) 
           </h1>
         )}
         <div
-          className={`scrollDiv ${dateIndex === 1 ? "currentDay" : ""} pt-4 ${
+          className={`scrollDiv ${dateIndex === 1 ? "currentDay" : "notCurrentDay"} pt-4 ${
             size === "fullsize" ? "overflow-x-scroll overflow-y-hidden " : ""
           } `}
         >

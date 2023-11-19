@@ -64,7 +64,15 @@ function RoutineModal() {
       return;
     }
 
+    console.log(firstLength)
+
     if (firstLength < 0) {
+      let stringNumber = '89' + firstLength.toString()
+      let newString = stringNumber.substring(0, 2) + stringNumber.substring(2, + 1)
+      stringNumber[2]
+      let number = parseInt(stringNumber)
+      console.log(newString)
+      console.log(number)
       showError(true);
       showErrorMessage("Routine cannot pass through 12:00 AM.");
       return;
@@ -97,6 +105,7 @@ function RoutineModal() {
       }
     );
     const routine = await newRoutine.json();
+    console.log(routine)
     if (routine.message === "Routine created and user updated") {
       window.location.href = "/";
     }
